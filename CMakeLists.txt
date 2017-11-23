@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8)
 project(ce30_viz C CXX)
 
+set(CMAKE_CXX_STANDARD 11)
+
 set(CE30_VIZ_MAJOR_VERSION 0)
 set(CE30_VIZ_MINOR_VERSION 0)
 set(CE30_VIZ_PATCH_VERSION 0)

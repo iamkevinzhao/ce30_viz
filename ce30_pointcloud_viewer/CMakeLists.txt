@@ -1,4 +1,6 @@
-add_executable(ce30_pointcloud_viewer ce30_pointcloud_viewer.c)
+add_executable(
+  ce30_pointcloud_viewer
+  main.cpp)
 
 target_link_libraries(ce30_pointcloud_viewer ce30_pcviz)
 
