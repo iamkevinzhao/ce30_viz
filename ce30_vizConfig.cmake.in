@@ -1,0 +1,16 @@
+# - Config file for the ce30_viz package
+# It defines the following variables
+#  CE30_VIZ_INCLUDE_DIRS - include directories for ce30_viz
+#  CE30_VIZ_LIBRARIES    - libraries to link against
+#  CE30_VIZ_EXECUTABLE   - the ce30_pointcloud_viewer executable
+
+# Compute paths
+get_filename_component(CE30_VIZ_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+set(CE30_VIZ_INCLUDE_DIRS "@CONF_INCLUDE_DIRS@")
+
+# Our library dependencies (contains definitions for IMPORTED targets)
+include("${CE30_VIZ_CMAKE_DIR}/ce30_vizTargets.cmake")
+
+# These are IMPORTED targets created by ce30_vizTargets.cmake
+set(CE30_VIZ_LIBRARIES ce30_pcviz)
+set(CE30_VIZ_EXECUTABLE ce30_pointcloud_viewer)
