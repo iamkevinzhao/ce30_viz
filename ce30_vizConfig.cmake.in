@@ -14,3 +14,8 @@ include("${CE30_VIZ_CMAKE_DIR}/ce30_vizTargets.cmake")
 # These are IMPORTED targets created by ce30_vizTargets.cmake
 set(CE30_VIZ_LIBRARIES ce30_pcviz)
 set(CE30_VIZ_EXECUTABLE ce30_pointcloud_viewer)
+
+find_package(PCL 1.2 REQUIRED)
+include_directories(${PCL_INCLUDE_DIRS})
+link_directories(${PCL_LIBRARY_DIRS})
+add_definitions(${PCL_DEFINITIONS})

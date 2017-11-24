@@ -35,6 +35,12 @@ include_directories(
   "${PROJECT_SOURCE_DIR}"   # to find ce30_pcviz/ce30_pcviz.h
   "${PROJECT_BINARY_DIR}")  # to find ce30_pcviz/config.h
 
+find_package(PCL 1.2 REQUIRED)
+
+include_directories(${PCL_INCLUDE_DIRS})
+link_directories(${PCL_LIBRARY_DIRS})
+add_definitions(${PCL_DEFINITIONS})
+
 # Add sub-directories
 add_subdirectory(ce30_pcviz)
 add_subdirectory(ce30_pointcloud_viewer)

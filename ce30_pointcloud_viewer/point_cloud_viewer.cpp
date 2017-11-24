@@ -14,23 +14,24 @@ PointCloudViewer::PointCloudViewer()
 }
 
 PointCloudViewer::~PointCloudViewer() {
+  StopRunning(*socket_);
 }
 
 ExitCode PointCloudViewer::ConnectOrExit(UDPSocket& socket) {
-  if (!Connect(socket)) {
-    cerr << "Unable to Connect Device!" << endl;
-    return ExitCode::device_connection_failure;
-  }
-  if (!StartRunning(socket)) {
-    cerr << "Unable to Start CE30" << endl;
-    return ExitCode::start_ce30_failure;
-  }
-  string device_version;
-  if (!GetVersion(device_version, socket)) {
-    cerr << "Unable to Retrieve CE30 Device Version" << endl;
-    return ExitCode::retrieve_ce30_version_failure;
-  }
-  cout << "CE30 Version: " << device_version << endl;
+//  if (!Connect(socket)) {
+//    cerr << "Unable to Connect Device!" << endl;
+//    return ExitCode::device_connection_failure;
+//  }
+//  if (!StartRunning(socket)) {
+//    cerr << "Unable to Start CE30" << endl;
+//    return ExitCode::start_ce30_failure;
+//  }
+//  string device_version;
+//  if (!GetVersion(device_version, socket)) {
+//    cerr << "Unable to Retrieve CE30 Device Version" << endl;
+//    return ExitCode::retrieve_ce30_version_failure;
+//  }
+//  cout << "CE30 Version: " << device_version << endl;
   return ExitCode::no_exit;
 }
 
@@ -50,6 +51,10 @@ void PointCloudViewer::timerEvent(QTimerEvent *event) {
   if (pcviz_->Closed()) {
     QCoreApplication::exit((int)ExitCode::normal_exit);
   }
+
+  pcviz_->UpdatePointCloud(PointCloud());
+  return;
+
   Packet packet;
   if (GetPacket(packet, *socket_)) {
     auto parsed = packet.Parse();
@@ -65,5 +70,12 @@ void PointCloudViewer::timerEvent(QTimerEvent *event) {
 
 void PointCloudViewer::UpdatePointCloudDisplay(
     const Scan &scan, PointCloudViz &viz) {
-
+  PointCloud cloud;
+  for (int x = 0; x < scan.Width(); ++x) {
+    for (int y = 0; y < scan.Height(); ++y) {
+      ce30_driver::Point p = scan.at(x, y).point();
+      cloud.push_back(ce30_pcviz::Point(p.x, p.y, p.z));
+    }
+  }
+  viz.UpdatePointCloud(cloud);
 }

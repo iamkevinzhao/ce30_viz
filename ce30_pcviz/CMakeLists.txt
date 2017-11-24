@@ -9,6 +9,11 @@ add_library(
       export.h
 )
 
+target_link_libraries(
+  ce30_pcviz
+    ${PCL_LIBRARIES}
+)
+
 set_target_properties(ce30_pcviz PROPERTIES
   PUBLIC_HEADER "ce30_pcviz.h;${CMAKE_CURRENT_BINARY_DIR}/config.h")
 
