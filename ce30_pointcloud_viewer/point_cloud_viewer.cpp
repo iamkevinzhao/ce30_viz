@@ -10,37 +10,60 @@ using namespace ce30_driver;
 
 PointCloudViewer::PointCloudViewer()
 {
+  startTimer(0);
 }
 
 PointCloudViewer::~PointCloudViewer() {
 }
 
-bool PointCloudViewer::Init() {
-  startTimer(0);
-  socket_.reset(new UDPSocket);
-  if (!Connect(*socket_)) {
+ExitCode PointCloudViewer::ConnectOrExit(UDPSocket& socket) {
+  if (!Connect(socket)) {
     cerr << "Unable to Connect Device!" << endl;
-    exit_code_= ExitCode::device_connection_failure;
-    return false;
+    return ExitCode::device_connection_failure;
   }
-  if (!StartRunning(*socket_)) {
+  if (!StartRunning(socket)) {
     cerr << "Unable to Start CE30" << endl;
-    exit_code_= ExitCode::start_ce30_failure;
-    return false;
+    return ExitCode::start_ce30_failure;
   }
   string device_version;
-  if (!GetVersion(device_version, *socket_)) {
+  if (!GetVersion(device_version, socket)) {
     cerr << "Unable to Retrieve CE30 Device Version" << endl;
-    exit_code_= ExitCode::retrieve_ce30_version_failure;
-    return false;
+    return ExitCode::retrieve_ce30_version_failure;
   }
-  return true;
+  cout << "CE30 Version: " << device_version << endl;
+  return ExitCode::no_exit;
 }
 
 void PointCloudViewer::timerEvent(QTimerEvent *event) {
-  if (exit_code_ != ExitCode::no_exit) {
-    QCoreApplication::exit((int)exit_code_);
+  if (!socket_) {
+    socket_.reset(new UDPSocket);
+    auto ec = ConnectOrExit(*socket_);
+    if (ec != ExitCode::no_exit) {
+      QCoreApplication::exit((int)ec);
+      return;
+    }
+  }
+  if (!pcviz_) {
+    pcviz_.reset(new PointCloudViz);
+    pcviz_->Show();
+  }
+  if (pcviz_->Closed()) {
+    QCoreApplication::exit((int)ExitCode::normal_exit);
   }
   Packet packet;
-  socket_->GetPacket(packet);
+  if (GetPacket(packet, *socket_)) {
+    auto parsed = packet.Parse();
+    if (parsed) {
+      scan_.AddColumnsFromPacket(*parsed);
+      if (scan_.Ready()) {
+        UpdatePointCloudDisplay(scan_, *pcviz_);
+        scan_.Reset();
+      }
+    }
+  }
+}
+
+void PointCloudViewer::UpdatePointCloudDisplay(
+    const Scan &scan, PointCloudViz &viz) {
+
 }

@@ -11,4 +11,12 @@ PointCloudViz::PointCloudViz() {}
 string PointCloudViz::Version() {
   return CE30_VIZ_VERSION_STRING;
 }
+
+void PointCloudViz::Show() {
+
+}
+
+bool PointCloudViz::Closed() {
+  return false;
+}
 }

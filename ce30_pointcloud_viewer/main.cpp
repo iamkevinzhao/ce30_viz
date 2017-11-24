@@ -6,6 +6,5 @@ int main(int argc, char *argv[])
 {
   QCoreApplication app(argc, argv);
   PointCloudViewer viewer;
-  viewer.Init();
   return app.exec();
 }

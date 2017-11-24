@@ -11,6 +11,8 @@ class API PointCloudViz {
 public:
   PointCloudViz();
   static std::string Version();
+  void Show();
+  bool Closed();
 };
 }
 

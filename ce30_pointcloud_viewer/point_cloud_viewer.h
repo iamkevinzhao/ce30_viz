@@ -3,7 +3,8 @@
 
 #include <QObject>
 #include <memory>
-#include <ce30_driver/udp_socket.h>
+#include <ce30_driver/ce30_driver.h>
+#include <ce30_pcviz/ce30_pcviz.h>
 #include <QCoreApplication>
 #include "exit_code.h"
 
@@ -12,12 +13,15 @@ class PointCloudViewer : public QObject
 public:
   PointCloudViewer();
   ~PointCloudViewer();
-  bool Init();
 protected:
   void timerEvent(QTimerEvent* event);
 private:
+  static ExitCode ConnectOrExit(ce30_driver::UDPSocket& socket);
+  static void UpdatePointCloudDisplay(
+      const ce30_driver::Scan& scan, ce30_pcviz::PointCloudViz& viz);
   std::unique_ptr<ce30_driver::UDPSocket> socket_;
-  ExitCode exit_code_;
+  std::unique_ptr<ce30_pcviz::PointCloudViz> pcviz_;
+  ce30_driver::Scan scan_;
 };
 
 #endif // POINT_CLOUD_VIEWER_H
