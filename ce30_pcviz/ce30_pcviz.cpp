@@ -1,8 +1,14 @@
 
 #include "ce30_pcviz.h"
 #include <iostream>
+#include <string>
 
-void ce30_pcviz(void)
-{
-  std::cout <<"This is ce30_pcviz version " << CE30_VIZ_VERSION_STRING << std::endl;
+using namespace std;
+
+namespace ce30_pcviz {
+PointCloudViz::PointCloudViz() {}
+
+string PointCloudViz::Version() {
+  return CE30_VIZ_VERSION_STRING;
+}
 }

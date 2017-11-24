@@ -1,11 +1,11 @@
 #include <QCoreApplication>
-#include "ce30_pcviz/ce30_pcviz.h"
+#include "point_cloud_viewer.h"
+#include <QTimer>
 
 int main(int argc, char *argv[])
 {
-  QCoreApplication a(argc, argv);
-
-  ce30_pcviz();
-
-  return a.exec();
+  QCoreApplication app(argc, argv);
+  PointCloudViewer viewer;
+  viewer.Init();
+  return app.exec();
 }

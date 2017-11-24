@@ -4,7 +4,14 @@
 
 #include <ce30_pcviz/config.h>
 #include "export.h"
+#include <string>
 
-void API ce30_pcviz(void);
+namespace ce30_pcviz {
+class API PointCloudViz {
+public:
+  PointCloudViz();
+  static std::string Version();
+};
+}
 
 #endif
