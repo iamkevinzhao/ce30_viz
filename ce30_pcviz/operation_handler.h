@@ -10,13 +10,15 @@ class OperationHandler
 {
 public:
   OperationHandler(std::shared_ptr<pcl::visualization::PCLVisualizer> viz);
-  void ApplyInitialView();
+  void UseAerialView();
+  void UseVerticalView();
 protected:
   void HandleMouseEvent(const pcl::visualization::MouseEvent& event);
   void HandleKeyboardEvent(const pcl::visualization::KeyboardEvent& event);
 private:
   std::shared_ptr<pcl::visualization::PCLVisualizer> viz_;
-  std::unique_ptr<StaticView> initial_view_;
+  std::unique_ptr<StaticView> aerial_view_;
+  std::unique_ptr<StaticView> vertical_view_;
 };
 }
 

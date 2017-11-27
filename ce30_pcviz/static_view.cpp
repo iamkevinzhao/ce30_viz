@@ -1,4 +1,5 @@
 #include "static_view.h"
+#include <iostream>
 
 using namespace std;
 using namespace pcl::visualization;
@@ -33,7 +34,7 @@ void StaticView::Change(
 }
 
 void StaticView::Change(const pcl::PointXYZ &at, const pcl::PointXYZ &toward) {
-  Viz().setCameraPosition(at.x, at.y, at.z, toward.x, toward.y, toward.z);
+  Viz().setCameraPosition(at.x, at.y, at.z, toward.x, toward.y, toward.z, 0.0f, 0.0f, 1.0f);
 }
 
 bool StaticView::Change() {

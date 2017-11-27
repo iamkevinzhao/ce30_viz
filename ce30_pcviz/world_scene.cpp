@@ -13,7 +13,7 @@ WorldScene::WorldScene(std::shared_ptr<pcl::visualization::PCLVisualizer> viz)
 }
 
 void WorldScene::Show() {
-//  Viz().addCoordinateSystem(1.0);
+  Viz().addCoordinateSystem(1.0);
   Viz().initCameraParameters();
   Viz().setCameraPosition(-5, 0, 10, 10, 0, 0);
 }
