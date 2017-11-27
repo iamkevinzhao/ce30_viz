@@ -7,6 +7,10 @@ add_library(
       ce30_pcviz.h
       config.h.in
       export.h
+      scene.h
+      scene.cpp
+      world_scene.h
+      world_scene.cpp
 )
 
 target_link_libraries(

@@ -14,7 +14,7 @@ PointCloudViewer::PointCloudViewer()
 }
 
 PointCloudViewer::~PointCloudViewer() {
-  StopRunning(*socket_);
+//  StopRunning(*socket_);
 }
 
 ExitCode PointCloudViewer::ConnectOrExit(UDPSocket& socket) {
@@ -36,20 +36,21 @@ ExitCode PointCloudViewer::ConnectOrExit(UDPSocket& socket) {
 }
 
 void PointCloudViewer::timerEvent(QTimerEvent *event) {
-  if (!socket_) {
-    socket_.reset(new UDPSocket);
-    auto ec = ConnectOrExit(*socket_);
-    if (ec != ExitCode::no_exit) {
-      QCoreApplication::exit((int)ec);
-      return;
-    }
-  }
+//  if (!socket_) {
+//    socket_.reset(new UDPSocket);
+//    auto ec = ConnectOrExit(*socket_);
+//    if (ec != ExitCode::no_exit) {
+//      QCoreApplication::exit((int)ec);
+//      return;
+//    }
+//  }
   if (!pcviz_) {
     pcviz_.reset(new PointCloudViz);
     pcviz_->Show();
   }
   if (pcviz_->Closed()) {
-    QCoreApplication::exit((int)ExitCode::normal_exit);
+     QCoreApplication::exit((int)ExitCode::normal_exit);
+    return;
   }
 
   pcviz_->UpdatePointCloud(PointCloud());

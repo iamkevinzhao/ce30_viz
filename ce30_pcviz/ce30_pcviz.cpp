@@ -2,6 +2,7 @@
 #include "ce30_pcviz.h"
 #include <iostream>
 #include <string>
+#include "world_scene.h"
 
 using namespace std;
 using namespace pcl::visualization;
@@ -9,7 +10,9 @@ using namespace pcl::visualization;
 #include <random>
 std::random_device rd;
 std::mt19937 gen(rd());
-std::uniform_real_distribution<> dis(1.0, 10.0);
+std::uniform_real_distribution<> x_dis(5.0, 10.0);
+std::uniform_real_distribution<> y_dis(-10, 10.0);
+std::uniform_real_distribution<> z_dis(-3.0, 3.0);
 
 namespace ce30_pcviz {
 Point::Point() : Point(0.0f, 0.0f, 0.0f) {}
@@ -18,9 +21,9 @@ Point::Point(const float& x, const float& y, const float& z) {
   point_.y = y;
   point_.z = z;
 
-  point_.x = dis(gen);
-  point_.y = dis(gen);
-  point_.z = dis(gen);
+  point_.x = x_dis(gen);
+  point_.y = y_dis(gen);
+  point_.z = z_dis(gen);
 
   point_.r = 100;
 }
@@ -29,8 +32,7 @@ PointCloud::PointCloud() {}
 
 PointCloudViz::PointCloudViz() {
   viz_.reset(new PCLVisualizer("CE30 Point Cloud Viz"));
-  viz_->addCoordinateSystem (1.0);
-  viz_->initCameraParameters ();
+  world_scene_.reset(new WorldScene(viz_));
 }
 
 string PointCloudViz::Version() {
@@ -42,10 +44,11 @@ void PointCloudViz::Show() {
 }
 
 bool PointCloudViz::Closed() {
-  return false;
+  return viz_->wasStopped();
 }
 
 void PointCloudViz::UpdatePointCloud(const PointCloud &point_cloud) {
+  world_scene_->Update();
   pcl::PointCloud<pcl::PointXYZRGB>::Ptr point_cloud_ptr (new pcl::PointCloud<pcl::PointXYZRGB>(point_cloud.pcl_pointcloud()));
 
   for (int i = 0; i < 100; ++i) {
@@ -62,6 +65,8 @@ void PointCloudViz::UpdatePointCloud(const PointCloud &point_cloud) {
 
   viz_->updatePointCloud<pcl::PointXYZRGB>(point_cloud_ptr, rgb, "sample cloud");
 
-  viz_->spinOnce(100);
+  if (!viz_->wasStopped()) {
+    viz_->spinOnce(100);
+  }
 }
 }

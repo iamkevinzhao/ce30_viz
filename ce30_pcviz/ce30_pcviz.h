@@ -7,6 +7,7 @@
 #include <string>
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
+#include "scene.h"
 #include <pcl/visualization/pcl_visualizer.h>
 
 namespace ce30_pcviz {
@@ -43,7 +44,8 @@ public:
   bool Closed();
   void UpdatePointCloud(const PointCloud& point_cloud);
 private:
-  std::unique_ptr<pcl::visualization::PCLVisualizer> viz_;
+  std::unique_ptr<Scene> world_scene_;
+  std::shared_ptr<pcl::visualization::PCLVisualizer> viz_;
 };
 }
 
