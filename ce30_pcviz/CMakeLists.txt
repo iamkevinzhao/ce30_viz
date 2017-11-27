@@ -11,6 +11,10 @@ add_library(
       scene.cpp
       world_scene.h
       world_scene.cpp
+      grid_scene.h
+      grid_scene.cpp
+      static_scene.h
+      static_scene.cpp
 )
 
 target_link_libraries(

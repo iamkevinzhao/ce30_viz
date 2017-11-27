@@ -6,4 +6,12 @@ using namespace pcl::visualization;
 namespace ce30_pcviz {
 Scene::Scene(shared_ptr<PCLVisualizer> visualizer) : visualizer_(visualizer) {}
 Scene::~Scene() {}
+void Scene::AddChild(std::shared_ptr<Scene> child) {
+  children_.push_back(child);
+}
+void Scene::Update() {
+  for (auto& child : children_) {
+    child->Update();
+  }
+}
 }

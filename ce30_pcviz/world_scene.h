@@ -1,17 +1,17 @@
 #ifndef WORLD_SCENE_H
 #define WORLD_SCENE_H
 
-#include "scene.h"
+#include "static_scene.h"
+#include "export.h"
 
 namespace ce30_pcviz {
-class WorldScene : public Scene
+class API WorldScene : public StaticScene
 {
 public:
   WorldScene(std::shared_ptr<pcl::visualization::PCLVisualizer> viz);
-  void Update() override;
+  void Show() override;
 private:
-  void Show();
-  bool shown_;
+  std::shared_ptr<StaticScene> grid_scene_;
 };
 } // namespace ce30_pcviz
 
