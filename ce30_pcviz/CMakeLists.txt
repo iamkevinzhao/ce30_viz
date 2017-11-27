@@ -17,6 +17,12 @@ add_library(
       static_scene.cpp
       grid_geometry.h
       grid_geometry.cpp
+      sensor_model_scene.h
+      sensor_model_scene.cpp
+      operation_handler.h
+      operation_handler.cpp
+      static_view.h
+      static_view.cpp
 )
 
 target_link_libraries(

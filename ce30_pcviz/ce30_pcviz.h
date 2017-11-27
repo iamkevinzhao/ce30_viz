@@ -9,6 +9,12 @@
 #include <pcl/point_types.h>
 #include "scene.h"
 #include <pcl/visualization/pcl_visualizer.h>
+#include <pcl/visualization/point_cloud_color_handlers.h>
+#include "operation_handler.h"
+
+namespace ce30_pcviz {
+class OperationHandler;
+}
 
 namespace ce30_pcviz {
 using PCLPoint = pcl::PointXYZRGB;
@@ -44,8 +50,13 @@ public:
   bool Closed();
   void UpdatePointCloud(const PointCloud& point_cloud);
 private:
+  void OnFirstPointCloud(
+      pcl::PointCloud<pcl::PointXYZRGB>::Ptr point_cloud_ptr,
+      pcl::visualization::PointCloudColorHandlerRGBField<PCLPoint>& rgb);
   std::unique_ptr<Scene> world_scene_;
   std::shared_ptr<pcl::visualization::PCLVisualizer> viz_;
+  std::unique_ptr<OperationHandler> operation_;
+  bool first_cloud_;
 };
 }
 

@@ -46,7 +46,6 @@ void PointCloudViewer::timerEvent(QTimerEvent *event) {
 //  }
   if (!pcviz_) {
     pcviz_.reset(new PointCloudViz);
-    pcviz_->Show();
   }
   if (pcviz_->Closed()) {
      QCoreApplication::exit((int)ExitCode::normal_exit);
