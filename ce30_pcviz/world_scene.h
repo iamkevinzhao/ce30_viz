@@ -11,7 +11,7 @@ public:
   WorldScene(std::shared_ptr<pcl::visualization::PCLVisualizer> viz);
   void Show() override;
 private:
-  std::shared_ptr<StaticScene> grid_scene_;
+  std::shared_ptr<Scene> grid_scene_;
 };
 } // namespace ce30_pcviz
 

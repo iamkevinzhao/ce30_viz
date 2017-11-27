@@ -15,6 +15,8 @@ add_library(
       grid_scene.cpp
       static_scene.h
       static_scene.cpp
+      grid_geometry.h
+      grid_geometry.cpp
 )
 
 target_link_libraries(
