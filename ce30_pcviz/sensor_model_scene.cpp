@@ -12,5 +12,6 @@ SensorModelScene::SensorModelScene(shared_ptr<PCLVisualizer> viz)
 
 void SensorModelScene::Show() {
   Viz().addCube(-0.1f, 0.1f, -0.15f, 0.15f, -0.1f, 0.1f);
+  Viz().addText3D("CE30", pcl::PointXYZ(-1.0f, 0.0f, 0.0f), 0.5f);
 }
 }

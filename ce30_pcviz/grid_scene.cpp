@@ -26,5 +26,17 @@ void GridScene::Show() {
   for (auto& ver : verticals) {
     Viz().addLine(ver.first, ver.second, "vl" + to_string(index++));
   }
+
+  const float offset = 0.5;
+  auto right_border = grid_geo.RightBorder();
+  for (int i = 0; i <= height; i += 10) {
+    auto p = right_border[i];
+    auto pp = p;
+    pp.y -= offset;
+    stringstream ss;
+    ss << fixed << setprecision(1) << p.x;
+    Viz().addText3D(
+        ss.str() + "m", pp, 0.5, 1.0, 1.0, 1.0, "left_landmark" + to_string(i));
+  }
 }
 } // namespace ce30_pcviz

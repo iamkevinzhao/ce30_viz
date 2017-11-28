@@ -42,6 +42,16 @@ void GridGeometry::Calculate() {
     e2e.first.x = end_left.x - size_ * hgt;
     e2e.second.x = end_right.x - size_ * hgt;
     verticals_.push_back(e2e);
+    if (hgt == 0) {
+      top_left_ = e2e.first;
+      top_right_ = e2e.second;
+    } else if (hgt == height_) {
+      bottom_right_ = e2e.first;
+      bottom_left_ = e2e.second;
+    }
+
+    left_border_.push_back(e2e.first);
+    right_border_.push_back(e2e.second);
   }
 
   for (int wid = 0; wid <= width_; ++wid) {
@@ -49,6 +59,8 @@ void GridGeometry::Calculate() {
     e2e.first.y = end_top.y - size_ * wid;
     e2e.second.y = end_bottom.y - size_ * wid;
     horizontals_.push_back(e2e);
+    top_border_.push_back(e2e.first);
+    bottom_border_.push_back(e2e.second);
   }
 }
 
@@ -58,5 +70,37 @@ vector<EndToEnd> GridGeometry::Horizontals() {
 
 vector<EndToEnd> GridGeometry::Verticals() {
   return verticals_;
+}
+
+pcl::PointXYZ GridGeometry::TopLeftCorner() {
+  return top_left_;
+}
+
+pcl::PointXYZ GridGeometry::BottomLeftCorner() {
+  return bottom_left_;
+}
+
+pcl::PointXYZ GridGeometry::BottomRightCorner() {
+  return bottom_right_;
+}
+
+pcl::PointXYZ GridGeometry::TopRightCorner() {
+  return top_right_;
+}
+
+std::vector<pcl::PointXYZ> GridGeometry::LeftBorder() {
+  return left_border_;
+}
+
+std::vector<pcl::PointXYZ> GridGeometry::RightBorder() {
+  return right_border_;
+}
+
+std::vector<pcl::PointXYZ> GridGeometry::TopBorder() {
+  return top_border_;
+}
+
+std::vector<pcl::PointXYZ> GridGeometry::BottomBorder() {
+  return bottom_border_;
 }
 }

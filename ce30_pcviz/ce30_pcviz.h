@@ -25,7 +25,14 @@ public:
   inline const PCLPoint& pcl_point() const {
     return point_;
   }
+  static void SetXRange(const float& min, const float& max);
 private:
+  static void RainbowColorize(
+      const float& x, const float& min, const float& max,
+      unsigned char& r, unsigned char& g, unsigned char& b);
+  static float x_max_;
+  static float x_min_;
+
   PCLPoint point_;
 };
 

@@ -16,6 +16,9 @@ std::uniform_real_distribution<> y_dis(-10, 10.0);
 std::uniform_real_distribution<> z_dis(-3.0, 3.0);
 
 namespace ce30_pcviz {
+float Point::x_max_ = 10.0f;
+float Point::x_min_ = 5.0f;
+
 Point::Point() : Point(0.0f, 0.0f, 0.0f) {}
 Point::Point(const float& x, const float& y, const float& z) {
   point_.x = x;
@@ -26,15 +29,23 @@ Point::Point(const float& x, const float& y, const float& z) {
   point_.y = y_dis(gen);
   point_.z = z_dis(gen);
 
-  double max = 10;
-  double min = 5;
-  double lut_scale = 255.0/ (max - min);
+  RainbowColorize(point_.x, x_min_, x_max_, point_.r, point_.g, point_.b);
+}
 
-  int value = round((point_.x - min) * lut_scale);
+void Point::RainbowColorize(
+    const float& x, const float& min, const float& max,
+    unsigned char& r, unsigned char& g, unsigned char& b) {
+  float lut_scale = 255.0f / (max - min);
+  int value = round((x - min) * lut_scale);
 
-  point_.r = value > 128 ? (value - 128) * 2 : 0;
-  point_.g = value < 128 ? 2 * value : 255 - ( (value - 128) * 2);
-  point_.b = value < 128 ? 255 - (2 * value) : 0;
+  r = value > 128 ? (value - 128) * 2 : 0;
+  g = value < 128 ? 2 * value : 255 - ( (value - 128) * 2);
+  b = value < 128 ? 255 - (2 * value) : 0;
+}
+
+void Point::SetXRange(const float &min, const float &max) {
+  x_min_ = min;
+  x_max_ = max;
 }
 
 PointCloud::PointCloud() {}
@@ -70,7 +81,7 @@ void PointCloudViz::UpdatePointCloud(const PointCloud &point_cloud) {
   viz_->updatePointCloud<pcl::PointXYZRGB>(point_cloud_ptr, rgb);
 
   if (!viz_->wasStopped()) {
-    viz_->spinOnce(100);
+    viz_->spinOnce(1000);
   }
 }
 

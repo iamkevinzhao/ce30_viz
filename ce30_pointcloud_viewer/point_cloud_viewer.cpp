@@ -11,6 +11,7 @@ using namespace ce30_driver;
 PointCloudViewer::PointCloudViewer()
 {
   startTimer(0);
+  ce30_pcviz::Point::SetXRange(Channel::DistanceMin(), Channel::DistanceMax());
 }
 
 PointCloudViewer::~PointCloudViewer() {
@@ -36,14 +37,14 @@ ExitCode PointCloudViewer::ConnectOrExit(UDPSocket& socket) {
 }
 
 void PointCloudViewer::timerEvent(QTimerEvent *event) {
-//  if (!socket_) {
-//    socket_.reset(new UDPSocket);
-//    auto ec = ConnectOrExit(*socket_);
-//    if (ec != ExitCode::no_exit) {
-//      QCoreApplication::exit((int)ec);
-//      return;
-//    }
-//  }
+  if (!socket_) {
+    socket_.reset(new UDPSocket);
+    auto ec = ConnectOrExit(*socket_);
+    if (ec != ExitCode::no_exit) {
+      QCoreApplication::exit((int)ec);
+      return;
+    }
+  }
   if (!pcviz_) {
     pcviz_.reset(new PointCloudViz);
   }
