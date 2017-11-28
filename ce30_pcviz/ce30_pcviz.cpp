@@ -26,7 +26,15 @@ Point::Point(const float& x, const float& y, const float& z) {
   point_.y = y_dis(gen);
   point_.z = z_dis(gen);
 
-  point_.r = 100;
+  double max = 10;
+  double min = 5;
+  double lut_scale = 255.0/ (max - min);
+
+  int value = round((point_.x - min) * lut_scale);
+
+  point_.r = value > 128 ? (value - 128) * 2 : 0;
+  point_.g = value < 128 ? 2 * value : 255 - ( (value - 128) * 2);
+  point_.b = value < 128 ? 255 - (2 * value) : 0;
 }
 
 PointCloud::PointCloud() {}
