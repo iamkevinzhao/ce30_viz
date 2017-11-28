@@ -3,6 +3,7 @@
 #include <ce30_pcviz/ce30_pcviz.h>
 #include <ce30_driver/utils.h>
 #include <QCoreApplication>
+#include <QThread>
 
 using namespace std;
 using namespace ce30_pcviz;
@@ -15,24 +16,24 @@ PointCloudViewer::PointCloudViewer()
 }
 
 PointCloudViewer::~PointCloudViewer() {
-//  StopRunning(*socket_);
+  StopRunning(*socket_);
 }
 
 ExitCode PointCloudViewer::ConnectOrExit(UDPSocket& socket) {
-//  if (!Connect(socket)) {
-//    cerr << "Unable to Connect Device!" << endl;
-//    return ExitCode::device_connection_failure;
-//  }
-//  if (!StartRunning(socket)) {
-//    cerr << "Unable to Start CE30" << endl;
-//    return ExitCode::start_ce30_failure;
-//  }
-//  string device_version;
-//  if (!GetVersion(device_version, socket)) {
-//    cerr << "Unable to Retrieve CE30 Device Version" << endl;
-//    return ExitCode::retrieve_ce30_version_failure;
-//  }
-//  cout << "CE30 Version: " << device_version << endl;
+  if (!Connect(socket)) {
+    cerr << "Unable to Connect Device!" << endl;
+    return ExitCode::device_connection_failure;
+  }
+  if (!StartRunning(socket)) {
+    cerr << "Unable to Start CE30" << endl;
+    return ExitCode::start_ce30_failure;
+  }
+  string device_version;
+  if (!GetVersion(device_version, socket)) {
+    cerr << "Unable to Retrieve CE30 Device Version" << endl;
+    return ExitCode::retrieve_ce30_version_failure;
+  }
+  cout << "CE30 Version: " << device_version << endl;
   return ExitCode::no_exit;
 }
 
@@ -41,6 +42,7 @@ void PointCloudViewer::timerEvent(QTimerEvent *event) {
     socket_.reset(new UDPSocket);
     auto ec = ConnectOrExit(*socket_);
     if (ec != ExitCode::no_exit) {
+      QThread::sleep(2);
       QCoreApplication::exit((int)ec);
       return;
     }
@@ -53,8 +55,8 @@ void PointCloudViewer::timerEvent(QTimerEvent *event) {
     return;
   }
 
-  pcviz_->UpdatePointCloud(PointCloud());
-  return;
+//  pcviz_->UpdatePointCloud(PointCloud());
+//  return;
 
   Packet packet;
   if (GetPacket(packet, *socket_)) {

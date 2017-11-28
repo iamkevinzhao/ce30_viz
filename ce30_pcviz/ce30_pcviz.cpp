@@ -25,9 +25,9 @@ Point::Point(const float& x, const float& y, const float& z) {
   point_.y = y;
   point_.z = z;
 
-  point_.x = x_dis(gen);
-  point_.y = y_dis(gen);
-  point_.z = z_dis(gen);
+//  point_.x = x_dis(gen);
+//  point_.y = y_dis(gen);
+//  point_.z = z_dis(gen);
 
   RainbowColorize(point_.x, x_min_, x_max_, point_.r, point_.g, point_.b);
 }
@@ -68,9 +68,9 @@ void PointCloudViz::UpdatePointCloud(const PointCloud &point_cloud) {
   world_scene_->Update();
   pcl::PointCloud<pcl::PointXYZRGB>::Ptr point_cloud_ptr (
       new pcl::PointCloud<pcl::PointXYZRGB>(point_cloud.pcl_pointcloud()));
-  for (int i = 0; i < 100; ++i) {
-    point_cloud_ptr->push_back(Point().pcl_point());
-  }
+//  for (int i = 0; i < 100; ++i) {
+//    point_cloud_ptr->push_back(Point().pcl_point());
+//  }
 
   PointCloudColorHandlerRGBField<pcl::PointXYZRGB> rgb(point_cloud_ptr);
   if (first_cloud_) {
@@ -81,7 +81,7 @@ void PointCloudViz::UpdatePointCloud(const PointCloud &point_cloud) {
   viz_->updatePointCloud<pcl::PointXYZRGB>(point_cloud_ptr, rgb);
 
   if (!viz_->wasStopped()) {
-    viz_->spinOnce(1000);
+    viz_->spinOnce(10);
   }
 }
 
