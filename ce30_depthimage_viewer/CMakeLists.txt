@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 2.8.12)
-
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Instruct CMake to run moc automatically when needed.
@@ -9,7 +7,6 @@ set(CMAKE_AUTOUIC ON)
 
 # Find the QtWidgets library
 find_package(Qt5Widgets)
-find_package(ce30_driver PATHS "C:/Users/kevin/Documents/CE30-D/build-ce30_driver-Desktop_Qt_5_9_2_MSVC2015_64bit-Default")
 
 # Tell CMake to create the helloworld executable
 add_executable(
@@ -45,7 +42,6 @@ add_executable(
     point_cloud_viewer.cpp
 )
 
-LINK_DIRECTORIES("C:/Users/kevin/Documents/CE30-D/build-ce30_driver-Desktop_Qt_5_9_2_MSVC2015_64bit-Default/ce30_driver")
 target_link_libraries(
   ce30_depthimage_viewer
     ${CE30_DRIVER_LIBRARIES}
@@ -56,7 +52,8 @@ if(UNIX)
   target_link_libraries(
     ce30_depthimage_viewer
       pthread
-      -lboost_system)
+      -lboost_system
+  )
 endif()
 
 install(TARGETS ce30_depthimage_viewer
