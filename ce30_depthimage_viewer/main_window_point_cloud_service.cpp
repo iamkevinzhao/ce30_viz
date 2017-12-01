@@ -4,6 +4,7 @@ MainWindowPointCloudService::MainWindowPointCloudService(QWidget* parent)
   : MainWindowImageService(parent)
 {
   pcviewer_.reset(new PointCloudViewer);
+  PointCloudPushButton()->setDisabled(true);
 }
 
 MainWindowPointCloudService::~MainWindowPointCloudService() {

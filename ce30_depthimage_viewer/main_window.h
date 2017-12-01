@@ -23,6 +23,7 @@ protected:
   QLabel* FullImageLabel();
   QPushButton* StartPushButton();
   QPushButton* SettingsPushButton();
+  QPushButton* PointCloudPushButton();
   virtual void OnStartPushButtonClicked();
   virtual void OnPointCloudPushButtonClicked();
 private slots:

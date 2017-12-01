@@ -40,6 +40,10 @@ QPushButton* MainWindow::SettingsPushButton() {
   return ui->settingsPushButton;
 }
 
+QPushButton* MainWindow::PointCloudPushButton() {
+  return ui->pointCloudPushButton;
+}
+
 void MainWindow::OnStartPushButtonClicked() {
 
 }
