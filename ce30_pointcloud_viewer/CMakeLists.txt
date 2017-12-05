@@ -3,6 +3,10 @@ set(CMAKE_AUTOMOC ON)
 
 find_package(Qt5Core)
 
+if(USE_FAKE_POINTCLOUD)
+  add_definitions(-DFAKE_POINTCLOUD)
+endif()
+
 add_executable(
   ce30_pointcloud_viewer
     main.cpp

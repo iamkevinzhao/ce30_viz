@@ -71,6 +71,7 @@ void PointCloudViewer::timerEvent(QTimerEvent *event) {
   }
 }
 
+#ifndef FAKE_POINTCLOUD
 void PointCloudViewer::UpdatePointCloudDisplay(
     const Scan &scan, PointCloudViz &viz) {
   PointCloud cloud;
@@ -82,3 +83,21 @@ void PointCloudViewer::UpdatePointCloudDisplay(
   }
   viz.UpdatePointCloud(cloud);
 }
+#else
+void PointCloudViewer::UpdatePointCloudDisplay(
+    const Scan &scan, PointCloudViz &viz) {
+  PointCloud cloud;
+  float delta_y = 30.0f / 320;
+  for (float y = -15.0f; y < 15.0f; y += delta_y) {
+    float x = 26.0f;
+    if (y <= 7.5f && y >= -7.5f) {
+      x = 28.0f;
+    }
+    float delta_z = 2.0f / 20;
+    for (float z = -1.0f; z < 1.0f; z+= delta_z) {
+      cloud.push_back(ce30_pcviz::Point(x, y, z));
+    }
+  }
+  viz.UpdatePointCloud(cloud);
+}
+#endif
