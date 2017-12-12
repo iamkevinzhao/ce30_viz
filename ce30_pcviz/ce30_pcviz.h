@@ -55,6 +55,7 @@ public:
   void AddCtrlShortcut(const CtrlShortcut& shortcut);
   std::vector<std::pair<std::string, std::string>> CtrlShortcutMap();
   void PrintShortcuts();
+  static bool SavePCD(const std::string& file, const PointCloud& pointcloud);
 private:
   void OnFirstPointCloud(
       pcl::PointCloud<pcl::PointXYZRGB>::Ptr point_cloud_ptr,

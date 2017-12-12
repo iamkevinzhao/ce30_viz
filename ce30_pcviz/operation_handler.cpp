@@ -59,7 +59,7 @@ void OperationHandler::PrintShortcuts() {
   cout << "Shortcuts:" << endl;
   for (auto& shortcut : ctrl_shortcuts_) {
     cout
-        << "  Ctrl+'" << shortcut.key
+        << "  * Ctrl+'" << shortcut.key
         << "' -- " << shortcut.description << endl;
   }
 }

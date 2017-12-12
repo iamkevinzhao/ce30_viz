@@ -4,6 +4,7 @@
 #include <string>
 #include "world_scene.h"
 #include "operation_handler.h"
+#include <pcl/io/pcd_io.h>
 
 using namespace std;
 using namespace pcl::visualization;
@@ -80,6 +81,10 @@ vector<pair<string, string>> PointCloudViz::CtrlShortcutMap() {
 
 void PointCloudViz::PrintShortcuts() {
   return operation_->PrintShortcuts();
+}
+
+bool PointCloudViz::SavePCD(const string &file, const PointCloud &pointcloud) {
+  return pcl::io::savePCDFileASCII(file, pointcloud.pcl_pointcloud());
 }
 
 void PointCloudViz::OnFirstPointCloud(
