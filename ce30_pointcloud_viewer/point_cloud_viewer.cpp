@@ -9,7 +9,7 @@ using namespace std;
 using namespace ce30_pcviz;
 using namespace ce30_driver;
 
-PointCloudViewer::PointCloudViewer()
+PointCloudViewer::PointCloudViewer() : vertical_stretch_mode_(false)
 {
   startTimer(0);
   ce30_pcviz::Point::SetXRange(Channel::DistanceMin(), Channel::DistanceMax());
@@ -49,14 +49,12 @@ void PointCloudViewer::timerEvent(QTimerEvent *event) {
   }
   if (!pcviz_) {
     pcviz_.reset(new PointCloudViz);
+    OnPCVizInitialized();
   }
   if (pcviz_->Closed()) {
      QCoreApplication::exit((int)ExitCode::normal_exit);
     return;
   }
-
-//  pcviz_->UpdatePointCloud(PointCloud());
-//  return;
 
   Packet packet;
   if (GetPacket(packet, *socket_)) {
@@ -64,7 +62,7 @@ void PointCloudViewer::timerEvent(QTimerEvent *event) {
     if (parsed) {
       scan_.AddColumnsFromPacket(*parsed);
       if (scan_.Ready()) {
-        UpdatePointCloudDisplay(scan_, *pcviz_);
+        UpdatePointCloudDisplay(scan_, *pcviz_, vertical_stretch_mode_);
         scan_.Reset();
       }
     }
@@ -72,13 +70,24 @@ void PointCloudViewer::timerEvent(QTimerEvent *event) {
 }
 
 void PointCloudViewer::UpdatePointCloudDisplay(
-    const Scan &scan, PointCloudViz &viz) {
+    const Scan &scan, PointCloudViz &viz, const bool& vsmode) {
   PointCloud cloud;
   for (int x = 0; x < scan.Width(); ++x) {
     for (int y = 0; y < scan.Height(); ++y) {
       ce30_driver::Point p = scan.at(x, y).point();
+      if (vsmode) {
+        p.z = y * 0.1;
+      }
       cloud.push_back(ce30_pcviz::Point(p.x, p.y, p.z));
     }
   }
   viz.UpdatePointCloud(cloud);
+}
+
+void PointCloudViewer::OnPCVizInitialized() {
+  pcviz_->AddCtrlShortcut(
+      {"t",
+       [this](){vertical_stretch_mode_ = !vertical_stretch_mode_;},
+       "Switch Normal/Stretched Z axis"});
+  pcviz_->PrintShortcuts();
 }

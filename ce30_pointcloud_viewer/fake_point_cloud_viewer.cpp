@@ -16,6 +16,12 @@ inline static float to_rad(const float& deg) {
 FakePointCloudViewer::FakePointCloudViewer()
 {
   timer_id_ = startTimer(10);
+  viz_.AddCtrlShortcut({"i", [](){cout << "ii" << endl;}, "ii"});
+  auto key_maps = viz_.CtrlShortcutMap();
+  cout << "Shortcuts: " << endl;
+  for (auto key_map : key_maps) {
+    cout << "  Ctrl+'" << key_map.first << "' -- " << key_map.second << endl;
+  }
 }
 
 void FakePointCloudViewer::timerEvent(QTimerEvent *event) {

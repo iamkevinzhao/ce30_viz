@@ -89,21 +89,21 @@ void ImageServer::Execute(Config config) {
     return;
   }
 
-  if (config.HoldValidDeviceID()) {
-    if (!SetDeviceID(config.GetDeviceID(), socket)) {
-      HandleConnectFailure();
-      return;
-    }
-  }
+//  if (config.HoldValidDeviceID()) {
+//    if (!SetDeviceID(config.GetDeviceID(), socket)) {
+//      HandleConnectFailure();
+//      return;
+//    }
+//  }
 
-  int id = -1;
-  device_manager_->SetDeviceID(id);
-  if (GetDeviceID(id, socket)) {
-    device_manager_->SetDeviceID(id);
-  } else {
-    HandleConnectFailure();
-    return;
-  }
+//  int id = -1;
+//  device_manager_->SetDeviceID(id);
+//  if (GetDeviceID(id, socket)) {
+//    device_manager_->SetDeviceID(id);
+//  } else {
+//    HandleConnectFailure();
+//    return;
+//  }
 
   if (!StartRunning(socket)) {
     HandleConnectFailure();

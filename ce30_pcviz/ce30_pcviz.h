@@ -13,10 +13,6 @@
 #include "operation_handler.h"
 
 namespace ce30_pcviz {
-class OperationHandler;
-}
-
-namespace ce30_pcviz {
 using PCLPoint = pcl::PointXYZRGB;
 class API Point {
 public:
@@ -56,6 +52,9 @@ public:
   void Show();
   bool Closed();
   void UpdatePointCloud(const PointCloud& point_cloud);
+  void AddCtrlShortcut(const CtrlShortcut& shortcut);
+  std::vector<std::pair<std::string, std::string>> CtrlShortcutMap();
+  void PrintShortcuts();
 private:
   void OnFirstPointCloud(
       pcl::PointCloud<pcl::PointXYZRGB>::Ptr point_cloud_ptr,

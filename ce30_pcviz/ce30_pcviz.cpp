@@ -70,6 +70,18 @@ void PointCloudViz::UpdatePointCloud(const PointCloud &point_cloud) {
   }
 }
 
+void PointCloudViz::AddCtrlShortcut(const CtrlShortcut &shortcut) {
+  return operation_->AddShortcut(shortcut);
+}
+
+vector<pair<string, string>> PointCloudViz::CtrlShortcutMap() {
+  return operation_->CtrlShortcutMap();
+}
+
+void PointCloudViz::PrintShortcuts() {
+  return operation_->PrintShortcuts();
+}
+
 void PointCloudViz::OnFirstPointCloud(
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr point_cloud_ptr,
     PointCloudColorHandlerRGBField<PCLPoint>& rgb) {
