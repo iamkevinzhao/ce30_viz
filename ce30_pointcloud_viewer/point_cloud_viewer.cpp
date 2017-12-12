@@ -76,7 +76,10 @@ void PointCloudViewer::UpdatePointCloudDisplay(
     for (int y = 0; y < scan.Height(); ++y) {
       ce30_driver::Point p = scan.at(x, y).point();
       if (vsmode) {
-        p.z = y * 0.1;
+        p.z = y * 0.1f;
+      }
+      if (sqrt(p.x * p.x + p.y * p.y) < 0.1f) {
+        continue;
       }
       cloud.push_back(ce30_pcviz::Point(p.x, p.y, p.z));
     }
