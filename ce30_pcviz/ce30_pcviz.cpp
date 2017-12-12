@@ -8,27 +8,15 @@
 using namespace std;
 using namespace pcl::visualization;
 
-#include <random>
-std::random_device rd;
-std::mt19937 gen(rd());
-std::uniform_real_distribution<> x_dis(5.0, 10.0);
-std::uniform_real_distribution<> y_dis(-10, 10.0);
-std::uniform_real_distribution<> z_dis(-3.0, 3.0);
-
 namespace ce30_pcviz {
-float Point::x_max_ = 10.0f;
-float Point::x_min_ = 5.0f;
+float Point::x_max_ = 30.0f;
+float Point::x_min_ = 0.0f;
 
 Point::Point() : Point(0.0f, 0.0f, 0.0f) {}
 Point::Point(const float& x, const float& y, const float& z) {
   point_.x = x;
   point_.y = y;
   point_.z = z;
-
-//  point_.x = x_dis(gen);
-//  point_.y = y_dis(gen);
-//  point_.z = z_dis(gen);
-
   RainbowColorize(point_.x, x_min_, x_max_, point_.r, point_.g, point_.b);
 }
 
@@ -68,9 +56,6 @@ void PointCloudViz::UpdatePointCloud(const PointCloud &point_cloud) {
   world_scene_->Update();
   pcl::PointCloud<pcl::PointXYZRGB>::Ptr point_cloud_ptr (
       new pcl::PointCloud<pcl::PointXYZRGB>(point_cloud.pcl_pointcloud()));
-//  for (int i = 0; i < 100; ++i) {
-//    point_cloud_ptr->push_back(Point().pcl_point());
-//  }
 
   PointCloudColorHandlerRGBField<pcl::PointXYZRGB> rgb(point_cloud_ptr);
   if (first_cloud_) {
