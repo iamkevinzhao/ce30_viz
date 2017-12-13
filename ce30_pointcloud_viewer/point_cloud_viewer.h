@@ -8,6 +8,10 @@
 #include <QCoreApplication>
 #include "exit_code.h"
 
+#ifdef CES_SPECIAL
+#include "ces_special/ces_static_scene.h"
+#endif
+
 class PointCloudViewer : public QObject
 {
 public:
@@ -28,6 +32,10 @@ private:
   ce30_driver::Scan scan_;
   bool vertical_stretch_mode_;
   bool save_pcd_;
+
+#ifdef CES_SPECIAL
+  std::shared_ptr<CESStaticScene> ces_static_scene_;
+#endif
 };
 
 #endif // POINT_CLOUD_VIEWER_H

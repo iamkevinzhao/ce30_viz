@@ -87,6 +87,13 @@ bool PointCloudViz::SavePCD(const string &file, const PointCloud &pointcloud) {
   return pcl::io::savePCDFileASCII(file, pointcloud.pcl_pointcloud());
 }
 
+void PointCloudViz::AddScene(std::shared_ptr<Scene> scene) {
+  if (!scene->VisualizerLoaded()) {
+    scene->LoadVisualizer(viz_);
+  }
+  world_scene_->AddChild(scene);
+}
+
 void PointCloudViz::OnFirstPointCloud(
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr point_cloud_ptr,
     PointCloudColorHandlerRGBField<PCLPoint>& rgb) {

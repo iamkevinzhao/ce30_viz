@@ -14,4 +14,12 @@ void Scene::Update() {
     child->Update();
   }
 }
+
+bool Scene::VisualizerLoaded() {
+  return visualizer_ != nullptr;
+}
+
+void Scene::LoadVisualizer(std::shared_ptr<PCLVisualizer> visualizer) {
+  visualizer_ = visualizer;
+}
 }

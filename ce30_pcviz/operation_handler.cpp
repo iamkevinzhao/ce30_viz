@@ -30,7 +30,7 @@ void OperationHandler::HandleMouseEvent(const MouseEvent &event) {
 
 void OperationHandler::HandleKeyboardEvent(const KeyboardEvent &event) {
   auto this_tap = high_resolution_clock::now();
-  if (duration_cast<milliseconds>(this_tap - last_tap_time_).count() < 100) {
+  if (duration_cast<milliseconds>(this_tap - last_tap_time_).count() < 200) {
     last_tap_time_ = this_tap;
     return;
   }

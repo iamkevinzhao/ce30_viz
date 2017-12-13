@@ -105,6 +105,11 @@ void PointCloudViewer::UpdatePointCloudDisplay(
 }
 
 void PointCloudViewer::OnPCVizInitialized() {
+#ifdef CES_SPECIAL
+  ces_static_scene_.reset(new CESStaticScene);
+  pcviz_->AddScene(ces_static_scene_);
+#endif
+
   pcviz_->AddCtrlShortcut(
       {"t",
        [this](){vertical_stretch_mode_ = !vertical_stretch_mode_;},
@@ -124,5 +129,15 @@ void PointCloudViewer::OnPCVizInitialized() {
            }
          }
        }, "Save Cloud to Disk"});
+
+#ifdef CES_SPECIAL
+  pcviz_->AddCtrlShortcut(
+      {"c",
+       [this](){
+         ces_static_scene_->SetShow(!ces_static_scene_->Showing());
+       },
+       "Display CES Scene"});
+#endif
+
   pcviz_->PrintShortcuts();
 }

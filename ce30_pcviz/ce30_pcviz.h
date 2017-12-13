@@ -56,6 +56,7 @@ public:
   std::vector<std::pair<std::string, std::string>> CtrlShortcutMap();
   void PrintShortcuts();
   static bool SavePCD(const std::string& file, const PointCloud& pointcloud);
+  void AddScene(std::shared_ptr<Scene> scene);
 private:
   void OnFirstPointCloud(
       pcl::PointCloud<pcl::PointXYZRGB>::Ptr point_cloud_ptr,
