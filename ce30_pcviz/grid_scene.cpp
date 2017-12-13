@@ -11,7 +11,7 @@ GridScene::GridScene(shared_ptr<PCLVisualizer> viz) : StaticScene(viz)
 
 void GridScene::Show() {
   int width = 30;
-  int height =30;
+  int height = 30;
   float size = 1.0f;
   float x = height * size;
   float y = width * size / 2;
@@ -38,5 +38,17 @@ void GridScene::Show() {
     Viz().addText3D(
         ss.str() + "m", pp, 0.5, 1.0, 1.0, 1.0, "left_landmark" + to_string(i));
   }
+
+  // Fov Boundary Lines
+  Viz().addLine(
+        pcl::PointXYZ(0.0f, 0.0f, 0.0f),
+        pcl::PointXYZ(width * size / 2 * tan(M_PI / 3), width * size / 2, 0.0f),
+        1.0, 0.0, 0.0,
+        "fov_left");
+  Viz().addLine(
+        pcl::PointXYZ(0.0f, 0.0f, 0.0f),
+        pcl::PointXYZ(width * size / 2 * tan(M_PI / 3), -width * size / 2, 0.0f),
+        1.0, 0.0, 0.0,
+        "fov_right");
 }
 } // namespace ce30_pcviz
