@@ -23,6 +23,10 @@ if(CES_SPECIAL)
   )
 endif()
 
+if(USE_FEATURE_FILTER)
+  add_definitions(-DUSE_FEATURE_FILTER)
+endif()
+
 add_executable(
   ce30_pointcloud_viewer
     main.cpp

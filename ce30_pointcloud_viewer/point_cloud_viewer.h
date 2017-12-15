@@ -32,7 +32,7 @@ private:
   ce30_driver::Scan scan_;
   bool vertical_stretch_mode_;
   bool save_pcd_;
-
+  bool use_filter_;
 #ifdef CES_SPECIAL
   std::shared_ptr<CESStaticScene> ces_static_scene_;
 #endif

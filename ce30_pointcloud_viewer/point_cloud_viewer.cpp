@@ -12,7 +12,7 @@ using namespace ce30_pcviz;
 using namespace ce30_driver;
 
 PointCloudViewer::PointCloudViewer()
-  : vertical_stretch_mode_(false), save_pcd_(false)
+  : vertical_stretch_mode_(false), save_pcd_(false), use_filter_(false)
 {
   startTimer(0);
   ce30_pcviz::Point::SetXRange(Channel::DistanceMin(), Channel::DistanceMax());
@@ -129,6 +129,32 @@ void PointCloudViewer::OnPCVizInitialized() {
            }
          }
        }, "Save Cloud to Disk"});
+
+#ifdef USE_FEATURE_FILTER
+  pcviz_->AddCtrlShortcut(
+      {"f",
+       [this](){
+         StopRunning(*socket_);
+         if (!use_filter_) {
+           cout << "Enabling Filter" << endl;
+           use_filter_ = EnableFilter(*socket_);
+           if (use_filter_) {
+             cout << "  * Filter On" << endl;
+           } else {
+             cout << "  * Failed" << endl;
+           }
+         } else {
+           cout << "Disabling Filter" << endl;
+           use_filter_ = !DisableFilter(*socket_);
+           if (!use_filter_) {
+             cout << "  * Filter Off" << endl;
+           } else {
+             cout << "  * Failed" << endl;
+           }
+         }
+         StartRunning(*socket_);
+       }, "Filter ON/OFF"});
+#endif
 
 #ifdef CES_SPECIAL
   pcviz_->AddCtrlShortcut(
