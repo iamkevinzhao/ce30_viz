@@ -113,7 +113,7 @@ void PointCloudViewer::OnPCVizInitialized() {
   pcviz_->AddCtrlShortcut(
       {"t",
        [this](){vertical_stretch_mode_ = !vertical_stretch_mode_;},
-       "Switch Normal/Stretched Z axis"});
+       "Switch Normal/Stretched"});
   pcviz_->AddCtrlShortcut(
       {"l",
        [this](){
