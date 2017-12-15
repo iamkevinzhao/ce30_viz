@@ -12,12 +12,24 @@ if(USE_FAKE_POINTCLOUD)
   )
 endif()
 
+if(CES_SPECIAL)
+  add_definitions(-DCES_SPECIAL)
+  set(
+    SRC_CES_SPECIAL
+      ces_special/ces_special.h
+      ces_special/ces_special.cpp
+      ces_special/ces_static_scene.h
+      ces_special/ces_static_scene.cpp
+  )
+endif()
+
 add_executable(
   ce30_pointcloud_viewer
     main.cpp
     point_cloud_viewer.cpp
     point_cloud_viewer.h
     ${SRC_FAKE_POINTCLOUD}
+    ${SRC_CES_SPECIAL}
     exit_code.h
 )
 

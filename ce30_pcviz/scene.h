@@ -12,6 +12,10 @@ public:
   Scene(std::shared_ptr<pcl::visualization::PCLVisualizer> visualizer);
   virtual ~Scene();
   virtual void Update();
+  bool VisualizerLoaded();
+  void LoadVisualizer(
+      std::shared_ptr<pcl::visualization::PCLVisualizer> visualizer);
+  virtual void AddChild(std::shared_ptr<Scene> child);
 protected:
   inline pcl::visualization::PCLVisualizer& Viz() {
     return *visualizer_;
@@ -19,7 +23,6 @@ protected:
   inline std::shared_ptr<pcl::visualization::PCLVisualizer> VizPtr() {
     return visualizer_;
   }
-  virtual void AddChild(std::shared_ptr<Scene> child);
 private:
   std::shared_ptr<pcl::visualization::PCLVisualizer> visualizer_;
   std::vector<std::shared_ptr<Scene>> children_;

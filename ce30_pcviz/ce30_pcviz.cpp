@@ -67,7 +67,7 @@ void PointCloudViz::UpdatePointCloud(const PointCloud &point_cloud) {
   viz_->updatePointCloud<pcl::PointXYZRGB>(point_cloud_ptr, rgb);
 
   if (!viz_->wasStopped()) {
-    viz_->spinOnce(10);
+    viz_->spinOnce();
   }
 }
 
@@ -85,6 +85,13 @@ void PointCloudViz::PrintShortcuts() {
 
 bool PointCloudViz::SavePCD(const string &file, const PointCloud &pointcloud) {
   return pcl::io::savePCDFileASCII(file, pointcloud.pcl_pointcloud());
+}
+
+void PointCloudViz::AddScene(std::shared_ptr<Scene> scene) {
+  if (!scene->VisualizerLoaded()) {
+    scene->LoadVisualizer(viz_);
+  }
+  world_scene_->AddChild(scene);
 }
 
 void PointCloudViz::OnFirstPointCloud(
