@@ -23,6 +23,7 @@ public:
   void AddShortcut(const CtrlShortcut& shortcut);
   std::vector<std::pair<std::string, std::string>> CtrlShortcutMap();
   void PrintShortcuts();
+  static bool IsNumKey(const std::string& key);
 protected:
   void HandleMouseEvent(const pcl::visualization::MouseEvent& event);
   void HandleKeyboardEvent(const pcl::visualization::KeyboardEvent& event);
@@ -31,7 +32,7 @@ private:
   std::unique_ptr<StaticView> aerial_view_;
   std::unique_ptr<StaticView> vertical_view_;
   std::vector<CtrlShortcut> ctrl_shortcuts_;
-  std::chrono::high_resolution_clock::time_point last_tap_time_;
+  bool double_tapped_;
 };
 }
 

@@ -8,7 +8,7 @@ using namespace std::chrono;
 
 namespace ce30_pcviz {
 OperationHandler::OperationHandler(shared_ptr<PCLVisualizer> viz)
-  : viz_(viz)
+  : viz_(viz), double_tapped_(false)
 {
   viz_->registerKeyboardCallback(
         boost::bind(&OperationHandler::HandleKeyboardEvent, this, _1));
@@ -29,18 +29,22 @@ void OperationHandler::HandleMouseEvent(const MouseEvent &event) {
 }
 
 void OperationHandler::HandleKeyboardEvent(const KeyboardEvent &event) {
-  auto this_tap = high_resolution_clock::now();
-  if (duration_cast<milliseconds>(this_tap - last_tap_time_).count() < 150) {
-    last_tap_time_ = this_tap;
-    return;
+  if (double_tapped_) {
+    if (event.isCtrlPressed() && IsNumKey(event.getKeySym())) {
+      // Ctrl + NUM
+    } else {
+      double_tapped_ = !double_tapped_;
+      return;
+    }
   }
-  last_tap_time_ = this_tap;
 
   for (auto& shortcut : ctrl_shortcuts_) {
     if (event.isCtrlPressed() && event.getKeySym() == shortcut.key) {
       shortcut.callback();
     }
   }
+
+  double_tapped_ = !double_tapped_;
 }
 
 void OperationHandler::AddShortcut(const CtrlShortcut &shortcut) {
@@ -62,6 +66,13 @@ void OperationHandler::PrintShortcuts() {
         << "  * Ctrl+'" << shortcut.key
         << "' -- " << shortcut.description << endl;
   }
+}
+
+bool OperationHandler::IsNumKey(const string &key) {
+  if (key >= "0" && key <= "9") {
+    return true;
+  }
+  return false;
 }
 
 void OperationHandler::UseAerialView() {
