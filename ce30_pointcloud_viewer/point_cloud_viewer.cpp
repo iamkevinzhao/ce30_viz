@@ -107,7 +107,7 @@ void PointCloudViewer::UpdatePointCloudDisplay(
 void PointCloudViewer::OnPCVizInitialized() {
 #ifdef CES_SPECIAL
   ces_static_scene_.reset(new CESStaticScene);
-  pcviz_->AddScene(ces_static_scene_);
+  pcviz_->UpdateWorldScene(ces_static_scene_);
 #endif
 
   pcviz_->AddCtrlShortcut(

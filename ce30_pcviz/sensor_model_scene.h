@@ -4,11 +4,14 @@
 #include "static_scene.h"
 
 namespace ce30_pcviz {
-class SensorModelScene : public StaticScene
+class API SensorModelScene : public StaticScene
 {
 public:
   SensorModelScene(std::shared_ptr<pcl::visualization::PCLVisualizer> viz);
+  void SetTextDisplay(const bool& display);
   void Show() override;
+private:
+  bool display_text_;
 };
 }
 

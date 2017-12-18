@@ -57,11 +57,12 @@ public:
   void PrintShortcuts();
   static bool SavePCD(const std::string& file, const PointCloud& pointcloud);
   void AddScene(std::shared_ptr<Scene> scene);
+  void UpdateWorldScene(std::shared_ptr<Scene> scene);
 private:
   void OnFirstPointCloud(
       pcl::PointCloud<pcl::PointXYZRGB>::Ptr point_cloud_ptr,
       pcl::visualization::PointCloudColorHandlerRGBField<PCLPoint>& rgb);
-  std::unique_ptr<Scene> world_scene_;
+  std::shared_ptr<Scene> world_scene_;
   std::shared_ptr<pcl::visualization::PCLVisualizer> viz_;
   std::unique_ptr<OperationHandler> operation_;
   bool first_cloud_;

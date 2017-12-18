@@ -21,5 +21,26 @@ bool Scene::VisualizerLoaded() {
 
 void Scene::LoadVisualizer(std::shared_ptr<PCLVisualizer> visualizer) {
   visualizer_ = visualizer;
+  OnVisualizerLoaded(visualizer_);
+  OnVisualizerLoaded();
+}
+
+void Scene::RegisterComponent(const string &id) {
+  component_ids_.push_back(id);
+}
+
+void Scene::OnVisualizerLoaded(std::shared_ptr<PCLVisualizer> viz) {
+
+}
+
+void Scene::OnVisualizerLoaded() {}
+
+void Scene::Erase() {
+  for (auto& id : component_ids_) {
+    visualizer_->removeCorrespondences(id);
+  }
+  for (auto& child : children_) {
+    child->Erase();
+  }
 }
 }

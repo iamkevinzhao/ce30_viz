@@ -5,7 +5,7 @@
 #include "export.h"
 
 namespace ce30_pcviz {
-class GridScene : public StaticScene
+class API GridScene : public StaticScene
 {
 public:
   GridScene(std::shared_ptr<pcl::visualization::PCLVisualizer> viz);

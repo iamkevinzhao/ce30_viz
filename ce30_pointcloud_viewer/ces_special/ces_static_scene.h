@@ -2,6 +2,7 @@
 #define CES_STATIC_SCENE_H
 
 #include <ce30_pcviz/scene.h>
+#include <ce30_pcviz/world_scene.h>
 
 class CESStaticScene : public ce30_pcviz::Scene
 {
@@ -11,15 +12,11 @@ public:
   bool Showing();
   void Update() override;
 private:
-  static std::vector<std::string> DrawScene(
-      pcl::visualization::PCLVisualizer& viz);
-  static void EraseScene(
-      pcl::visualization::PCLVisualizer& viz,
-      const std::vector<std::string> ids);
+  void DrawScene();
   static std::string GetLineID(const int& id);
   bool showing_;
   bool last_showing_;
-  std::vector<std::string> scene_ids_;
+  std::unique_ptr<ce30_pcviz::WorldScene> world_scene_;
 };
 
 #endif // CES_STATIC_SCENE_H

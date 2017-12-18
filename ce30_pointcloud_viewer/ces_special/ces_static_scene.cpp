@@ -1,14 +1,17 @@
 #include "ces_static_scene.h"
 #include <iostream>
+#include <ce30_pcviz/grid_scene.h>
+#include <ce30_pcviz/sensor_model_scene.h>
 
 using namespace std;
 using namespace pcl;
 using namespace pcl::visualization;
+using namespace ce30_pcviz;
 
 CESStaticScene::CESStaticScene()
-  : Scene(nullptr), showing_(false), last_showing_(false)
+  : Scene(nullptr), showing_(false),
+    last_showing_(true) // ensure show on start
 {
-
 }
 
 void CESStaticScene::SetShow(const bool &show) {
@@ -22,31 +25,65 @@ bool CESStaticScene::Showing() {
 void CESStaticScene::Update() {
   if (last_showing_ != showing_) {
     if (showing_) {
-      scene_ids_ = DrawScene(Viz());
+      if (world_scene_) {
+        world_scene_->Erase();
+      }
+      DrawScene();
     } else {
-      EraseScene(Viz(), scene_ids_);
+      Erase();
+      world_scene_.reset(new WorldScene(VizPtr()));
+      world_scene_->Update();
     }
   }
   last_showing_ = showing_;
 }
 
-vector<string> CESStaticScene::DrawScene(PCLVisualizer& viz) {
+void CESStaticScene::DrawScene() {
   int id = -1;
-  viz.addLine(
-      PointXYZ(0.0f, -1.5f, -1.0f),
-      PointXYZ(0.0f, 1.5f, -1.0f), GetLineID(++id));
+  static vector<array<float, 6>> lines{
+    {0.0f, -1.5f, -1.0f, 0.0f, 1.5f, -1.0f},
+    {0.0f, -1.5f, -1.0f, 0.0f, -1.5f, 0.0f},
+    {0.0f, -1.5f, 0.0f, 0.0f, 0.0f, 0.0f},
+    {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.5f},
+    {0.0f, 0.0f, 1.5f, 0.0f, 1.5f, 1.5f},
+    {0.0f, 1.5f, 1.5f, 0.0f, 1.5f, -1.0f},
+
+    {0.0f, 1.5f, -1.0f, 9.0f, 1.5f, -1.0f},
+    {9.0f, 1.5f, -1.0f, 9.0f, 1.5f, 1.5f},
+    {9.0f, 1.5f, 1.5f, 0.0f, 1.5f, 1.5f},
+
+    {9.0f, -1.5f, -1.0f, 9.0f, 1.5f, -1.0f},
+    {9.0f, -1.5f, -1.0f, 9.0f, -1.5f, 0.0f},
+    {9.0f, -1.5f, 0.0f, 9.0f, 0.0f, 0.0f},
+    {9.0f, 0.0f, 0.0f, 9.0f, 0.0f, 1.5f},
+    {9.0f, 0.0f, 1.5f, 9.0f, 1.5f, 1.5f},
+    {9.0f, 1.5f, 1.5f, 9.0f, 1.5f, -1.0f},
+
+    {0.0f, -1.5f, -1.0f, 9.0f, -1.5f, -1.0f}
+  };
+  double r = 0.0, g = 0.0, b = 1.0;
+  float x = -0.5f, y = 0.0f, z = 0.0f;
+  for (auto& line : lines) {
+    Viz().addLine(
+        PointXYZ(line[0] + x, line[1] + y, line[2] + z),
+        PointXYZ(line[3] + x, line[4] + y, line[5] + z),
+        r, g, b, GetLineID(++id));
+  }
   vector<string> ids;
   ids.reserve(id);
   for (int i = 0; i <= id; ++i) {
-    ids.push_back(GetLineID(i));
+    RegisterComponent(GetLineID(i));
   }
-  return ids;
-}
 
-void CESStaticScene::EraseScene(PCLVisualizer& viz, const vector<string> ids) {
-  for (auto& id : ids) {
-    viz.removeCorrespondences(id);
-  }
+  shared_ptr<GridScene> grid_scene_(new GridScene(VizPtr()));
+  AddChild(grid_scene_);
+  // grid_scene_->Update();
+
+  shared_ptr<SensorModelScene> sensor_model_scene_(
+      new SensorModelScene(VizPtr()));
+  sensor_model_scene_->SetTextDisplay(false);
+  AddChild(sensor_model_scene_);
+  sensor_model_scene_->Update();
 }
 
 string CESStaticScene::GetLineID(const int &id) {
