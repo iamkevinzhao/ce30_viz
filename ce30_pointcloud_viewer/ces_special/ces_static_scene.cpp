@@ -2,6 +2,7 @@
 #include <iostream>
 #include <ce30_pcviz/grid_scene.h>
 #include <ce30_pcviz/sensor_model_scene.h>
+#include <fstream>
 
 using namespace std;
 using namespace pcl;
@@ -15,6 +16,36 @@ CESStaticScene::CESStaticScene()
     offset_y_(0.0f),
     offset_z_(0.0f)
 {
+  LoadParams();
+}
+
+CESStaticScene::~CESStaticScene() {
+  SaveParams();
+}
+
+bool CESStaticScene::LoadParams() {
+  ifstream is(DefaultConfigFilePath());
+  if (!is.is_open()) {
+    return false;
+  }
+  is >> offset_x_;
+  is >> offset_y_;
+  is >> offset_z_;
+  is.close();
+  return true;
+}
+
+bool CESStaticScene::SaveParams() {
+  ofstream os(DefaultConfigFilePath());
+  if (!os.is_open()) {
+    return false;
+  }
+  os << offset_x_ << " " << offset_y_ << " " << offset_z_ << endl;
+  return true;
+}
+
+string CESStaticScene::DefaultConfigFilePath() {
+  return "settings_ces.txt";
 }
 
 void CESStaticScene::SetShow(const bool &show) {

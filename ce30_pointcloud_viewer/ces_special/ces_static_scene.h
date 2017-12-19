@@ -9,6 +9,9 @@ class CESStaticScene : public ce30_pcviz::Scene
 {
 public:
   CESStaticScene();
+  ~CESStaticScene();
+  bool LoadParams();
+  bool SaveParams();
   void SetShow(const bool& show);
   bool Showing();
   void Update() override;
@@ -18,6 +21,7 @@ protected:
   void OnVisualizerLoaded(
       std::shared_ptr<pcl::visualization::PCLVisualizer> viz) override;
 private:
+  std::string DefaultConfigFilePath();
   void DrawScene();
   static std::string GetLineID(const int& id);
   bool showing_;
