@@ -162,13 +162,49 @@ void PointCloudViewer::OnPCVizInitialized() {
        [this](){
          ces_static_scene_->SetShow(!ces_static_scene_->Showing());
        },
-       "Display CES Scene"});
+       "Display CES Scene (CES Special)"});
   pcviz_->AddCtrlShortcut(
       {"3",
        [this](){
          ces_static_scene_->ChangeToDefaultViewPoint();
        },
        "Change View Point (CES Special)"});
+  pcviz_->AddCtrlShortcut(
+      {"u",
+       [this](){
+         ces_static_scene_->UpdateOffsetDelta(0.0f, 0.0f, 0.05f);
+       },
+       "Move Scene Up (CES Special)"});
+  pcviz_->AddCtrlShortcut(
+      {"d",
+       [this](){
+         ces_static_scene_->UpdateOffsetDelta(0.0f, 0.0f, -0.05f);
+       },
+       "Move Scene Down (CES Special)"});
+  pcviz_->AddCtrlShortcut(
+      {"Up",
+       [this](){
+         ces_static_scene_->UpdateOffsetDelta(0.05f, 0.0f, 0.0f);
+       },
+       "Move Scene Forward (CES Special)"});
+  pcviz_->AddCtrlShortcut(
+      {"Down",
+       [this](){
+         ces_static_scene_->UpdateOffsetDelta(-0.05f, 0.0f, 0.0f);
+       },
+       "Move Scene Backward (CES Special)"});
+  pcviz_->AddCtrlShortcut(
+      {"Left",
+       [this](){
+         ces_static_scene_->UpdateOffsetDelta(0.0f, 0.05f, 0.0f);
+       },
+       "Move Scene Left (CES Special)"});
+  pcviz_->AddCtrlShortcut(
+      {"Right",
+       [this](){
+         ces_static_scene_->UpdateOffsetDelta(0.0f, -0.05f, 0.00f);
+       },
+       "Move Scene Right (CES Special)"});
 #endif
 
   pcviz_->PrintShortcuts();

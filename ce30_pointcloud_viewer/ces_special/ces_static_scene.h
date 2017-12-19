@@ -13,6 +13,7 @@ public:
   bool Showing();
   void Update() override;
   void ChangeToDefaultViewPoint();
+  void UpdateOffsetDelta(const float& x, const float& y, const float& z);
 protected:
   void OnVisualizerLoaded(
       std::shared_ptr<pcl::visualization::PCLVisualizer> viz) override;
@@ -23,6 +24,9 @@ private:
   bool last_showing_;
   std::unique_ptr<ce30_pcviz::WorldScene> world_scene_;
   std::unique_ptr<ce30_pcviz::StaticView> default_viewpoint_;
+  float offset_x_;
+  float offset_y_;
+  float offset_z_;
 };
 
 #endif // CES_STATIC_SCENE_H

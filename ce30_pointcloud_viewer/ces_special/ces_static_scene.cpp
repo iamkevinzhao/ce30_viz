@@ -10,7 +10,10 @@ using namespace ce30_pcviz;
 
 CESStaticScene::CESStaticScene()
   : Scene(nullptr), showing_(false),
-    last_showing_(true) // ensure show on start
+    last_showing_(true), // ensure show on start
+    offset_x_(-0.5f),
+    offset_y_(0.0f),
+    offset_z_(0.0f)
 {
 }
 
@@ -51,6 +54,15 @@ void CESStaticScene::ChangeToDefaultViewPoint() {
   }
 }
 
+void CESStaticScene::UpdateOffsetDelta(
+    const float &x, const float &y, const float &z) {
+  offset_x_ += x;
+  offset_y_ += y;
+  offset_z_ += z;
+  Erase();
+  DrawScene();
+}
+
 void CESStaticScene::OnVisualizerLoaded(std::shared_ptr<PCLVisualizer> viz) {
   Scene::OnVisualizerLoaded();
   default_viewpoint_.reset(new StaticView(viz));
@@ -80,11 +92,10 @@ void CESStaticScene::DrawScene() {
     {0.0f, -1.5f, -1.0f, 9.0f, -1.5f, -1.0f}
   };
   double r = 0.0, g = 0.0, b = 1.0;
-  float x = -0.5f, y = 0.0f, z = 0.0f;
   for (auto& line : lines) {
     Viz().addLine(
-        PointXYZ(line[0] + x, line[1] + y, line[2] + z),
-        PointXYZ(line[3] + x, line[4] + y, line[5] + z),
+        PointXYZ(line[0] + offset_x_, line[1] + offset_y_, line[2] + offset_z_),
+        PointXYZ(line[3] + offset_x_, line[4] + offset_y_, line[5] + offset_z_),
         r, g, b, GetLineID(++id));
   }
   vector<string> ids;
@@ -94,7 +105,8 @@ void CESStaticScene::DrawScene() {
   }
 
   shared_ptr<GridScene> grid_scene_(new GridScene(VizPtr()));
-  grid_scene_->SetParams(12, 30, 0.5f, 12.0f, 3.0f, -1.1f);
+  grid_scene_->SetParams(
+      12, 30, 0.5f, 12.0f + offset_x_, 3.0f + offset_y_, -1.1f + offset_z_);
   AddChild(grid_scene_);
   grid_scene_->Update();
 
