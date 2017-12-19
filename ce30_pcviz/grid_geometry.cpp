@@ -27,15 +27,23 @@ using namespace std;
 
 namespace ce30_pcviz {
 GridGeometry::GridGeometry(const int& width, const int& height,
-                           const float& x, const float& y, const float& size)
-  : width_(width), height_(height), x_(x), y_(y), size_(size) {
+                           const float& x, const float& y,
+                           const float& size)
+  : GridGeometry(width, height, x, y, 0.0f, size) {
+}
+
+GridGeometry::GridGeometry(const int& width, const int& height,
+                           const float& x, const float& y, const float& z,
+                           const float& size)
+  : width_(width), height_(height), x_(x), y_(y), z_(z), size_(size) {
   Calculate();
 }
+
 void GridGeometry::Calculate() {
-  PointXYZ end_left(x_, y_, 0.0f);
-  PointXYZ end_right(x_, y_ - width_ * size_, 0.0f);
+  PointXYZ end_left(x_, y_, z_);
+  PointXYZ end_right(x_, y_ - width_ * size_, z_);
   PointXYZ end_top = end_left;
-  PointXYZ end_bottom(x_ - height_ * size_, y_, 0.0f);
+  PointXYZ end_bottom(x_ - height_ * size_, y_, z_);
 
   for (int hgt = 0; hgt <= height_; ++hgt) {
     EndToEnd e2e{end_left, end_right};

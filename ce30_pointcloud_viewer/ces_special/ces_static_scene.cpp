@@ -94,8 +94,9 @@ void CESStaticScene::DrawScene() {
   }
 
   shared_ptr<GridScene> grid_scene_(new GridScene(VizPtr()));
+  grid_scene_->SetParams(12, 30, 0.5f, 12.0f, 3.0f, -1.1f);
   AddChild(grid_scene_);
-  // grid_scene_->Update();
+  grid_scene_->Update();
 
   shared_ptr<SensorModelScene> sensor_model_scene_(
       new SensorModelScene(VizPtr()));

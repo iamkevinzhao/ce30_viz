@@ -13,6 +13,10 @@ public:
   GridGeometry(
       const int& width, const int& height,
       const float& x, const float& y, const float& size);
+  GridGeometry(
+      const int& width, const int& height,
+      const float& x, const float& y, const float& z,
+      const float& size);
   std::vector<EndToEnd> Horizontals();
   std::vector<EndToEnd> Verticals();
   pcl::PointXYZ TopLeftCorner();
@@ -29,6 +33,7 @@ private:
   int height_;
   float x_;
   float y_;
+  float z_;
   float size_;
 
   std::vector<EndToEnd> horizontals_;

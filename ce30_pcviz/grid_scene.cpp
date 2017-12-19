@@ -5,11 +5,50 @@ using namespace std;
 using namespace pcl::visualization;
 
 namespace ce30_pcviz {
-GridScene::GridScene(shared_ptr<PCLVisualizer> viz) : StaticScene(viz)
+GridScene::GridScene(shared_ptr<PCLVisualizer> viz)
+  : StaticScene(viz), show_default_(true)
 {
 }
 
+void GridScene::SetShowDefault(const bool &show_default) {
+  show_default_ = show_default;
+}
+
+void GridScene::SetParams(
+    const int &width, const int &height, const float &size,
+    const float &x, const float &y, const float &z) {
+  width_ = width;
+  height_ = height;
+  size_ = size;
+  x_ = x;
+  y_ = y;
+  z_ = z;
+  SetShowDefault(false);
+}
+
 void GridScene::Show() {
+  if (show_default_) {
+    ShowDefault();
+    return;
+  }
+  GridGeometry grid_geo(width_, height_, x_, y_, z_, size_);
+  auto horizontals = grid_geo.Horizontals();
+  auto verticals = grid_geo.Verticals();
+  int index = 0;
+  for (auto& hor : horizontals) {
+    auto id = "grid_line_h_" + to_string(index++);
+    Viz().addLine(hor.first, hor.second, id);
+    RegisterComponent(id);
+  }
+  index = 0;
+  for (auto& ver : verticals) {
+    auto id = "grid_line_v_" + to_string(index++);
+    Viz().addLine(ver.first, ver.second, id);
+    RegisterComponent(id);
+  }
+}
+
+void GridScene::ShowDefault() {
   int width = 30;
   int height = 30;
   float size = 1.0f;
