@@ -30,7 +30,6 @@ void Scene::RegisterComponent(const string &id) {
 }
 
 void Scene::OnVisualizerLoaded(std::shared_ptr<PCLVisualizer> viz) {
-
 }
 
 void Scene::OnVisualizerLoaded() {}

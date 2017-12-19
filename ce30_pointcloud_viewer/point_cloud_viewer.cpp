@@ -163,6 +163,12 @@ void PointCloudViewer::OnPCVizInitialized() {
          ces_static_scene_->SetShow(!ces_static_scene_->Showing());
        },
        "Display CES Scene"});
+  pcviz_->AddCtrlShortcut(
+      {"3",
+       [this](){
+         ces_static_scene_->ChangeToDefaultViewPoint();
+       },
+       "Change View Point (CES Special)"});
 #endif
 
   pcviz_->PrintShortcuts();

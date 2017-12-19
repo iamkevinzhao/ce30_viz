@@ -2,9 +2,10 @@
 #define STATIC_VIEW_H
 
 #include "scene.h"
+#include "export.h"
 
 namespace ce30_pcviz {
-class StaticView : public Scene
+class API StaticView : public Scene
 {
 public:
   StaticView(std::shared_ptr<pcl::visualization::PCLVisualizer> viz);

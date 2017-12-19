@@ -32,10 +32,28 @@ void CESStaticScene::Update() {
     } else {
       Erase();
       world_scene_.reset(new WorldScene(VizPtr()));
+      static bool first_world = true;
+      if (first_world) {
+        first_world = false;
+      } else {
+        world_scene_->InitCameraParametersOnShow(false);
+        world_scene_->ChangeDefaultViewPointOnShow(false);
+      }
       world_scene_->Update();
     }
   }
   last_showing_ = showing_;
+}
+
+void CESStaticScene::ChangeToDefaultViewPoint() {
+  if (default_viewpoint_) {
+    default_viewpoint_->Change(5.0f, -10.0f, 0.0f, 5.0f, 0.0f, 0.0f);
+  }
+}
+
+void CESStaticScene::OnVisualizerLoaded(std::shared_ptr<PCLVisualizer> viz) {
+  Scene::OnVisualizerLoaded();
+  default_viewpoint_.reset(new StaticView(viz));
 }
 
 void CESStaticScene::DrawScene() {
