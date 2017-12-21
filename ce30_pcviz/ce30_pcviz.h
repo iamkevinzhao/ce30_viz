@@ -49,6 +49,7 @@ class API PointCloudViz {
 public:
   PointCloudViz();
   static std::string Version();
+  void SetRefreshInterval(const int& millisecs);
   void Show();
   bool Closed();
   void UpdatePointCloud(const PointCloud& point_cloud);
@@ -66,6 +67,7 @@ private:
   std::shared_ptr<pcl::visualization::PCLVisualizer> viz_;
   std::unique_ptr<OperationHandler> operation_;
   bool first_cloud_;
+  int refresh_interval_; // in millisecs
 };
 }
 

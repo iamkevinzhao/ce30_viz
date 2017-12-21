@@ -39,7 +39,7 @@ void Point::SetXRange(const float &min, const float &max) {
 
 PointCloud::PointCloud() {}
 
-PointCloudViz::PointCloudViz() : first_cloud_(true) {
+PointCloudViz::PointCloudViz() : first_cloud_(true), refresh_interval_(0) {
   viz_.reset(new PCLVisualizer("CE30 Point Cloud Viz"));
   world_scene_.reset(new WorldScene(viz_));
   operation_.reset(new OperationHandler(viz_));
@@ -47,6 +47,10 @@ PointCloudViz::PointCloudViz() : first_cloud_(true) {
 
 string PointCloudViz::Version() {
   return CE30_VIZ_VERSION_STRING;
+}
+
+void PointCloudViz::SetRefreshInterval(const int &millisecs) {
+  refresh_interval_ = millisecs;
 }
 
 bool PointCloudViz::Closed() {
@@ -67,7 +71,7 @@ void PointCloudViz::UpdatePointCloud(const PointCloud &point_cloud) {
   viz_->updatePointCloud<pcl::PointXYZRGB>(point_cloud_ptr, rgb);
 
   if (!viz_->wasStopped()) {
-    viz_->spinOnce();
+    viz_->spinOnce(refresh_interval_);
   }
 }
 

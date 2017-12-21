@@ -7,6 +7,8 @@
 #include <ce30_pcviz/ce30_pcviz.h>
 #include <QCoreApplication>
 #include "exit_code.h"
+#include <thread>
+#include <mutex>
 
 #ifdef CES_SPECIAL
 #include "ces_special/ces_static_scene.h"
@@ -20,6 +22,7 @@ public:
 protected:
   void timerEvent(QTimerEvent* event);
 private:
+  void PacketReceiveThread();
   void OnPCVizInitialized();
   static ExitCode ConnectOrExit(ce30_driver::UDPSocket& socket);
   static void UpdatePointCloudDisplay(
@@ -27,7 +30,7 @@ private:
       ce30_pcviz::PointCloudViz& viz,
       const bool& vsmode,
       const bool& save_pcd);
-  std::unique_ptr<ce30_driver::UDPSocket> socket_;
+  std::shared_ptr<ce30_driver::UDPSocket> socket_;
   std::unique_ptr<ce30_pcviz::PointCloudViz> pcviz_;
   ce30_driver::Scan scan_;
   bool vertical_stretch_mode_;
@@ -36,6 +39,11 @@ private:
 #ifdef CES_SPECIAL
   std::shared_ptr<CESStaticScene> ces_static_scene_;
 #endif
+  std::unique_ptr<std::thread> thread_;
+  std::mutex packet_mutex_;
+  ce30_driver::Packet packet_;
+  std::mutex signal_mutex_;
+  bool kill_signal_;
 };
 
 #endif // POINT_CLOUD_VIEWER_H

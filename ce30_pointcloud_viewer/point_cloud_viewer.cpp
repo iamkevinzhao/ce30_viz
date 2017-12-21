@@ -12,13 +12,23 @@ using namespace ce30_pcviz;
 using namespace ce30_driver;
 
 PointCloudViewer::PointCloudViewer()
-  : vertical_stretch_mode_(false), save_pcd_(false), use_filter_(false)
+  : vertical_stretch_mode_(false),
+    save_pcd_(false),
+    use_filter_(false),
+    kill_signal_(false)
 {
   startTimer(0);
   ce30_pcviz::Point::SetXRange(Channel::DistanceMin(), Channel::DistanceMax());
 }
 
 PointCloudViewer::~PointCloudViewer() {
+  signal_mutex_.lock();
+  kill_signal_ = true;
+  signal_mutex_.unlock();
+
+  if (thread_ && thread_->joinable()) {
+    thread_->join();
+  }
   StopRunning(*socket_);
 }
 
@@ -49,6 +59,10 @@ void PointCloudViewer::timerEvent(QTimerEvent *event) {
       QCoreApplication::exit((int)ec);
       return;
     }
+    if (!thread_) {
+      thread_.reset(
+          new std::thread(bind(&PointCloudViewer::PacketReceiveThread, this)));
+    }
   }
   if (!pcviz_) {
     pcviz_.reset(new PointCloudViz);
@@ -59,16 +73,18 @@ void PointCloudViewer::timerEvent(QTimerEvent *event) {
     return;
   }
 
-  Packet packet;
-  if (GetPacket(packet, *socket_)) {
-    auto parsed = packet.Parse();
-    if (parsed) {
-      scan_.AddColumnsFromPacket(*parsed);
-      if (scan_.Ready()) {
-        UpdatePointCloudDisplay(
-            scan_, *pcviz_, vertical_stretch_mode_, save_pcd_);
-        scan_.Reset();
-      }
+  static Packet packet;
+  packet_mutex_.lock();
+  packet = packet_;
+  packet_mutex_.unlock();
+
+  auto parsed = packet.Parse();
+  if (parsed) {
+    scan_.AddColumnsFromPacket(*parsed);
+    if (scan_.Ready()) {
+      UpdatePointCloudDisplay(
+          scan_, *pcviz_, vertical_stretch_mode_, save_pcd_);
+      scan_.Reset();
     }
   }
 }
@@ -104,7 +120,26 @@ void PointCloudViewer::UpdatePointCloudDisplay(
   }
 }
 
+void PointCloudViewer::PacketReceiveThread() {
+  while (true) {
+    signal_mutex_.lock();
+    auto kill_signal = kill_signal_;
+    signal_mutex_.unlock();
+    if (kill_signal) {
+      return;
+    }
+
+    static Packet packet;
+    if (GetPacket(packet, *socket_, true)) {
+      packet_mutex_.lock();
+      packet_ = packet;
+      packet_mutex_.unlock();
+    }
+  }
+}
+
 void PointCloudViewer::OnPCVizInitialized() {
+  pcviz_->SetRefreshInterval(5);
 #ifdef CES_SPECIAL
   ces_static_scene_.reset(new CESStaticScene);
   pcviz_->UpdateWorldScene(ces_static_scene_);
