@@ -139,7 +139,7 @@ void PointCloudViewer::PacketReceiveThread() {
 }
 
 void PointCloudViewer::OnPCVizInitialized() {
-  pcviz_->SetRefreshInterval(5);
+  // pcviz_->SetRefreshInterval(5);
 #ifdef CES_SPECIAL
   ces_static_scene_.reset(new CESStaticScene);
   pcviz_->UpdateWorldScene(ces_static_scene_);
