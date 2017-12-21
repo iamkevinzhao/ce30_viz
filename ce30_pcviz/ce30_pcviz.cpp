@@ -111,7 +111,7 @@ void PointCloudViz::OnFirstPointCloud(
     PointCloudColorHandlerRGBField<PCLPoint>& rgb) {
   viz_->addPointCloud<pcl::PointXYZRGB>(point_cloud_ptr, rgb);
   viz_->setPointCloudRenderingProperties(
-      pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 7);
+      pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 3);
   viz_->setShowFPS(false);
   operation_->UseAerialView();
 }
