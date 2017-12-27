@@ -100,7 +100,7 @@ void PointCloudViewer::UpdatePointCloudDisplay(
 //    cnt = 0;
 //  }
 
-  PointCloud cloud;
+  ce30_pcviz::PointCloud cloud;
   for (int x = 0; x < scan.Width(); ++x) {
     for (int y = 0; y < scan.Height(); ++y) {
       ce30_driver::Point p = scan.at(x, y).point();
@@ -145,10 +145,10 @@ void PointCloudViewer::PacketReceiveThread() {
         }
       }
     }
-    scan_mutex_.lock();
+    unique_lock<mutex> lock(scan_mutex_);
     scan_ = scan;
-    scan_mutex_.unlock();
     condition_.notify_all();
+    lock.unlock();
     scan.Reset();
   }
 }
