@@ -10,7 +10,25 @@ The `ce30_viz` provides a set of tools to visualize CE30-D measurement data. All
 
 - 1.6.1
 
+#### Dependencies
+
+- [PCL](http://www.pointclouds.org) 1.7
+- [CMake](https://cmake.org/) 2.8.1
+- C++11
+- [ce30_driver](https://codincodee.github.io/ce30_driver) 1.0.4
+- [Qt](https://www.qt.io/) 5.6
+
+#### Recommend Configurations
+
+- [Ubuntu](https://www.ubuntu.com/) 16.04 x86_64 or 64-bit Windows 10
+- [GCC-C++](https://gcc.gnu.org) 5.4.0 or [MSVC](https://www.visualstudio.com) 2015 64 bits
+
 #### Download
 
 - [Point Cloud Viewer for Windows](https://github.com/codincodee/ce30_viz/releases/download/v1.6.1/ce30_pointcloud_viewer_v1_6_1_win10_x86_64.zip)
+
+#### Quick Access
+
+- [Official Website](http://www.benewake.com/en/index.html)
+- [ce30_driver](https://codincodee.github.io/ce30_driver)
 
