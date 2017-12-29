@@ -1,23 +1,16 @@
-## ce30_viz
+This page is set up for CE30-D SDK technical support. For product information about CE30 series and other Benewake products, please visit our [offical website](http://www.benewake.com/en/index.html).
 
-Welcome to Benewake CE30 Lidar!
+---
 
-This repository contains the SDK that enables developers to read and visualize CE30 measurement data at ease. 
-Components of the SDK can be directly compiled and run on Windows and Linux distributions.
+#### Get Started
 
-For more information about the SDK, please visit our [Wiki](https://github.com/codincodee/ce30_viz/wiki).
+The `ce30_viz` provides a set of tools to visualize CE30-D measurement data. All of these programs can be built and run on both Windows and Linux platforms. So far, we have tested them on Intel Core i7 PCs with 64-bit Windows 7, 64-bit Windows 10 and Ubuntu 16.04 x86_64, separately. You can built from source codes after correctly installing all dependencies. Besides, we have pre-built binaries along with every release for Windows. Therefore, we recommend you downloading the latest binary at first when you are using Windows 7/10. If this does not work for you, you might have to build from source then.
 
-If you are interested in Benewake product lines, please proceed to our [Home Page](http://www.benewake.com).
+#### Version
 
-Thanks for joining us!
+- 1.6.1
 
+#### Download
 
-感谢关注北醒CE30面阵雷达！
+- [Point Cloud Viewer for Windows](https://github.com/codincodee/ce30_viz/releases/download/v1.6.1/ce30_pointcloud_viewer_v1_6_1_win10_x86_64.zip)
 
-该仓库包含了可视化CE30输出数据的库与应用程序。用户可在Windows或Linux平台上编译使用相应组件。
-
-详情请访问[Wiki](https://github.com/codincodee/ce30_viz/wiki)。
-
-如需获取北醒的产品信息，请访问[企业主页](http://www.benewake.com)。
-
-感谢您对北醒的支持！
