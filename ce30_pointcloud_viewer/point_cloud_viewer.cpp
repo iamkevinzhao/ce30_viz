@@ -13,7 +13,7 @@ using namespace ce30_pcviz;
 using namespace ce30_driver;
 
 PointCloudViewer::PointCloudViewer()
-  : vertical_stretch_mode_(false),
+  : vertical_stretch_mode_(true),
     save_pcd_(false),
     use_filter_(false),
     kill_signal_(false)
