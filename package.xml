@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package>
+  <name>ce30_viz</name>
+  <version>0.0.0</version>
+  <description>Benewake CE30 Visualizer</description>
+  <maintainer email="bw@benewake.com">bw</maintainer>
+  <license>TODO</license>
+
+  <buildtool_depend>cmake</buildtool_depend>
+  <build_depend>ce30_driver</build_depend>
+  <run_depend>ce30_driver</run_depend>
+
+  <export>
+    <build_type>cmake</build_type>
+  </export>
+</package>
