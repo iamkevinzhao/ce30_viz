@@ -32,7 +32,6 @@ private:
       const bool& save_pcd);
   std::shared_ptr<ce30_driver::UDPSocket> socket_;
   std::unique_ptr<ce30_pcviz::PointCloudViz> pcviz_;
-  ce30_driver::Scan scan_;
   bool vertical_stretch_mode_;
   bool save_pcd_;
   bool use_filter_;
@@ -40,10 +39,11 @@ private:
   std::shared_ptr<CESStaticScene> ces_static_scene_;
 #endif
   std::unique_ptr<std::thread> thread_;
-  std::mutex packet_mutex_;
-  ce30_driver::Packet packet_;
+  std::mutex scan_mutex_;
+  ce30_driver::Scan scan_;
   std::mutex signal_mutex_;
   bool kill_signal_;
+  std::condition_variable condition_;
 };
 
 #endif // POINT_CLOUD_VIEWER_H

@@ -6,6 +6,7 @@
 #include <QThread>
 #include <QTime>
 #include <QDir>
+#include <QElapsedTimer>
 
 using namespace std;
 using namespace ce30_pcviz;
@@ -73,19 +74,15 @@ void PointCloudViewer::timerEvent(QTimerEvent *event) {
     return;
   }
 
-  static Packet packet;
-  packet_mutex_.lock();
-  packet = packet_;
-  packet_mutex_.unlock();
+  static Scan scan;
+  std::unique_lock<std::mutex> lock(scan_mutex_);
+  condition_.wait(lock);
+  scan = scan_;
+  lock.unlock();
 
-  auto parsed = packet.Parse();
-  if (parsed) {
-    scan_.AddColumnsFromPacket(*parsed);
-    if (scan_.Ready()) {
-      UpdatePointCloudDisplay(
-          scan_, *pcviz_, vertical_stretch_mode_, save_pcd_);
-      scan_.Reset();
-    }
+  if (scan.Ready()) {
+    UpdatePointCloudDisplay(
+        scan, *pcviz_, vertical_stretch_mode_, save_pcd_);
   }
 }
 
@@ -94,6 +91,15 @@ void PointCloudViewer::UpdatePointCloudDisplay(
     PointCloudViz &viz,
     const bool& vsmode,
     const bool& save_pcd) {
+//  static int cnt = 0;
+//  cnt++;
+//  static QElapsedTimer timer;
+//  if (cnt > 30) {
+//    cout << timer.elapsed() << endl;
+//    timer.start();
+//    cnt = 0;
+//  }
+
   PointCloud cloud;
   for (int x = 0; x < scan.Width(); ++x) {
     for (int y = 0; y < scan.Height(); ++y) {
@@ -122,24 +128,32 @@ void PointCloudViewer::UpdatePointCloudDisplay(
 
 void PointCloudViewer::PacketReceiveThread() {
   while (true) {
-    signal_mutex_.lock();
+    // signal_mutex_.lock();
     auto kill_signal = kill_signal_;
-    signal_mutex_.unlock();
+    // signal_mutex_.unlock();
     if (kill_signal) {
       return;
     }
 
     static Packet packet;
-    if (GetPacket(packet, *socket_, true)) {
-      packet_mutex_.lock();
-      packet_ = packet;
-      packet_mutex_.unlock();
+    static Scan scan;
+    while (!scan.Ready()) {
+      if (GetPacket(packet, *socket_, true)) {
+        auto parsed = packet.Parse();
+        if (parsed) {
+          scan.AddColumnsFromPacket(*parsed);
+        }
+      }
     }
+    scan_mutex_.lock();
+    scan_ = scan;
+    scan_mutex_.unlock();
+    condition_.notify_all();
+    scan.Reset();
   }
 }
 
 void PointCloudViewer::OnPCVizInitialized() {
-  pcviz_->SetRefreshInterval(5);
 #ifdef CES_SPECIAL
   ces_static_scene_.reset(new CESStaticScene);
   pcviz_->UpdateWorldScene(ces_static_scene_);
