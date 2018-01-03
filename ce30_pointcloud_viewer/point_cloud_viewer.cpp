@@ -100,7 +100,7 @@ void PointCloudViewer::UpdatePointCloudDisplay(
 //    cnt = 0;
 //  }
 
-  PointCloud cloud;
+  ce30_pcviz::PointCloud cloud;
   for (int x = 0; x < scan.Width(); ++x) {
     for (int y = 0; y < scan.Height(); ++y) {
       ce30_driver::Point p = scan.at(x, y).point();
