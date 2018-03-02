@@ -34,26 +34,35 @@ PointCloudViewer::~PointCloudViewer() {
 }
 
 ExitCode PointCloudViewer::ConnectOrExit(UDPSocket& socket) {
-  if (!Connect(socket)) {
-    cerr << "Unable to Connect Device!" << endl;
-    return ExitCode::device_connection_failure;
-  }
-  string device_version;
-  if (!GetVersion(device_version, socket)) {
-    cerr << "Unable to Retrieve CE30 Device Version" << endl;
-    return ExitCode::retrieve_ce30_version_failure;
-  }
-  cout << "CE30 Version: " << device_version << endl;
-  if (!StartRunning(socket)) {
-    cerr << "Unable to Start CE30" << endl;
-    return ExitCode::start_ce30_failure;
-  }
+//  if (!Connect(socket)) {
+//    cerr << "Unable to Connect Device!" << endl;
+//    return ExitCode::device_connection_failure;
+//  }
+//  string device_version;
+//  if (!GetVersion(device_version, socket)) {
+//    cerr << "Unable to Retrieve CE30 Device Version" << endl;
+//    return ExitCode::retrieve_ce30_version_failure;
+//  }
+//  cout << "CE30 Version: " << device_version << endl;
+//  if (!StartRunning(socket)) {
+//    cerr << "Unable to Start CE30" << endl;
+//    return ExitCode::start_ce30_failure;
+//  }
   return ExitCode::no_exit;
 }
 
 void PointCloudViewer::timerEvent(QTimerEvent *event) {
   if (!socket_) {
-    socket_.reset(new UDPSocket);
+    ifstream is("ip.txt");
+    string ip, port;
+    if (!is.is_open()) {
+      socket_.reset(new UDPSocket);
+      cout << __LINE__ << endl;
+    } else {
+      is >> ip >> port;
+      cout << ip << " " << port << endl;
+      socket_.reset(new UDPSocket(ip, stoi(port)));
+    }
     auto ec = ConnectOrExit(*socket_);
     if (ec != ExitCode::no_exit) {
       QThread::sleep(2);
