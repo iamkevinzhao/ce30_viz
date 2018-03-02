@@ -57,10 +57,9 @@ void PointCloudViewer::timerEvent(QTimerEvent *event) {
     string ip, port;
     if (!is.is_open()) {
       socket_.reset(new UDPSocket);
-      cout << __LINE__ << endl;
     } else {
       is >> ip >> port;
-      cout << ip << " " << port << endl;
+      cout << "IP: " << ip << " Port: " << port << endl;
       socket_.reset(new UDPSocket(ip, stoi(port)));
     }
     auto ec = ConnectOrExit(*socket_);
