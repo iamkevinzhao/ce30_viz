@@ -142,7 +142,11 @@ void PointCloudViewer::PacketReceiveThread() {
         auto parsed = packet.Parse();
         if (parsed) {
           scan.AddColumnsFromPacket(*parsed);
+        } else {
+          cerr << "Error parsing package." << endl;
         }
+      } else {
+        cerr << "Error getting package." << endl;
       }
     }
     unique_lock<mutex> lock(scan_mutex_);
