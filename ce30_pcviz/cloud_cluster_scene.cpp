@@ -47,19 +47,17 @@ void CloudClusterScene::DrawClusterFrame(
 
   std::vector<pcl::PointIndices> cluster_indices;
   pcl::EuclideanClusterExtraction<pcl::PointXYZ> ec;
-  ec.setClusterTolerance (0.5); // 2cm
+  ec.setClusterTolerance (0.5);
   ec.setMinClusterSize (10);
   ec.setMaxClusterSize (100000);
   ec.setSearchMethod (tree);
   ec.setInputCloud (cloud_filtered);
   ec.extract (cluster_indices);
-  // std::cout << cluster_indices.size() << endl;
 
   if (!cluster_indices.empty()) {
     ClearAllCubicFrames();
   }
 
-  int j = 0;
   for (std::vector<pcl::PointIndices>::const_iterator it = cluster_indices.begin (); it != cluster_indices.end (); ++it)
   {
     static float min = std::numeric_limits<float>::min();
@@ -94,66 +92,66 @@ void CloudClusterScene::Erase() {
   ClearAllCubicFrames();
 }
 
+std::string CloudClusterScene::EdgeID() {
+  auto id =
+      "cubic_frame_line_" +
+      std::to_string(cubic_frame_edge_ids_.size());
+  cubic_frame_edge_ids_.push_back(id);
+  return id;
+}
+
 void CloudClusterScene::AddCubicFrame(
     const float x_min, const float x_max,
     const float y_min, const float y_max,
     const float z_min, const float z_max) {
-  static auto id =
-      [this](){
-        auto id =
-            "cubic_frame_line_" +
-            std::to_string(cubic_frame_edge_ids_.size());
-        cubic_frame_edge_ids_.push_back(id);
-        return id;
-      };
   static float r = 0, g = 1, b = 0;
   Viz().addLine(
       pcl::PointXYZ{x_max, y_min, z_min},
       pcl::PointXYZ{x_max, y_max, z_min},
-      r, g, b, id());
+      r, g, b, EdgeID());
   Viz().addLine(
       pcl::PointXYZ{x_max, y_min, z_min},
       pcl::PointXYZ{x_max, y_min, z_max},
-      r, g, b, id());
+      r, g, b, EdgeID());
   Viz().addLine(
       pcl::PointXYZ{x_max, y_min, z_max},
       pcl::PointXYZ{x_max, y_max, z_max},
-      r, g, b, id());
+      r, g, b, EdgeID());
   Viz().addLine(
       pcl::PointXYZ{x_max, y_min, z_max},
       pcl::PointXYZ{x_min, y_min, z_max},
-      r, g, b, id());
+      r, g, b, EdgeID());
   Viz().addLine(
       pcl::PointXYZ{x_max, y_max, z_min},
       pcl::PointXYZ{x_max, y_max, z_max},
-      r, g, b, id());
+      r, g, b, EdgeID());
   Viz().addLine(
       pcl::PointXYZ{x_min, y_min, z_max},
       pcl::PointXYZ{x_min, y_min, z_min},
-      r, g, b, id());
+      r, g, b, EdgeID());
   Viz().addLine(
       pcl::PointXYZ{x_max, y_min, z_min},
       pcl::PointXYZ{x_min, y_min, z_min},
-      r, g, b, id());
+      r, g, b, EdgeID());
   Viz().addLine(
       pcl::PointXYZ{x_min, y_max, z_max},
       pcl::PointXYZ{x_min, y_min, z_max},
-      r, g, b, id());
+      r, g, b, EdgeID());
   Viz().addLine(
       pcl::PointXYZ{x_min, y_max, z_max},
       pcl::PointXYZ{x_min, y_max, z_min},
-      r, g, b, id());
+      r, g, b, EdgeID());
   Viz().addLine(
       pcl::PointXYZ{x_min, y_max, z_min},
       pcl::PointXYZ{x_max, y_max, z_min},
-      r, g, b, id());
+      r, g, b, EdgeID());
   Viz().addLine(
       pcl::PointXYZ{x_min, y_max, z_max},
       pcl::PointXYZ{x_max, y_max, z_max},
-      r, g, b, id());
+      r, g, b, EdgeID());
   Viz().addLine(
       pcl::PointXYZ{x_min, y_min, z_min},
       pcl::PointXYZ{x_min, y_max, z_min},
-      r, g, b, id());
+      r, g, b, EdgeID());
 }
 } // namespace ce30_pcviz

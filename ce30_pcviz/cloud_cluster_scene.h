@@ -21,6 +21,7 @@ protected:
   void ClearAllCubicFrames();
   void Erase() override;
 private:
+  std::string EdgeID();
   std::vector<std::string> cubic_frame_edge_ids_;
 };
 } // namespace ce30_pcviz
