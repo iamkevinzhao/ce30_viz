@@ -10,7 +10,7 @@ The `ce30_viz` provides a set of tools to visualize CE30-D measurement data. All
 
 #### Version
 
-- 1.6.2
+- 1.7.0
 
 #### Dependencies
 
