@@ -23,6 +23,10 @@ add_library(
       operation_handler.cpp
       static_view.h
       static_view.cpp
+      cloud_scene.h
+      cloud_scene.cpp
+      cloud_cluster_scene.h
+      cloud_cluster_scene.cpp
 )
 
 target_link_libraries(

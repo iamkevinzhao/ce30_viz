@@ -182,6 +182,11 @@ void PointCloudViewer::OnPCVizInitialized() {
            }
          }
        }, "Save Cloud to Disk"});
+  pcviz_->AddCtrlShortcut(
+      {"d",
+       [this](){
+         pcviz_->ClusterModeOn(!pcviz_->IsClusterModeOn());
+       }, "Clustering Mode"});
 
 #ifdef USE_FEATURE_FILTER
   pcviz_->AddCtrlShortcut(

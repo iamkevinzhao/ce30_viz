@@ -5,6 +5,7 @@
 #include "world_scene.h"
 #include "operation_handler.h"
 #include <pcl/io/pcd_io.h>
+#include "cloud_cluster_scene.h"
 
 using namespace std;
 using namespace pcl::visualization;
@@ -39,9 +40,11 @@ void Point::SetXRange(const float &min, const float &max) {
 
 PointCloud::PointCloud() {}
 
-PointCloudViz::PointCloudViz() : first_cloud_(true), refresh_interval_(0) {
+PointCloudViz::PointCloudViz() :
+    first_cloud_(true), refresh_interval_(0) {
   viz_.reset(new PCLVisualizer("CE30 Point Cloud Viz"));
   world_scene_.reset(new WorldScene(viz_));
+//  cloud_cluster_scene_.reset(new CloudClusterScene(viz_));
   operation_.reset(new OperationHandler(viz_));
 }
 
@@ -63,6 +66,11 @@ void PointCloudViz::UpdatePointCloud(const PointCloud &point_cloud) {
       new pcl::PointCloud<pcl::PointXYZRGB>(point_cloud.pcl_pointcloud()));
 
   PointCloudColorHandlerRGBField<pcl::PointXYZRGB> rgb(point_cloud_ptr);
+  if (cloud_cluster_scene_) {
+    cloud_cluster_scene_->SetCloud(point_cloud_ptr);
+    cloud_cluster_scene_->Update();
+  }
+
   if (first_cloud_) {
     OnFirstPointCloud(point_cloud_ptr, rgb);
     first_cloud_ = false;
@@ -114,5 +122,24 @@ void PointCloudViz::OnFirstPointCloud(
       pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 3);
   viz_->setShowFPS(false);
   operation_->UseAerialView();
+}
+
+void PointCloudViz::ClusterModeOn(const bool &on) {
+  if (cloud_cluster_scene_) {
+    if (!on) {
+      cloud_cluster_scene_->Erase();
+      cloud_cluster_scene_.reset();
+    }
+  } else {
+    if (on) {
+      if (viz_) {
+        cloud_cluster_scene_.reset(new CloudClusterScene(viz_));
+      }
+    }
+  }
+}
+
+bool PointCloudViz::IsClusterModeOn() {
+  return cloud_cluster_scene_ != nullptr;
 }
 }
