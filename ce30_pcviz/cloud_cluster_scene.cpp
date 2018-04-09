@@ -40,6 +40,9 @@ void CloudClusterScene::DrawClusterFrame(
   }
 
   auto cloud_filtered = cloud;
+  if (cloud->empty()) {
+    return;
+  }
 
   // Creating the KdTree object for the search method of the extraction
   pcl::search::KdTree<pcl::PointXYZ>::Ptr tree (new pcl::search::KdTree<pcl::PointXYZ>);
