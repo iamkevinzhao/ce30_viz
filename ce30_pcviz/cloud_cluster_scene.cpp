@@ -50,7 +50,7 @@ void CloudClusterScene::DrawClusterFrame(
 
   std::vector<pcl::PointIndices> cluster_indices;
   pcl::EuclideanClusterExtraction<pcl::PointXYZ> ec;
-  ec.setClusterTolerance (0.5);
+  ec.setClusterTolerance (0.4);
   ec.setMinClusterSize (10);
   ec.setMaxClusterSize (100000);
   ec.setSearchMethod (tree);
@@ -63,8 +63,10 @@ void CloudClusterScene::DrawClusterFrame(
 
   for (std::vector<pcl::PointIndices>::const_iterator it = cluster_indices.begin (); it != cluster_indices.end (); ++it)
   {
-    static float min = std::numeric_limits<float>::min();
-    static float max = std::numeric_limits<float>::max();
+//    static float min = std::numeric_limits<float>::min();
+//    static float max = std::numeric_limits<float>::max();
+    static float min = -1000;
+    static float max = 1000;
 
     float x_min = max, x_max = min;
     float y_min = max, y_max = min;
