@@ -62,6 +62,9 @@ public:
   void UpdateWorldScene(std::shared_ptr<Scene> scene);
   void ClusterModeOn(const bool& on);
   bool IsClusterModeOn();
+  std::shared_ptr<pcl::visualization::PCLVisualizer> Viz() {
+    return viz_;
+  }
 private:
   void OnFirstPointCloud(
       pcl::PointCloud<pcl::PointXYZRGB>::Ptr point_cloud_ptr,

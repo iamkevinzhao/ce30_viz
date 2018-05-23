@@ -44,6 +44,8 @@ private:
   std::mutex signal_mutex_;
   bool kill_signal_;
   std::condition_variable condition_;
+
+  bool pause_ = false;
 };
 
 #endif // POINT_CLOUD_VIEWER_H

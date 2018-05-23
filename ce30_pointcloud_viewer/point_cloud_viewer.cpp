@@ -7,6 +7,8 @@
 #include <QTime>
 #include <QDir>
 #include <QElapsedTimer>
+#include <pcl/io/pcd_io.h>
+#include <QDebug>
 
 using namespace std;
 using namespace ce30_pcviz;
@@ -52,19 +54,32 @@ ExitCode PointCloudViewer::ConnectOrExit(UDPSocket& socket) {
 }
 
 void PointCloudViewer::timerEvent(QTimerEvent *event) {
-  if (!socket_) {
-    socket_.reset(new UDPSocket);
-    auto ec = ConnectOrExit(*socket_);
-    if (ec != ExitCode::no_exit) {
-      QThread::sleep(2);
-      QCoreApplication::exit((int)ec);
-      return;
-    }
-    if (!thread_) {
-      thread_.reset(
-          new std::thread(bind(&PointCloudViewer::PacketReceiveThread, this)));
-    }
+  if (pause_) {
+    return;
   }
+//  if (!socket_) {
+//    socket_.reset(new UDPSocket);
+//    auto ec = ConnectOrExit(*socket_);
+//    if (ec != ExitCode::no_exit) {
+//      QThread::sleep(2);
+//      QCoreApplication::exit((int)ec);
+//      return;
+//    }
+//    if (!thread_) {
+//      thread_.reset(
+//          new std::thread(bind(&PointCloudViewer::PacketReceiveThread, this)));
+//    }
+//  }
+  static bool first = true;
+  static QStringList pcds;
+  static int index = 0;
+  if (first) {
+    QDir dir("pcd");
+    dir.setNameFilters(QStringList() << "*.pcd");
+    pcds = dir.entryList();
+    first = false;
+  }
+
   if (!pcviz_) {
     pcviz_.reset(new PointCloudViz);
     OnPCVizInitialized();
@@ -74,16 +89,31 @@ void PointCloudViewer::timerEvent(QTimerEvent *event) {
     return;
   }
 
-  static Scan scan;
-  std::unique_lock<std::mutex> lock(scan_mutex_);
-  condition_.wait(lock);
-  scan = scan_;
-  lock.unlock();
-
-  if (scan.Ready()) {
-    UpdatePointCloudDisplay(
-        scan, *pcviz_, vertical_stretch_mode_, save_pcd_);
+  ce30_pcviz::PointCloud pointcloud;
+  if (index < pcds.size()) {
+    pcl::PointCloud<pcl::PointXYZ> cloud;
+    if (pcl::io::loadPCDFile<pcl::PointXYZ>("pcd/" + pcds.at(index).toStdString(), cloud) != -1) {
+      for (auto& p : cloud) {
+        pointcloud.push_back(ce30_pcviz::Point(p.z, p.x,p.y));
+      }
+      pcviz_->UpdatePointCloud(pointcloud);
+    }
+    ++index;
+    pcviz_->Viz()->setWindowName("Frame " + QString::number(index).toStdString());
+    QThread::msleep(1.0 / 30 * 1000);
+  } else {
+    QCoreApplication::exit((int)ExitCode::normal_exit);
   }
+//  static Scan scan;
+//  std::unique_lock<std::mutex> lock(scan_mutex_);
+//  condition_.wait(lock);
+//  scan = scan_;
+//  lock.unlock();
+
+//  if (scan.Ready()) {
+//    UpdatePointCloudDisplay(
+//        scan, *pcviz_, vertical_stretch_mode_, save_pcd_);
+//  }
 }
 
 void PointCloudViewer::UpdatePointCloudDisplay(
@@ -187,6 +217,12 @@ void PointCloudViewer::OnPCVizInitialized() {
        [this](){
          pcviz_->ClusterModeOn(!pcviz_->IsClusterModeOn());
        }, "Clustering Mode"});
+
+  pcviz_->AddCtrlShortcut(
+      {"p",
+       [this](){
+         pause_ = !pause_;
+       }, "Pause"});
 
 #ifdef USE_FEATURE_FILTER
   pcviz_->AddCtrlShortcut(
