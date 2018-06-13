@@ -137,11 +137,16 @@ void PointCloudViewer::PacketReceiveThread() {
 
     static Packet packet;
     static Scan scan;
-    while (!scan.Ready()) {
+    static Scan grey_scan;
+    while (!scan.Ready() && !grey_scan.Ready()) {
       if (GetPacket(packet, *socket_, true)) {
         auto parsed = packet.Parse();
         if (parsed) {
-          scan.AddColumnsFromPacket(*parsed);
+          if (parsed->grey_image) {
+            grey_scan.AddColumnsFromPacket(*parsed);
+          } else {
+            scan.AddColumnsFromPacket(*parsed);
+          }
         } else {
           cerr << "Error parsing package." << endl;
         }
@@ -150,10 +155,20 @@ void PointCloudViewer::PacketReceiveThread() {
       }
     }
     unique_lock<mutex> lock(scan_mutex_);
-    scan_ = scan;
+    if (grey_scan.Ready()) {
+      grey_scan_ = grey_scan;
+    }
+    if (scan.Ready()) {
+      scan_ = scan;
+    }
     condition_.notify_all();
     lock.unlock();
-    scan.Reset();
+    if (grey_scan.Ready()) {
+      grey_scan.Reset();
+    }
+    if (scan.Ready()) {
+      scan.Reset();
+    }
   }
 }
 

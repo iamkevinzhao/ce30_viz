@@ -41,6 +41,7 @@ private:
   std::unique_ptr<std::thread> thread_;
   std::mutex scan_mutex_;
   ce30_driver::Scan scan_;
+  ce30_driver::Scan grey_scan_;
   std::mutex signal_mutex_;
   bool kill_signal_;
   std::condition_variable condition_;
