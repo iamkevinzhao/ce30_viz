@@ -30,6 +30,8 @@ private:
       ce30_pcviz::PointCloudViz& viz,
       const bool& vsmode,
       const bool& save_pcd);
+  static void UpdateGreyImageDisplay(
+      const ce30_driver::Scan& scan);
   std::shared_ptr<ce30_driver::UDPSocket> socket_;
   std::unique_ptr<ce30_pcviz::PointCloudViz> pcviz_;
   bool vertical_stretch_mode_;

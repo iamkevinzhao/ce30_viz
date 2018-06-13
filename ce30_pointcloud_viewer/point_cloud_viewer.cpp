@@ -75,14 +75,23 @@ void PointCloudViewer::timerEvent(QTimerEvent *event) {
   }
 
   static Scan scan;
+  static Scan grey_scan;
   std::unique_lock<std::mutex> lock(scan_mutex_);
   condition_.wait(lock);
-  scan = scan_;
+  if (scan_.Ready()) {
+    scan = scan_;
+  }
+  if (grey_scan_.Ready()) {
+    grey_scan = grey_scan_;
+  }
   lock.unlock();
 
   if (scan.Ready()) {
     UpdatePointCloudDisplay(
         scan, *pcviz_, vertical_stretch_mode_, save_pcd_);
+  }
+  if (grey_scan.Ready()) {
+    UpdateGreyImageDisplay(grey_scan);
   }
 }
 
@@ -124,6 +133,10 @@ void PointCloudViewer::UpdatePointCloudDisplay(
         QTime::currentTime().toString().replace(":", "_").toStdString() +
         ".pcd", cloud);
   }
+}
+
+void PointCloudViewer::UpdateGreyImageDisplay(const Scan &scan) {
+
 }
 
 void PointCloudViewer::PacketReceiveThread() {
