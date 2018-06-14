@@ -9,6 +9,7 @@
 #include "exit_code.h"
 #include <thread>
 #include <mutex>
+#include <QImage>
 
 #ifdef CES_SPECIAL
 #include "ces_special/ces_static_scene.h"
@@ -16,9 +17,12 @@
 
 class PointCloudViewer : public QObject
 {
+  Q_OBJECT
 public:
   PointCloudViewer();
   ~PointCloudViewer();
+signals:
+  void UpdateImage(std::shared_ptr<QImage> image);
 protected:
   void timerEvent(QTimerEvent* event);
 private:
@@ -30,7 +34,7 @@ private:
       ce30_pcviz::PointCloudViz& viz,
       const bool& vsmode,
       const bool& save_pcd);
-  static void UpdateGreyImageDisplay(
+  void UpdateGreyImageDisplay(
       const ce30_driver::Scan& scan);
   std::shared_ptr<ce30_driver::UDPSocket> socket_;
   std::unique_ptr<ce30_pcviz::PointCloudViz> pcviz_;

@@ -7,6 +7,7 @@
 #include <QTime>
 #include <QDir>
 #include <QElapsedTimer>
+#include "grey_image.h"
 
 using namespace std;
 using namespace ce30_pcviz;
@@ -136,7 +137,28 @@ void PointCloudViewer::UpdatePointCloudDisplay(
 }
 
 void PointCloudViewer::UpdateGreyImageDisplay(const Scan &scan) {
+  const auto min = ce30_driver::Channel::GreyValueMin();
+  const auto max = ce30_driver::Channel::GreyValueMax();
+  const auto width = ce30_driver::Scan::Width();
+  const auto height = ce30_driver::Scan::Height();
 
+  std::shared_ptr<GrayImage> image(
+      new GrayImage(width, height, min, max));
+  for (int w = 0; w < width; ++w) {
+    for (int h = 0; h < height; ++h) {
+      auto value = scan.at(width - w - 1, h).grey_value;
+      if (value < min) {
+        value = min;
+      }
+      if (value > max) {
+        value = max;
+      }
+      // image->SetPixel({w, h}, scan.at(w, h).grey_value);
+      image->SetPixel({w, h}, value);
+      // std::cout << scan.at(w, h).grey_value << std::endl;
+    }
+  }
+  emit UpdateImage(image);
 }
 
 void PointCloudViewer::PacketReceiveThread() {

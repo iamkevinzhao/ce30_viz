@@ -1,6 +1,8 @@
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
 
+find_package(Qt5Widgets)
 find_package(Qt5Core)
 
 if(USE_FAKE_POINTCLOUD)
@@ -32,6 +34,11 @@ add_executable(
     main.cpp
     point_cloud_viewer.cpp
     point_cloud_viewer.h
+    grey_image_window.cpp
+    grey_image_window.h
+    grey_image_window.ui
+    grey_image.cpp
+    grey_image.h
     ${SRC_FAKE_POINTCLOUD}
     ${SRC_CES_SPECIAL}
     exit_code.h
@@ -42,6 +49,7 @@ target_link_libraries(
     ce30_pcviz
     ${CE30_DRIVER_LIBRARIES}
     Qt5::Core
+    Qt5::Widgets
 )
 
 install(TARGETS ce30_pointcloud_viewer
