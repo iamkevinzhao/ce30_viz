@@ -4,8 +4,8 @@ project(ce30_viz C CXX)
 set(CMAKE_CXX_STANDARD 11)
 
 set(CE30_VIZ_MAJOR_VERSION 1)
-set(CE30_VIZ_MINOR_VERSION 7)
-set(CE30_VIZ_PATCH_VERSION 1)
+set(CE30_VIZ_MINOR_VERSION 8)
+set(CE30_VIZ_PATCH_VERSION 0)
 set(CE30_VIZ_VERSION
   ${CE30_VIZ_MAJOR_VERSION}.${CE30_VIZ_MINOR_VERSION}.${CE30_VIZ_PATCH_VERSION})
 
@@ -36,7 +36,7 @@ include_directories(
   "${PROJECT_BINARY_DIR}")  # to find ce30_pcviz/config.h
 
 find_package(PCL 1.7 REQUIRED)
-find_package(ce30_driver 1.0.4 REQUIRED)
+find_package(ce30_driver 1.1.0 REQUIRED)
 
 include_directories(${PCL_INCLUDE_DIRS})
 link_directories(${PCL_LIBRARY_DIRS})
