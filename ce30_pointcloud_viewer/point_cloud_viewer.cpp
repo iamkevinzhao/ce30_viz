@@ -137,11 +137,25 @@ void PointCloudViewer::UpdatePointCloudDisplay(
 }
 
 void PointCloudViewer::UpdateGreyImageDisplay(const Scan &scan) {
-  const auto min = ce30_driver::Channel::GreyValueMin();
-  const auto max = ce30_driver::Channel::GreyValueMax();
+//  const auto min = ce30_driver::Channel::GreyValueMin();
+//  const auto max = ce30_driver::Channel::GreyValueMax();
   const auto width = ce30_driver::Scan::Width();
   const auto height = ce30_driver::Scan::Height();
 
+  const unsigned short min = ce30_driver::Channel::GreyValueMin();
+  unsigned short max = min;
+
+  for (int w = 0; w < width; ++w) {
+    for (int h = 0; h < height; ++h) {
+      auto value = scan.at(w, h).grey_value;
+      if (value > max) {
+        max = value;
+      }
+    }
+  }
+  if (max <= min) {
+    max = ce30_driver::Channel::GreyValueMax();
+  }
   std::shared_ptr<GrayImage> image(
       new GrayImage(width, height, min, max));
   for (int w = 0; w < width; ++w) {
