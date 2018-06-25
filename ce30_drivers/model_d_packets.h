@@ -7,8 +7,10 @@
 #include <unordered_map>
 #include "ce30_drivers_export.h"
 #include "data_types.h"
+#include "packets.h"
 
-namespace ce30_driver {
+namespace ce30_drivers {
+namespace model_d {
 /**
  * @brief contains the data collected by a photosensitive cell
  */
@@ -182,21 +184,6 @@ public:
   inline static float LookUpVerticalAzimuth(const int& i);
 private:
   std::unordered_map<int, Column> columns_;
-};
-
-/**
- * @brief base class of all UDP packets
- */
-struct CE30_DRIVERS_API PacketBase {
-  virtual ~PacketBase();
-  /**
-   * @brief time stamp when the packet is received
-   */
-  std::chrono::high_resolution_clock::time_point stamp;
-  /**
-   * @brief raw packet message in ASCIIs
-   */
-  std::vector<unsigned char> data;
 };
 
 /**
@@ -389,6 +376,7 @@ struct CE30_DRIVERS_API DisableFilterRequestPacket : public RequestPacket {
 /// @endcond
 
 using DisableFilterResponsePacket = CommonResponsePacket;
-}
+} // namespace model_d
+} // namespace ce30_drivers
 
 #endif // PACKET_H

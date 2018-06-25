@@ -1,9 +1,10 @@
-#include "utils.h"
+#include "model_d_utils.h"
 #include <iostream>
 
 using namespace std;
 
-namespace ce30_driver {
+namespace ce30_drivers {
+namespace model_d {
 bool GetVersion(std::string& version, UDPSocket& socket) {
   VersionRequestPacket version_request;
   auto diagnose = socket.SendPacket(version_request);
@@ -161,4 +162,5 @@ bool SendPacket(
   }
   return diagnose == Diagnose::send_successful;
 }
-}
+} // namespace model_d
+} // namespace ce30_drivers

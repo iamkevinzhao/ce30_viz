@@ -5,7 +5,7 @@
 using namespace boost::asio::ip;
 
 /// @cond DO_NOT_DOCUMENT_THIS
-namespace ce30_driver {
+namespace ce30_drivers {
 TimedUDPSocket::TimedUDPSocket(
     const udp::endpoint& listen_endpoint)
   : socket_(io_service_, udp::endpoint(udp::v4(), listen_endpoint.port())),

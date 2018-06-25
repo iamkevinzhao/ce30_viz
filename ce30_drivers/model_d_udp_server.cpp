@@ -1,13 +1,14 @@
-#include "udp_server.h"
+#include "model_d_udp_server.h"
 #include <stdexcept>
-#include "utils.h"
+#include "model_d_utils.h"
 #include <chrono>
 #include <iostream>
 #include <cmath>
 
 using namespace std;
 
-namespace ce30_driver {
+namespace ce30_drivers {
+namespace model_d {
 bool UDPServer::instance_running_ = false;
 UDPServer::UDPServer() : kill_signal_(false), ip_("192.168.1.80"), port_(2368)
 {
@@ -118,4 +119,5 @@ void UDPServer::RegisterCallback(
   callback_.reset(
       new std::function<void(std::shared_ptr<PointCloud>)>(callback));
 }
-}
+} // namespace model_d
+} // namespace ce30_drivers

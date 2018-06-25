@@ -1,9 +1,9 @@
-#include "packet.h"
+#include "model_d_packets.h"
 #include <algorithm>
 #include <iostream>
 #include <string.h>
 #include <sstream>
-#include "utils.h"
+#include "model_d_utils.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -15,7 +15,8 @@ inline static float ToRad(const float& x) {
 
 using namespace std;
 
-namespace ce30_driver {
+namespace ce30_drivers {
+namespace model_d {
 Channel::Channel()
   : distance(0.0f), amplitude(0.0f), grey_value(0) {
 
@@ -142,8 +143,6 @@ int Scan::WhichColumn(const float& azimuth) {
 float Scan::LookUpVerticalAzimuth(const int& i) {
   return 1.9f - i * 0.2f;
 }
-
-PacketBase::~PacketBase() {}
 
 Packet::Packet() {
   data.resize(
@@ -437,4 +436,5 @@ DisableFilterRequestPacket::DisableFilterRequestPacket() : RequestPacket() {
   SetCmdString("disableFeatures 104876");
 }
 /// @endcond
-}
+} // namespace model_d
+} // namespcae ce30_driver

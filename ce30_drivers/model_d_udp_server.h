@@ -9,7 +9,8 @@
 #include <thread>
 #include <condition_variable>
 
-namespace ce30_driver {
+namespace ce30_drivers {
+namespace model_d {
 /**
  * @brief device communication framework
  */
@@ -74,5 +75,6 @@ private:
   std::string ip_;
   unsigned short port_;
 };
-}
+} // namespace model_d
+} // namespace ce30_drivers
 #endif // UDP_SERVER_H

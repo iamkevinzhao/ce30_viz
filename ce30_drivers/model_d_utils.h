@@ -1,5 +1,5 @@
-#ifndef UTILS_H
-#define UTILS_H
+#ifndef CE30_DRIVERS_CE30_D_UTILS_H_
+#define CE30_DRIVERS_CE30_D_UTILS_H_
 
 /**
  * @file utils.h
@@ -11,7 +11,8 @@
 #include "ce30_drivers_export.h"
 #include <sstream>
 
-namespace ce30_driver {
+namespace ce30_drivers {
+namespace model_d {
 /**
 * @brief retrieve device firmware version
 * @param[out] version version string
@@ -120,6 +121,7 @@ std::vector<std::string> B4ToByteHexStrs(const T& t) {
   return result;
 }
 /// @endcond
-}
+} // namespace model_d
+} // namespace ce30_drivers
 
-#endif // UTILS_H
+#endif // CE30_DRIVERS_CE30_D_UTILS_H_

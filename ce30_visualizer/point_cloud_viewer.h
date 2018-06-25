@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <memory>
-#include <ce30_drivers/ce30_driver.h>
+#include <ce30_drivers/ce30_d_driver.h>
 #include <ce30_pcviz/ce30_pcviz.h>
 #include <QCoreApplication>
 #include "exit_code.h"
@@ -28,15 +28,15 @@ class PointCloudViewer : public QObject
  private:
   void PacketReceiveThread();
   void OnPCVizInitialized();
-  static ExitCode ConnectOrExit(ce30_driver::UDPSocket& socket);
+  static ExitCode ConnectOrExit(ce30_drivers::UDPSocket& socket);
   static void UpdatePointCloudDisplay(
-      const ce30_driver::Scan& scan,
+      const ce30_d::Scan& scan,
       ce30_pcviz::PointCloudViz& viz,
       const bool& vsmode,
       const bool& save_pcd);
   void UpdateGreyImageDisplay(
-      const ce30_driver::Scan& scan);
-  std::shared_ptr<ce30_driver::UDPSocket> socket_;
+      const ce30_d::Scan& scan);
+  std::shared_ptr<ce30_drivers::UDPSocket> socket_;
   std::unique_ptr<ce30_pcviz::PointCloudViz> pcviz_;
   bool vertical_stretch_mode_;
   bool save_pcd_;
@@ -46,8 +46,8 @@ class PointCloudViewer : public QObject
 #endif
   std::unique_ptr<std::thread> thread_;
   std::mutex scan_mutex_;
-  ce30_driver::Scan scan_;
-  ce30_driver::Scan grey_scan_;
+  ce30_d::Scan scan_;
+  ce30_d::Scan grey_scan_;
   std::mutex signal_mutex_;
   bool kill_signal_;
   std::condition_variable condition_;

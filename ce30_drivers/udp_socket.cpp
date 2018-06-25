@@ -10,7 +10,7 @@
 using namespace std::chrono;
 using namespace boost::asio::ip;
 
-namespace ce30_driver {
+namespace ce30_drivers {
 UDPSocket::UDPSocket(const std::string& ip, uint16_t port)
   : ip_(ip), port_(port)
 {

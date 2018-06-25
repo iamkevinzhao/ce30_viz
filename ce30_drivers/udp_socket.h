@@ -4,11 +4,11 @@
 #include <chrono>
 #include <string>
 #include <vector>
-#include "ce30_drivers/packet.h"
+#include "ce30_drivers/model_d_packets.h"
 #include "ce30_drivers/ce30_drivers_export.h"
 #include <mutex>
 
-namespace ce30_driver {
+namespace ce30_drivers {
 /**
  * @brief The Diagnose enum
  */

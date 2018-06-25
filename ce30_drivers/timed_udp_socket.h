@@ -4,7 +4,7 @@
 #include <boost/asio.hpp>
 
 /// @cond DO_NO_DOCUMENT_THIS
-namespace ce30_driver {
+namespace ce30_drivers {
 class TimedUDPSocket
 {
 public:

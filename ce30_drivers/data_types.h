@@ -4,7 +4,7 @@
 #include <vector>
 #include "ce30_drivers_export.h"
 
-namespace ce30_driver {
+namespace ce30_drivers {
 /**
  * @brief 3D point
  */

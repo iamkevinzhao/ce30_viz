@@ -26,22 +26,23 @@ endif()
 add_library(
   ce30_drivers
     SHARED
-      utils.h
-      utils.cpp
+      model_d_utils.h
+      model_d_utils.cpp
       config.h.in
       udp_socket.cpp
-      udp_socket_win_impl.cpp
       udp_socket.h
       timed_udp_socket.cpp
       timed_udp_socket.h
-      packet.h
-      packet.cpp
-      udp_server.h
-      udp_server.cpp
+      model_d_packets.h
+      model_d_packets.cpp
+      model_d_udp_server.h
+      model_d_udp_server.cpp
       data_types.h
       data_types.cpp
       ce30_drivers_export.h
-      ce30_driver.h
+      ce30_d_driver.h
+      packets.h
+      packets.cpp
 )
 
 target_link_libraries(

@@ -2,23 +2,17 @@
 #include "ui_grey_image_window.h"
 #include <QPixmap>
 #include <ce30_pcviz/gray_image.h>
-#include <ce30_drivers/packet.h>
+#include <ce30_drivers/ce30_d_driver.h>
 
-const float kGreyImageWidthHeightRatio = 1.0f * ce30_driver::Scan::Width() / ce30_driver::Scan::Height();
+const float kGreyImageWidthHeightRatio =
+    1.0f * ce30_d::Scan::Width() / ce30_d::Scan::Height();
 
 GreyImageWindow::GreyImageWindow(QWidget *parent) :
   QMainWindow(parent),
   ui(new Ui::GreyImageWindow)
 {
   ui->setupUi(this);
-//  GrayImage image(320, 20, 0, 100);
-//  for (int x = 0; x < 320; ++x) {
-//    for (int y = 0; y < 20; ++y) {
-//      image.SetPixel(QPoint(x, y), 50);
-//    }
-//  }
   ui->GreyImageDisplayLabel->setScaledContents(true);
-//  ui->GreyImageDisplayLabel->setPixmap(QPixmap::fromImage(image));
   this->resize(800, 200);
 }
 

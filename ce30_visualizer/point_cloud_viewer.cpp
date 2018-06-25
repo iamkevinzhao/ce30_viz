@@ -1,7 +1,6 @@
 #include "point_cloud_viewer.h"
 #include <iostream>
-#include <ce30_pcviz/ce30_pcviz.h>
-#include <ce30_drivers/utils.h>
+#include <ce30_drivers/ce30_d_driver.h>
 #include <QCoreApplication>
 #include <QThread>
 #include <QTime>
@@ -11,7 +10,8 @@
 
 using namespace std;
 using namespace ce30_pcviz;
-using namespace ce30_driver;
+using namespace ce30_drivers;
+using namespace ce30_d;
 
 PointCloudViewer::PointCloudViewer()
   : vertical_stretch_mode_(true),
@@ -113,7 +113,7 @@ void PointCloudViewer::UpdatePointCloudDisplay(
   ce30_pcviz::PointCloud cloud;
   for (int x = 0; x < scan.Width(); ++x) {
     for (int y = 0; y < scan.Height(); ++y) {
-      ce30_driver::Point p = scan.at(x, y).point();
+      ce30_drivers::Point p = scan.at(x, y).point();
       if (vsmode) {
         p.z = (scan.Height() - y) * 0.1f;
       }
@@ -139,10 +139,10 @@ void PointCloudViewer::UpdatePointCloudDisplay(
 void PointCloudViewer::UpdateGreyImageDisplay(const Scan &scan) {
 //  const auto min = ce30_driver::Channel::GreyValueMin();
 //  const auto max = ce30_driver::Channel::GreyValueMax();
-  const auto width = ce30_driver::Scan::Width();
-  const auto height = ce30_driver::Scan::Height();
+  const auto width = ce30_d::Scan::Width();
+  const auto height = ce30_d::Scan::Height();
 
-  const unsigned short min = ce30_driver::Channel::GreyValueMin();
+  const unsigned short min = ce30_d::Channel::GreyValueMin();
   unsigned short max = min;
 
   for (int w = 0; w < width; ++w) {
@@ -154,7 +154,7 @@ void PointCloudViewer::UpdateGreyImageDisplay(const Scan &scan) {
     }
   }
   if (max <= min) {
-    max = ce30_driver::Channel::GreyValueMax();
+    max = ce30_d::Channel::GreyValueMax();
   }
   std::shared_ptr<GrayImage> image(
       new GrayImage(width, height, min, max));
