@@ -10,7 +10,7 @@
 
 using namespace std;
 using namespace ce30_pcviz;
-using namespace ce30_drivers;
+// using namespace ce30_drivers;
 using namespace ce30_d;
 
 PointCloudViewer::PointCloudViewer()
@@ -34,7 +34,7 @@ PointCloudViewer::~PointCloudViewer() {
   StopRunning(*socket_);
 }
 
-ExitCode PointCloudViewer::ConnectOrExit(UDPSocket& socket) {
+ExitCode PointCloudViewer::ConnectOrExit(ce30_drivers::UDPSocket& socket) {
   if (!Connect(socket)) {
     cerr << "Unable to Connect Device!" << endl;
     return ExitCode::device_connection_failure;
@@ -54,7 +54,7 @@ ExitCode PointCloudViewer::ConnectOrExit(UDPSocket& socket) {
 
 void PointCloudViewer::timerEvent(QTimerEvent *event) {
   if (!socket_) {
-    socket_.reset(new UDPSocket);
+    socket_.reset(new ce30_drivers::UDPSocket);
     auto ec = ConnectOrExit(*socket_);
     if (ec != ExitCode::no_exit) {
       QThread::sleep(2);

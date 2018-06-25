@@ -18,8 +18,9 @@ using namespace std;
 namespace ce30_drivers {
 namespace model_d {
 Channel::Channel()
-  : distance(0.0f), amplitude(0.0f), grey_value(0) {
-
+  : grey_value(0) {
+  distance = 0.0f;
+  amplitude = 0.0f;
 }
 
 Point Channel::point() const {
@@ -218,6 +219,10 @@ int Packet::GreyImageStatusIndex() {
 
 bool Packet::IsGreyImage(const char &grey_image_byte) {
   return grey_image_byte & 0x02;
+}
+
+std::unique_ptr<ce30_drivers::ParsedPacket> Packet::ParseBase() {
+  return Parse();
 }
 
 std::unique_ptr<ParsedPacket> Packet::Parse() {

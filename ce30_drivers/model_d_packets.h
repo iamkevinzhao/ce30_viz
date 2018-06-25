@@ -14,26 +14,15 @@ namespace model_d {
 /**
  * @brief contains the data collected by a photosensitive cell
  */
-struct CE30_DRIVERS_API Channel {
+struct CE30_DRIVERS_API Channel : ce30_drivers::Channel {
   /**
    * @brief constructor
    */
   Channel();
-  /**
-   * @brief distance in meters
-   */
-  float distance;
+
+  Point point() const override;
 
   unsigned short grey_value;
-  /**
-   * @brief amplitude
-   */
-  float amplitude;
-  /**
-   * @brief get 3D point
-   * @return 3D point
-   */
-  Point point() const;
   /**
    * @brief maximum distance
    * @return distance in meters
@@ -61,19 +50,17 @@ struct CE30_DRIVERS_API Channel {
 /**
  * @brief a collection of channels which are vertically aligned
  */
-struct CE30_DRIVERS_API Column {
+struct CE30_DRIVERS_API Column : ce30_drivers::Column {
   /**
    * @brief constructor
    */
   Column();
+
+  std::vector<Channel> channels;
   /**
    * @brief azimuth of this column
    */
   float azimuth;
-  /**
-   * @brief channels of this column
-   */
-  std::vector<Channel> channels;
   /**
    * @brief the number of channels in a column
    * @return the number of channels
@@ -84,19 +71,17 @@ struct CE30_DRIVERS_API Column {
 /**
  * @brief contains data after being parsed from a packet
  */
-struct CE30_DRIVERS_API ParsedPacket {
+struct CE30_DRIVERS_API ParsedPacket : ce30_drivers::ParsedPacket {
   /**
    * @brief constructor
    */
   ParsedPacket();
+
+  std::vector<Column> columns;
   /**
    * @brief time stamp parsed from packet
    */
   double time_stamp;
-  /**
-   * @brief columns parsed from the packet
-   */
-  std::vector<Column> columns;
   /**
    * @brief the number of columns in a packet
    * @return the number of columns
@@ -189,7 +174,7 @@ private:
 /**
  * @brief device measurement data packet
  */
-struct CE30_DRIVERS_API Packet : public PacketBase {
+struct CE30_DRIVERS_API Packet : public ce30_drivers::Packet {
   /**
    * @brief constructor
    */
@@ -199,6 +184,8 @@ struct CE30_DRIVERS_API Packet : public PacketBase {
    * @return the pointer to the parsed packet
    */
   std::unique_ptr<ParsedPacket> Parse();
+
+  std::unique_ptr<ce30_drivers::ParsedPacket> ParseBase() override;
   /// @cond DO_NOT_DOCUMENT_THIS
   inline static int HeaderBytes();
   /// @endcond
