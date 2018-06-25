@@ -1,6 +1,5 @@
 #include "point_cloud_viewer.h"
 #include <iostream>
-#include <ce30_drivers/ce30_d_driver.h>
 #include <QCoreApplication>
 #include <QThread>
 #include <QTime>
@@ -8,11 +7,14 @@
 #include <QElapsedTimer>
 #include <ce30_pcviz/gray_image.h>
 
+#include <ce30_drivers/ce30_d_driver.h>
+
 using namespace std;
 using namespace ce30_pcviz;
 // using namespace ce30_drivers;
-using namespace ce30_d;
+using namespace ce30_x;
 
+namespace visualizer {
 PointCloudViewer::PointCloudViewer()
   : vertical_stretch_mode_(true),
     save_pcd_(false),
@@ -31,7 +33,7 @@ PointCloudViewer::~PointCloudViewer() {
   if (thread_ && thread_->joinable()) {
     thread_->join();
   }
-  StopRunning(*socket_);
+  // StopRunning(*socket_);
 }
 
 ExitCode PointCloudViewer::ConnectOrExit(ce30_drivers::UDPSocket& socket) {
@@ -40,12 +42,12 @@ ExitCode PointCloudViewer::ConnectOrExit(ce30_drivers::UDPSocket& socket) {
     return ExitCode::device_connection_failure;
   }
   string device_version;
-  if (!GetVersion(device_version, socket)) {
+  if (!ce30_d::GetVersion(device_version, socket)) {
     cerr << "Unable to Retrieve CE30 Device Version" << endl;
     return ExitCode::retrieve_ce30_version_failure;
   }
   cout << "CE30 Version: " << device_version << endl;
-  if (!StartRunning(socket)) {
+  if (!ce30_d::StartRunning(socket)) {
     cerr << "Unable to Start CE30" << endl;
     return ExitCode::start_ce30_failure;
   }
@@ -76,23 +78,19 @@ void PointCloudViewer::timerEvent(QTimerEvent *event) {
   }
 
   static Scan scan;
-  static Scan grey_scan;
   std::unique_lock<std::mutex> lock(scan_mutex_);
   condition_.wait(lock);
   if (scan_.Ready()) {
     scan = scan_;
   }
-  if (grey_scan_.Ready()) {
-    grey_scan = grey_scan_;
-  }
   lock.unlock();
 
+//  if (scan.Ready()) {
+//    UpdatePointCloudDisplay(
+//        scan, *pcviz_, vertical_stretch_mode_, save_pcd_);
+//  }
   if (scan.Ready()) {
-    UpdatePointCloudDisplay(
-        scan, *pcviz_, vertical_stretch_mode_, save_pcd_);
-  }
-  if (grey_scan.Ready()) {
-    UpdateGreyImageDisplay(grey_scan);
+    UpdateGreyImageDisplay(scan);
   }
 }
 
@@ -139,28 +137,28 @@ void PointCloudViewer::UpdatePointCloudDisplay(
 void PointCloudViewer::UpdateGreyImageDisplay(const Scan &scan) {
 //  const auto min = ce30_driver::Channel::GreyValueMin();
 //  const auto max = ce30_driver::Channel::GreyValueMax();
-  const auto width = ce30_d::Scan::Width();
-  const auto height = ce30_d::Scan::Height();
+  const auto width = ce30_x::Scan::Width();
+  const auto height = ce30_x::Scan::Height();
 
-  const unsigned short min = ce30_d::Channel::GreyValueMin();
+  const unsigned short min = ce30_x::Channel::DistanceMin();
   unsigned short max = min;
 
   for (int w = 0; w < width; ++w) {
     for (int h = 0; h < height; ++h) {
-      auto value = scan.at(w, h).grey_value;
+      auto value = scan.at(w, h).distance;
       if (value > max) {
         max = value;
       }
     }
   }
   if (max <= min) {
-    max = ce30_d::Channel::GreyValueMax();
+    max = ce30_x::Channel::DistanceMax();
   }
   std::shared_ptr<GrayImage> image(
       new GrayImage(width, height, min, max));
   for (int w = 0; w < width; ++w) {
     for (int h = 0; h < height; ++h) {
-      auto value = scan.at(width - w - 1, h).grey_value;
+      auto value = scan.at(width - w - 1, h).distance;
       if (value < min) {
         value = min;
       }
@@ -186,35 +184,24 @@ void PointCloudViewer::PacketReceiveThread() {
 
     static Packet packet;
     static Scan scan;
-    static Scan grey_scan;
-    while (!scan.Ready() && !grey_scan.Ready()) {
+    while (!scan.Ready()) {
       if (GetPacket(packet, *socket_, true)) {
         auto parsed = packet.Parse();
         if (parsed) {
-          if (parsed->grey_image) {
-            grey_scan.AddColumnsFromPacket(*parsed);
-          } else {
-            scan.AddColumnsFromPacket(*parsed);
-          }
+          scan.AddFromPacket(*parsed);
         } else {
-          cerr << "Error parsing package." << endl;
+          // cerr << "Error parsing package." << endl;
         }
       } else {
         cerr << "Error getting package." << endl;
       }
     }
     unique_lock<mutex> lock(scan_mutex_);
-    if (grey_scan.Ready()) {
-      grey_scan_ = grey_scan;
-    }
     if (scan.Ready()) {
       scan_ = scan;
     }
     condition_.notify_all();
     lock.unlock();
-    if (grey_scan.Ready()) {
-      grey_scan.Reset();
-    }
     if (scan.Ready()) {
       scan.Reset();
     }
@@ -330,4 +317,6 @@ void PointCloudViewer::OnPCVizInitialized() {
 #endif
 
   pcviz_->PrintShortcuts();
+}
+
 }

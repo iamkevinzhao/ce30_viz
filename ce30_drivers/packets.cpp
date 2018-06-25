@@ -22,4 +22,13 @@ Channel::~Channel() {}
 Point Channel::point() const {
   return Point();
 }
+
+// Scan
+Scan::~Scan() {}
+bool Scan::Ready() {
+  return false;
+}
+void Scan::Reset() {
+
+}
 }

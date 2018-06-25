@@ -37,10 +37,15 @@ add_library(
       model_d_packets.cpp
       model_d_udp_server.h
       model_d_udp_server.cpp
+      model_x_packets.cpp
+      model_x_packets.h
       data_types.h
       data_types.cpp
       ce30_drivers_export.h
       ce30_d_driver.h
+      ce30_x_driver.h
+      common_utils.h
+      common_utils.cpp
       packets.h
       packets.cpp
 )

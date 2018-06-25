@@ -2,10 +2,10 @@
 #include "ui_grey_image_window.h"
 #include <QPixmap>
 #include <ce30_pcviz/gray_image.h>
-#include <ce30_drivers/ce30_d_driver.h>
+#include <ce30_drivers/ce30_x_driver.h>
 
 const float kGreyImageWidthHeightRatio =
-    1.0f * ce30_d::Scan::Width() / ce30_d::Scan::Height();
+    1.0f * ce30_x::Scan::Width() / ce30_x::Scan::Height();
 
 GreyImageWindow::GreyImageWindow(QWidget *parent) :
   QMainWindow(parent),

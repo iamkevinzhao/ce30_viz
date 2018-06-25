@@ -41,6 +41,13 @@ struct CE30_DRIVERS_API Packet : ce30_drivers::PacketBase {
   virtual ~Packet();
   virtual std::unique_ptr<ParsedPacket> ParseBase();
 };
+
+class CE30_DRIVERS_API Scan {
+ public:
+  virtual ~Scan();
+  virtual bool Ready();
+  virtual void Reset();
+};
 } // namespace ce30_drivers
 
 #endif // CE30_DRIVERS_PACKETS_H_

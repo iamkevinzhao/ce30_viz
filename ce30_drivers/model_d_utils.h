@@ -10,6 +10,7 @@
 #include "udp_socket.h"
 #include "ce30_drivers_export.h"
 #include <sstream>
+#include "common_utils.h"
 
 namespace ce30_drivers {
 namespace model_d {
@@ -50,23 +51,6 @@ bool CE30_DRIVERS_API StartRunning(UDPSocket& socket);
  * @return true if stopped; otherwise, false
  */
 bool CE30_DRIVERS_API StopRunning(UDPSocket& socket);
-
-/**
- * @brief establish socket and connect device
- * @param socket UDP socket object
- * @return true if successful; otherwise, false
- */
-bool CE30_DRIVERS_API Connect(UDPSocket& socket);
-
-/**
- * @brief receive packet
- * @param[out] the receiver packet
- * @param socket UDP socket object
- * @param thread_safe whether to use thread safe mode
- * @return true if received the packet successfully; otherwise false
- */
-bool CE30_DRIVERS_API GetPacket(
-    PacketBase& packet, UDPSocket& socket, const bool& thread_safe = false);
 
 /**
  * @brief send packet

@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 #ifdef FAKE_POINTCLOUD
   FakePointCloudViewer viewer;
 #else
-  PointCloudViewer viewer;
+  visualizer::PointCloudViewer viewer;
 #endif
   GreyImageWindow win;
   win.show();

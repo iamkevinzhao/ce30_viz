@@ -137,10 +137,6 @@ bool DisableFilter(UDPSocket& socket) {
 }
 /// @endcond
 
-bool Connect(UDPSocket& socket) {
-  return socket.Connect() == Diagnose::connect_successful;
-}
-
 bool GetPacket(
     PacketBase& packet, UDPSocket& socket, const bool& thread_safe) {
   Diagnose diagnose;
