@@ -1,5 +1,11 @@
 configure_file(config.h.in "${CMAKE_CURRENT_BINARY_DIR}/config.h" @ONLY)
 
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+
+find_package(Qt5Widgets)
+
 add_library(
   ce30_pcviz
     SHARED
@@ -27,11 +33,14 @@ add_library(
       cloud_scene.cpp
       cloud_cluster_scene.h
       cloud_cluster_scene.cpp
+      gray_image.h
+      gray_image.cpp
 )
 
 target_link_libraries(
   ce30_pcviz
     ${PCL_LIBRARIES}
+    Qt5::Widgets
 )
 
 set_target_properties(ce30_pcviz PROPERTIES

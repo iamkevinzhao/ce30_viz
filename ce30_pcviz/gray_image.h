@@ -1,11 +1,13 @@
-#ifndef GRAY_IMAGE_H
-#define GRAY_IMAGE_H
+#ifndef CE30_PCVIZ_GRAY_IMAGE_H_
+#define CE30_PCVIZ_GRAY_IMAGE_H_
 
 #include <QImage>
 #include <memory>
 #include <QDebug>
+#include "export.h"
 
-class GrayImage : public QImage
+namespace ce30_pcviz {
+class API GrayImage : public QImage
 {
 public:
   GrayImage(const GrayImage& image);
@@ -31,5 +33,5 @@ private:
   static const int kIndexMin;
   static const int kHighlightDelta;
 };
-
-#endif // GRAY_IMAGE_H
+} // namespace ce30_pcviz
+#endif // CE30_PCVIZ_GRAY_IMAGE_H_

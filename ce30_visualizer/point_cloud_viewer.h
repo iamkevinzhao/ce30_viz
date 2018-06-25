@@ -18,14 +18,14 @@
 class PointCloudViewer : public QObject
 {
   Q_OBJECT
-public:
+ public:
   PointCloudViewer();
   ~PointCloudViewer();
-signals:
+ signals:
   void UpdateImage(std::shared_ptr<QImage> image);
-protected:
+ protected:
   void timerEvent(QTimerEvent* event);
-private:
+ private:
   void PacketReceiveThread();
   void OnPCVizInitialized();
   static ExitCode ConnectOrExit(ce30_driver::UDPSocket& socket);

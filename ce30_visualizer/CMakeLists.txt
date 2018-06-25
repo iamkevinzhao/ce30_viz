@@ -37,8 +37,6 @@ add_executable(
     grey_image_window.cpp
     grey_image_window.h
     grey_image_window.ui
-    grey_image.cpp
-    grey_image.h
     ${SRC_FAKE_POINTCLOUD}
     ${SRC_CES_SPECIAL}
     exit_code.h

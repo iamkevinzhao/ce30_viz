@@ -1,7 +1,7 @@
 #include "grey_image_window.h"
 #include "ui_grey_image_window.h"
 #include <QPixmap>
-#include "grey_image.h"
+#include <ce30_pcviz/gray_image.h>
 #include <ce30_drivers/packet.h>
 
 const float kGreyImageWidthHeightRatio = 1.0f * ce30_driver::Scan::Width() / ce30_driver::Scan::Height();

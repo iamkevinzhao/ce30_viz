@@ -1,8 +1,9 @@
-#include "grey_image.h"
+#include "gray_image.h"
 #include <QDebug>
 
 using namespace std;
 
+namespace ce30_pcviz {
 const int GrayImage::kHighlightDelta = 50;
 const int GrayImage::kIndexMax = 254;
 const int GrayImage::kIndexMin = 0;
@@ -107,3 +108,5 @@ unique_ptr<GrayImage> GrayImage::Highlight(const QRect &region) const {
   }
   return result;
 }
+
+} // namespace ce30_pcviz

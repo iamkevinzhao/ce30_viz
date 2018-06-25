@@ -7,7 +7,7 @@
 #include <QTime>
 #include <QDir>
 #include <QElapsedTimer>
-#include "grey_image.h"
+#include <ce30_pcviz/gray_image.h>
 
 using namespace std;
 using namespace ce30_pcviz;
