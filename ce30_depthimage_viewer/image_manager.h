@@ -6,7 +6,7 @@
 #include <memory>
 #include <mutex>
 #include "gray_image.h"
-#include <ce30_driver/packet.h>
+#include <ce30_drivers/packet.h>
 
 class ImageManager
 {

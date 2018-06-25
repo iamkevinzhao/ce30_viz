@@ -12,8 +12,18 @@ set(CE30_VIZ_INCLUDE_DIRS "@CONF_INCLUDE_DIRS@")
 include("${CE30_VIZ_CMAKE_DIR}/ce30_vizTargets.cmake")
 
 # These are IMPORTED targets created by ce30_vizTargets.cmake
-set(CE30_VIZ_LIBRARIES ce30_pcviz)
-set(CE30_VIZ_EXECUTABLE ce30_pointcloud_viewer ce30_depthimage_viewer)
+set(
+  CE30_VIZ_LIBRARIES
+    ce30_pcviz
+    ce30_drivers
+)
+
+set(
+  CE30_VIZ_EXECUTABLE
+    ce30_pointcloud_viewer
+    # ce30_depthimage_viewer
+    ce30_visualizer
+)
 
 find_package(PCL 1.2 REQUIRED)
 include_directories(${PCL_INCLUDE_DIRS})
