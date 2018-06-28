@@ -11,8 +11,9 @@ std::unique_ptr<ParsedPacket> Packet::Parse() {
   return nullptr;
 }
 
+// 1192
 int Packet::TotalLength() {
-  return 816;
+  return 1192;
 }
 
 // Scan

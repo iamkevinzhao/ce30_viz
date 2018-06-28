@@ -41,22 +41,22 @@ ExitCode PointCloudViewer::ConnectOrExit(ce30_drivers::UDPSocket& socket) {
     cerr << "Unable to Connect Device!" << endl;
     return ExitCode::device_connection_failure;
   }
-  string device_version;
-  if (!ce30_d::GetVersion(device_version, socket)) {
-    cerr << "Unable to Retrieve CE30 Device Version" << endl;
-    return ExitCode::retrieve_ce30_version_failure;
-  }
-  cout << "CE30 Version: " << device_version << endl;
-  if (!ce30_d::StartRunning(socket)) {
-    cerr << "Unable to Start CE30" << endl;
-    return ExitCode::start_ce30_failure;
-  }
+//  string device_version;
+//  if (!ce30_d::GetVersion(device_version, socket)) {
+//    cerr << "Unable to Retrieve CE30 Device Version" << endl;
+//    return ExitCode::retrieve_ce30_version_failure;
+//  }
+//  cout << "CE30 Version: " << device_version << endl;
+//  if (!ce30_d::StartRunning(socket)) {
+//    cerr << "Unable to Start CE30" << endl;
+//    return ExitCode::start_ce30_failure;
+//  }
   return ExitCode::no_exit;
 }
 
 void PointCloudViewer::timerEvent(QTimerEvent *event) {
   if (!socket_) {
-    socket_.reset(new ce30_drivers::UDPSocket);
+    socket_.reset(new ce30_drivers::UDPSocket("192.168.0.2", 2468));
     auto ec = ConnectOrExit(*socket_);
     if (ec != ExitCode::no_exit) {
       QThread::sleep(2);
@@ -182,10 +182,25 @@ void PointCloudViewer::PacketReceiveThread() {
       return;
     }
 
+    static QElapsedTimer timer;
+    static bool init = false;
+    if (!init) {
+      timer.start();
+      init = true;
+    }
+    static int cnt = 0;
+
     static Packet packet;
     static Scan scan;
     while (!scan.Ready()) {
       if (GetPacket(packet, *socket_, true)) {
+        ++cnt;
+        auto elapsed = timer.elapsed();
+        if (elapsed > 1000) {
+          qDebug() << cnt * 1.0f / (elapsed / 1000.0f);
+          timer.restart();
+          cnt = 0;
+        }
         auto parsed = packet.Parse();
         if (parsed) {
           scan.AddFromPacket(*parsed);
