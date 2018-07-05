@@ -30,7 +30,7 @@ Channel Packet::ParseChannel(
   double data_distyp = 26214.0 - (dist_sorty / 200.0) * 32767.0;
   channel.y = ((data_distyp - data_distyn) / 22936.0) * 4.0;
 
-  channel.distance = 1.0 * A / B * 1000.0 * 3.0 * 1e8 / 2.0;
+  channel.distance = 1.0 * A / B * 1000.0 * 3.0 * 1e8 * 1e-9 / 2.0;
   return channel;
 }
 
