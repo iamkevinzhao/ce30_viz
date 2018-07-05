@@ -85,12 +85,9 @@ void PointCloudViewer::timerEvent(QTimerEvent *event) {
   }
   lock.unlock();
 
-//  if (scan.Ready()) {
-//    UpdatePointCloudDisplay(
-//        scan, *pcviz_, vertical_stretch_mode_, save_pcd_);
-//  }
   if (scan.Ready()) {
-    UpdateGreyImageDisplay(scan);
+    UpdatePointCloudDisplay(
+        scan, *pcviz_, vertical_stretch_mode_, save_pcd_);
   }
 }
 
@@ -109,17 +106,21 @@ void PointCloudViewer::UpdatePointCloudDisplay(
 //  }
 
   ce30_pcviz::PointCloud cloud;
-  for (int x = 0; x < scan.Width(); ++x) {
-    for (int y = 0; y < scan.Height(); ++y) {
-      ce30_drivers::Point p = scan.at(x, y).point();
-      if (vsmode) {
-        p.z = (scan.Height() - y) * 0.1f;
-      }
-      if (sqrt(p.x * p.x + p.y * p.y) < 0.1f) {
-        continue;
-      }
-      cloud.push_back(ce30_pcviz::Point(p.x, p.y, p.z));
-    }
+//  for (int x = 0; x < scan.Width(); ++x) {
+//    for (int y = 0; y < scan.Height(); ++y) {
+//      ce30_drivers::Point p = scan.at(x, y).point();
+//      if (vsmode) {
+//        p.z = (scan.Height() - y) * 0.1f;
+//      }
+//      if (sqrt(p.x * p.x + p.y * p.y) < 0.1f) {
+//        continue;
+//      }
+//      cloud.push_back(ce30_pcviz::Point(p.x, p.y, p.z));
+//    }
+//  }
+  auto channels = scan.GetChannels();
+  for (auto& channel : channels) {
+    cloud.push_back(ce30_pcviz::Point(channel.x, channel.y, channel.distance));
   }
   viz.UpdatePointCloud(cloud);
   if (save_pcd) {
@@ -132,45 +133,6 @@ void PointCloudViewer::UpdatePointCloudDisplay(
         QTime::currentTime().toString().replace(":", "_").toStdString() +
         ".pcd", cloud);
   }
-}
-
-void PointCloudViewer::UpdateGreyImageDisplay(const Scan &scan) {
-//  const auto min = ce30_driver::Channel::GreyValueMin();
-//  const auto max = ce30_driver::Channel::GreyValueMax();
-  const auto width = ce30_x::Scan::Width();
-  const auto height = ce30_x::Scan::Height();
-
-  const unsigned short min = ce30_x::Channel::DistanceMin();
-  unsigned short max = min;
-
-  for (int w = 0; w < width; ++w) {
-    for (int h = 0; h < height; ++h) {
-      auto value = scan.at(w, h).distance;
-      if (value > max) {
-        max = value;
-      }
-    }
-  }
-  if (max <= min) {
-    max = ce30_x::Channel::DistanceMax();
-  }
-  std::shared_ptr<GrayImage> image(
-      new GrayImage(width, height, min, max));
-  for (int w = 0; w < width; ++w) {
-    for (int h = 0; h < height; ++h) {
-      auto value = scan.at(width - w - 1, h).distance;
-      if (value < min) {
-        value = min;
-      }
-      if (value > max) {
-        value = max;
-      }
-      // image->SetPixel({w, h}, scan.at(w, h).grey_value);
-      image->SetPixel({w, h}, value);
-      // std::cout << scan.at(w, h).grey_value << std::endl;
-    }
-  }
-  emit UpdateImage(image);
 }
 
 void PointCloudViewer::PacketReceiveThread() {

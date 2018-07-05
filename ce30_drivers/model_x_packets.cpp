@@ -3,6 +3,8 @@
 #define M_PI 3.1415926
 #endif
 
+#include <iostream>
+
 namespace ce30_drivers {
 namespace model_x {
 // Packet
@@ -11,13 +13,23 @@ Packet::Packet() {
 }
 
 Channel Packet::ParseChannel(
-    const uint32_t &A, const uint32_t &B, const uint16_t &t) {
+    const uint32_t &A, const uint32_t &B, uint16_t t) {
   Channel channel;
-  channel.x = 140.0 * std::sin(2 * M_PI * 0.005 * t);
-  channel.y =
-      (t < 500) ?
-          ((2.0 * 140.0 / 500.0) * t + 140.0) :
-          ((2.0 * 140.0 / (5000.0 - 500.0)) * t - 170);
+  static int amp = 140;
+  static int b = 500;
+  static double k1 = -(2.0 * amp) / b;
+  static double k2 = (2.0 * amp) / (5000.0 - b);
+
+  double dist_sortx = -(1.0 * amp * std::sin(2.0 * M_PI * 0.0005 * t));
+  double data_distxp = 26214.0 + (dist_sortx / 200.0) * 32767.0;
+  double data_distxn = 26214.0 - (dist_sortx / 200.0) * 32767.0;
+  channel.x = ((data_distxp - data_distxn) / 22936.0) * 4.0;
+
+  double dist_sorty = (t < b) ? (k1 * t + amp) : (k2 * t - 170.0);
+  double data_distyn = 26214.0 + (dist_sorty / 200.0) * 32767.0;
+  double data_distyp = 26214.0 - (dist_sorty / 200.0) * 32767.0;
+  channel.y = ((data_distyp - data_distyn) / 22936.0) * 4.0;
+
   channel.distance = 1.0 * A / B * 1000.0 * 3.0 * 1e8 / 2.0;
   return channel;
 }
@@ -30,17 +42,30 @@ std::unique_ptr<ParsedPacket> Packet::Parse() {
     return nullptr;
   }
   uint16_t t;
-  memcpy(&t, &data[2], 2);
+  uint8_t buf2[2];
+  buf2[0] = data[3];
+  buf2[1] = data[2];
+  memcpy(&t, buf2, 2);
   int index = 4;
   const int kSizeOfDim = SizeOfDim();
   const int kSizeOfPacket = data.size();
   std::unique_ptr<ParsedPacket> parsed(new ParsedPacket);
   parsed->channels.reserve(NumChannel());
   uint32_t A, B;
+  uint8_t buf4[4];
   while (index < kSizeOfPacket) {
-    memcpy(&A, &data[index], kSizeOfDim);
+    buf4[0] = data[index + 3];
+    buf4[1] = data[index + 2];
+    buf4[2] = data[index + 1];
+    buf4[3] = data[index];
+    memcpy(&A, buf4, kSizeOfDim);
     index += kSizeOfDim;
-    memcpy(&B, &data[index], kSizeOfDim);
+
+    buf4[0] = data[index + 3];
+    buf4[1] = data[index + 2];
+    buf4[2] = data[index + 1];
+    buf4[3] = data[index];
+    memcpy(&B, buf4, kSizeOfDim);
     index += kSizeOfDim;
     parsed->channels.push_back(ParseChannel(A, B, t));
     ++t;
@@ -70,6 +95,18 @@ int Packet::SizeOfChannel() {
   return 2 * SizeOfDim();
 }
 
+int Packet::TMax() {
+  return 5000;
+}
+
+int Packet::TMin() {
+  return 0;
+}
+
+int Packet::NumT() {
+  return TMax() - TMin() + 1;
+}
+
 int Packet::NumChannel() {
   return (TotalLength() - SizeOfHead() - SizeOfT()) / SizeOfChannel();
 }
@@ -86,32 +123,34 @@ bool Packet::DetectHead(const unsigned char &alpha, const unsigned char &beta) {
 
 // Scan
 Scan::Scan() {}
-void Scan::AddFromPacket(const ParsedPacket& packet) {}
+
+void Scan::AddFromPacket(const ParsedPacket& packet) {
+  packets_[packet.t] = packet;
+}
+
 bool Scan::Ready() {
-  return false;
+  return packets_.size() > std::floor(1.0f * Packet::NumT() / Packet::NumChannel());
 }
 
-void Scan::Reset() {}
+void Scan::Reset() {
+  packets_.clear();
+}
 
-Channel Scan::at(const int& x, const int& y) const {
-  Channel channel;
-  channel.distance = 0.5f;
-  return channel;
+std::vector<Channel> Scan::GetChannels() const {
+  std::vector<Channel> channels;
+  channels.reserve(packets_.size() * Packet::NumChannel());
+  for (auto& packet : packets_) {
+    channels.insert(channels.end(), packet.second.channels.begin(), packet.second.channels.end());
+  }
+  return channels;
 }
-int Scan::Width() {
-  return 320;
-}
-int Scan::Height() {
-  return 20;
-}
+
 float Scan::DistanceMin() {
   return Channel::DistanceMin();
 }
+
 float Scan::DistanceMax() {
   return Channel::DistanceMax();
-}
-float Scan::FoV() {
-  return 0.0f;
 }
 
 // Channel

@@ -47,6 +47,8 @@ class CE30_DRIVERS_API Scan {
   virtual ~Scan();
   virtual bool Ready();
   virtual void Reset();
+  virtual int Width() const;
+  virtual int Height() const;
 };
 } // namespace ce30_drivers
 

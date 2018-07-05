@@ -2,6 +2,7 @@
 #define MODEL_X_PACKETS_H
 
 #include "packets.h"
+#include <unordered_map>
 
 namespace ce30_drivers {
 namespace model_x {
@@ -26,8 +27,11 @@ struct CE30_DRIVERS_API Packet : public ce30_drivers::Packet {
   inline static int SizeOfDim();
   inline static int SizeOfChannel();
   inline static int NumChannel();
+  inline static int TMin();
+  inline static int TMax();
+  inline static int NumT();
   static bool DetectHead(const unsigned char& alpha, const unsigned char& beta);
-  static Channel ParseChannel(const uint32_t& A, const uint32_t& B, const uint16_t& t);
+  static Channel ParseChannel(const uint32_t& A, const uint32_t& B, uint16_t t);
 };
 
 class CE30_DRIVERS_API Scan : public ce30_drivers::Scan {
@@ -36,12 +40,11 @@ class CE30_DRIVERS_API Scan : public ce30_drivers::Scan {
   void AddFromPacket(const ParsedPacket& packet);
   bool Ready() override;
   void Reset() override;
-  Channel at(const int& x, const int& y) const;
-  static int Width();
-  static int Height();
+  std::vector<Channel> GetChannels() const;
   static float DistanceMin();
   static float DistanceMax();
-  static float FoV();
+ private:
+  std::unordered_map<int, ParsedPacket> packets_;
 };
 } // namespace model_x
 } // namespace ce30_drivers

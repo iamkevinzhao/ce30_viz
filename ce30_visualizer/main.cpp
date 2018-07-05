@@ -1,7 +1,6 @@
 #include <QApplication>
 #include "point_cloud_viewer.h"
 #include <QTimer>
-#include "grey_image_window.h"
 #include <QObject>
 
 #ifdef FAKE_POINTCLOUD
@@ -16,11 +15,5 @@ int main(int argc, char *argv[])
 #else
   visualizer::PointCloudViewer viewer;
 #endif
-  GreyImageWindow win;
-  win.show();
-
-  QObject::connect(
-      &viewer, SIGNAL(UpdateImage(std::shared_ptr<QImage>)),
-      &win, SLOT(OnUpdateImage(std::shared_ptr<QImage>)));
   return app.exec();
 }

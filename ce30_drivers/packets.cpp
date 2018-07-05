@@ -31,4 +31,12 @@ bool Scan::Ready() {
 void Scan::Reset() {
 
 }
+
+int Scan::Width() const {
+  return 0;
+}
+
+int Scan::Height() const {
+  return 0;
+}
 }

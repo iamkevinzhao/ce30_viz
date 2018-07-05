@@ -34,9 +34,9 @@ add_executable(
     main.cpp
     point_cloud_viewer.cpp
     point_cloud_viewer.h
-    grey_image_window.cpp
-    grey_image_window.h
-    grey_image_window.ui
+#    grey_image_window.cpp
+#    grey_image_window.h
+#    grey_image_window.ui
     ${SRC_FAKE_POINTCLOUD}
     ${SRC_CES_SPECIAL}
     exit_code.h

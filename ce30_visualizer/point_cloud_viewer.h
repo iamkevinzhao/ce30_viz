@@ -35,8 +35,6 @@ class PointCloudViewer : public QObject
       ce30_pcviz::PointCloudViz& viz,
       const bool& vsmode,
       const bool& save_pcd);
-  void UpdateGreyImageDisplay(
-      const ce30_x::Scan& scan);
   std::shared_ptr<ce30_drivers::UDPSocket> socket_;
   std::unique_ptr<ce30_pcviz::PointCloudViz> pcviz_;
   bool vertical_stretch_mode_;
