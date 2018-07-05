@@ -9,6 +9,9 @@ bool CE30_DRIVERS_API Connect(UDPSocket& socket);
 
 bool CE30_DRIVERS_API GetPacket(
     PacketBase& packet, UDPSocket& socket, const bool& thread_safe = false);
+
+bool CE30_DRIVERS_API SendPacket(
+    const PacketBase &packet, UDPSocket &socket, const bool &thread_safe);
 }
 
 #endif // COMMON_UTILS_H

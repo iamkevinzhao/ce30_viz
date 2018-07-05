@@ -15,4 +15,15 @@ bool GetPacket(
   }
   return diagnose == Diagnose::receive_successful;
 }
+
+bool SendPacket(
+    const PacketBase &packet, UDPSocket &socket, const bool &thread_safe) {
+  Diagnose diagnose;
+  if (thread_safe) {
+    diagnose = socket.SendPacketThreadSafe(packet);
+  } else {
+    diagnose = socket.SendPacket(packet);
+  }
+  return diagnose == Diagnose::send_successful;
+}
 }

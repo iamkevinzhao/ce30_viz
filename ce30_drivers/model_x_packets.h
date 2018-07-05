@@ -46,6 +46,22 @@ class CE30_DRIVERS_API Scan : public ce30_drivers::Scan {
  private:
   std::unordered_map<int, ParsedPacket> packets_;
 };
+
+struct CE30_DRIVERS_API LaserOnSendPacket : public ce30_drivers::PacketBase {
+  LaserOnSendPacket();
+};
+
+struct CE30_DRIVERS_API LaserOffSendPacket : public ce30_drivers::PacketBase {
+  LaserOffSendPacket();
+};
+
+struct CE30_DRIVERS_API MEMSOn : public ce30_drivers::PacketBase {
+  MEMSOn();
+};
+
+struct CE30_DRIVERS_API MEMSOff : public ce30_drivers::PacketBase {
+  MEMSOff();
+};
 } // namespace model_x
 } // namespace ce30_drivers
 

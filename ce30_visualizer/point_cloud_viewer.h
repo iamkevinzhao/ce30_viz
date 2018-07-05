@@ -11,10 +11,6 @@
 #include <mutex>
 #include <QImage>
 
-#ifdef CES_SPECIAL
-#include "ces_special/ces_static_scene.h"
-#endif
-
 namespace visualizer {
 class PointCloudViewer : public QObject
 {

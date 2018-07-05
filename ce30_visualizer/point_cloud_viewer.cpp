@@ -186,112 +186,35 @@ void PointCloudViewer::PacketReceiveThread() {
 }
 
 void PointCloudViewer::OnPCVizInitialized() {
-#ifdef CES_SPECIAL
-  ces_static_scene_.reset(new CESStaticScene);
-  pcviz_->UpdateWorldScene(ces_static_scene_);
-#endif
-
   pcviz_->AddCtrlShortcut(
       {"t",
-       [this](){vertical_stretch_mode_ = !vertical_stretch_mode_;},
-       "Switch Normal/Stretched"});
+       [this](){
+         cout << "Laser ON" <<endl;
+         LaserOnSendPacket packet;
+         SendPacket(packet, *socket_, true);
+       },
+       "Laser ON"});
   pcviz_->AddCtrlShortcut(
       {"l",
        [this](){
-         save_pcd_ = !save_pcd_;
-         if (save_pcd_) {
-           cout << "Recording..." << endl;
-         } else {
-           cout << "Recording Ended" << endl;
-           static bool prompt = true;
-           if (prompt) {
-             cout << "  * Data Have Been Saved Under 'data' Folder" << endl;
-             prompt = false;
-           }
-         }
-       }, "Save Cloud to Disk"});
+          cout << "Laser OFF" << endl;
+         LaserOffSendPacket packet;
+         SendPacket(packet, *socket_, true);
+       }, "Laser OFF"});
   pcviz_->AddCtrlShortcut(
       {"d",
        [this](){
-         pcviz_->ClusterModeOn(!pcviz_->IsClusterModeOn());
-       }, "Clustering Mode"});
-
-#ifdef USE_FEATURE_FILTER
-  pcviz_->AddCtrlShortcut(
-      {"f",
-       [this](){
-         StopRunning(*socket_);
-         if (!use_filter_) {
-           cout << "Enabling Filter" << endl;
-           use_filter_ = EnableFilter(*socket_);
-           if (use_filter_) {
-             cout << "  * Filter On" << endl;
-           } else {
-             cout << "  * Failed" << endl;
-           }
-         } else {
-           cout << "Disabling Filter" << endl;
-           use_filter_ = !DisableFilter(*socket_);
-           if (!use_filter_) {
-             cout << "  * Filter Off" << endl;
-           } else {
-             cout << "  * Failed" << endl;
-           }
-         }
-         StartRunning(*socket_);
-       }, "Filter ON/OFF"});
-#endif
-
-#ifdef CES_SPECIAL
-  pcviz_->AddCtrlShortcut(
-      {"c",
-       [this](){
-         ces_static_scene_->SetShow(!ces_static_scene_->Showing());
-       },
-       "Display CES Scene (CES Special)"});
-  pcviz_->AddCtrlShortcut(
-      {"3",
-       [this](){
-         ces_static_scene_->ChangeToDefaultViewPoint();
-       },
-       "Change View Point (CES Special)"});
+          cout << "MEMS ON" << endl;
+         MEMSOn packet;
+         SendPacket(packet, *socket_, true);
+       }, "MEMS ON"});
   pcviz_->AddCtrlShortcut(
       {"u",
        [this](){
-         ces_static_scene_->UpdateOffsetDelta(0.0f, 0.0f, 0.05f);
-       },
-       "Move Scene Up (CES Special)"});
-  pcviz_->AddCtrlShortcut(
-      {"d",
-       [this](){
-         ces_static_scene_->UpdateOffsetDelta(0.0f, 0.0f, -0.05f);
-       },
-       "Move Scene Down (CES Special)"});
-  pcviz_->AddCtrlShortcut(
-      {"Up",
-       [this](){
-         ces_static_scene_->UpdateOffsetDelta(0.05f, 0.0f, 0.0f);
-       },
-       "Move Scene Forward (CES Special)"});
-  pcviz_->AddCtrlShortcut(
-      {"Down",
-       [this](){
-         ces_static_scene_->UpdateOffsetDelta(-0.05f, 0.0f, 0.0f);
-       },
-       "Move Scene Backward (CES Special)"});
-  pcviz_->AddCtrlShortcut(
-      {"Left",
-       [this](){
-         ces_static_scene_->UpdateOffsetDelta(0.0f, 0.05f, 0.0f);
-       },
-       "Move Scene Left (CES Special)"});
-  pcviz_->AddCtrlShortcut(
-      {"Right",
-       [this](){
-         ces_static_scene_->UpdateOffsetDelta(0.0f, -0.05f, 0.00f);
-       },
-       "Move Scene Right (CES Special)"});
-#endif
+          cout << "MEMS OFF" << endl;
+         MEMSOff packet;
+         SendPacket(packet, *socket_, true);
+       }, "MEMS OFF"});
 
   pcviz_->PrintShortcuts();
 }

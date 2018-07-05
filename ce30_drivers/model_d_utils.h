@@ -52,17 +52,6 @@ bool CE30_DRIVERS_API StartRunning(UDPSocket& socket);
  */
 bool CE30_DRIVERS_API StopRunning(UDPSocket& socket);
 
-/**
- * @brief send packet
- * @param packet the packet to send
- * @param socket UDP socket object
- * @param thread_safe whether to use thread safe mode
- * @return true if sent packet successfully; otherwise false
- */
-bool CE30_DRIVERS_API SendPacket(
-    const PacketBase& packet, UDPSocket& socket,
-    const bool& thread_safe = false);
-
 /// @cond DO_NO_DOCUMENT_THIS
 bool CE30_DRIVERS_API EnableFilter(UDPSocket& socket);
 /// @endcond
