@@ -120,7 +120,9 @@ void PointCloudViewer::UpdatePointCloudDisplay(
 //  }
   auto channels = scan.GetChannels();
   for (auto& channel : channels) {
-    cloud.push_back(ce30_pcviz::Point(channel.x, channel.y, channel.distance));
+    if (channel.distance > 10.0f) {
+      cloud.push_back(ce30_pcviz::Point(channel.distance - 30.0f, channel.x, channel.y));
+    }
   }
   viz.UpdatePointCloud(cloud);
   if (save_pcd) {
@@ -156,13 +158,13 @@ void PointCloudViewer::PacketReceiveThread() {
     static Scan scan;
     while (!scan.Ready()) {
       if (GetPacket(packet, *socket_, true)) {
-        ++cnt;
-        auto elapsed = timer.elapsed();
-        if (elapsed > 1000) {
-          qDebug() << cnt * 1.0f / (elapsed / 1000.0f);
-          timer.restart();
-          cnt = 0;
-        }
+//        ++cnt;
+//        auto elapsed = timer.elapsed();
+//        if (elapsed > 1000) {
+//          qDebug() << "Frequency: " <<  cnt * 1.0f / (elapsed / 1000.0f);
+//          timer.restart();
+//          cnt = 0;
+//        }
         auto parsed = packet.Parse();
         if (parsed) {
           scan.AddFromPacket(*parsed);
@@ -200,7 +202,7 @@ void PointCloudViewer::OnPCVizInitialized() {
           cout << "Laser OFF" << endl;
          LaserOffSendPacket packet;
          SendPacket(packet, *socket_, true);
-       }, "Laser OFF"});
+       }, "Laser OFF "});
   pcviz_->AddCtrlShortcut(
       {"d",
        [this](){
