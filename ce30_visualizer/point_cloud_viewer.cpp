@@ -121,7 +121,7 @@ void PointCloudViewer::UpdatePointCloudDisplay(
   auto channels = scan.GetChannels();
   for (auto& channel : channels) {
     if (channel.distance > 10.0f) {
-      cloud.push_back(ce30_pcviz::Point(channel.distance - 30.0f, channel.x, channel.y));
+      cloud.push_back(ce30_pcviz::Point(channel.distance - 60.0f, channel.x, channel.y));
     }
   }
   viz.UpdatePointCloud(cloud);
