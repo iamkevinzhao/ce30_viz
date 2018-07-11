@@ -126,12 +126,36 @@ void PointCloudViewer::UpdatePointCloudDisplay(
 //    }
 //  }
   auto channels = scan.GetChannels();
+  constexpr float kIgnoreDistanceMin = 10.0f;
+  constexpr float kIgnoreDistanceMax = 200.0f;
+  float dist_max = kIgnoreDistanceMin;
+  float dist_min = kIgnoreDistanceMax;
+
+  float dist;
   for (auto& channel : channels) {
-    if (channel.distance > 10.0f) {
-      cloud.push_back(ce30_pcviz::Point(channel.distance - 60.0f, channel.x, channel.y));
+    dist = channel.distance;
+    if (dist > kIgnoreDistanceMax || dist < kIgnoreDistanceMin) {
+      continue;
+    }
+    if (dist > dist_max) {
+      dist_max = dist;
+    }
+    if (dist < dist_min) {
+      dist_min = dist;
     }
   }
+  ce30_pcviz::Point::SetXRange(dist_min, dist_max);
+
+  cloud.Reserve(channels.size());
+  for (auto& channel : channels) {
+    dist = channel.distance;
+    if (dist > kIgnoreDistanceMax || dist < kIgnoreDistanceMin) {
+      continue;
+    }
+    cloud.push_back(ce30_pcviz::Point(dist, channel.x, channel.y));
+  }
   viz.UpdatePointCloud(cloud);
+
   if (save_pcd) {
     static const QString data_dir_name = "data";
     if (!QDir(data_dir_name).exists()) {
