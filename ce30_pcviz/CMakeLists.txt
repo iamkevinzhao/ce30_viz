@@ -35,6 +35,12 @@ add_library(
       cloud_cluster_scene.cpp
       gray_image.h
       gray_image.cpp
+      grid_scene_x.h
+      grid_scene_x.cpp
+      world_scene_base.h
+      world_scene_base.cpp
+      world_scene_x.h
+      world_scene_x.cpp
 )
 
 target_link_libraries(

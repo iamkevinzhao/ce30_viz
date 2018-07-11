@@ -9,13 +9,14 @@ class API GridScene : public StaticScene
 {
 public:
   GridScene(std::shared_ptr<pcl::visualization::PCLVisualizer> viz);
+  virtual ~GridScene();
   void SetShowDefault(const bool& show_default);
   void SetParams(
       const int& width, const int& height, const float& size,
       const float& x, const float& y, const float& z = 0.0f);
   void Show() override;
-private:
-  void ShowDefault();
+protected:
+  virtual void ShowDefault();
   bool show_default_;
   int width_;
   int height_;

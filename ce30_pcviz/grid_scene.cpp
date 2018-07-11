@@ -10,6 +10,8 @@ GridScene::GridScene(shared_ptr<PCLVisualizer> viz)
 {
 }
 
+GridScene::~GridScene() {}
+
 void GridScene::SetShowDefault(const bool &show_default) {
   show_default_ = show_default;
 }

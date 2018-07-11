@@ -142,4 +142,8 @@ void PointCloudViz::ClusterModeOn(const bool &on) {
 bool PointCloudViz::IsClusterModeOn() {
   return cloud_cluster_scene_ != nullptr;
 }
+
+std::shared_ptr<pcl::visualization::PCLVisualizer> PointCloudViz::GetPCLViz() {
+  return viz_;
+}
 }
