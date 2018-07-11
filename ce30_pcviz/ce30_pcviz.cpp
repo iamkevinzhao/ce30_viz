@@ -79,6 +79,10 @@ void PointCloudViz::UpdatePointCloud(const PointCloud &point_cloud) {
 
   viz_->updatePointCloud<pcl::PointXYZRGB>(point_cloud_ptr, rgb);
 
+  SpinOnce();
+}
+
+void PointCloudViz::SpinOnce() {
   if (!viz_->wasStopped()) {
     viz_->spinOnce(refresh_interval_);
   }

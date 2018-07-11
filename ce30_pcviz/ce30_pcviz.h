@@ -72,6 +72,7 @@ public:
   void ClusterModeOn(const bool& on);
   bool IsClusterModeOn();
   std::shared_ptr<pcl::visualization::PCLVisualizer> GetPCLViz();
+  void SpinOnce();
 private:
   void OnFirstPointCloud(
       pcl::PointCloud<pcl::PointXYZRGB>::Ptr point_cloud_ptr,

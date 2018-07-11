@@ -8,6 +8,7 @@
 #include <ce30_pcviz/gray_image.h>
 
 #include <ce30_drivers/ce30_d_driver.h>
+#include <chrono>
 
 using namespace std;
 using namespace ce30_pcviz;
@@ -73,21 +74,27 @@ void PointCloudViewer::timerEvent(QTimerEvent *event) {
     OnPCVizInitialized();
   }
   if (pcviz_->Closed()) {
-     QCoreApplication::exit((int)ExitCode::normal_exit);
+    QCoreApplication::exit((int)ExitCode::normal_exit);
     return;
   }
 
   static Scan scan;
   std::unique_lock<std::mutex> lock(scan_mutex_);
-  condition_.wait(lock);
-  if (scan_.Ready()) {
-    scan = scan_;
-  }
-  lock.unlock();
+  // condition_.wait(lock);
+  if (condition_.wait_for(lock, std::chrono::milliseconds(100)) ==
+      std::cv_status::no_timeout) {
+    if (scan_.Ready()) {
+      scan = scan_;
+    }
+    lock.unlock();
 
-  if (scan.Ready()) {
-    UpdatePointCloudDisplay(
-        scan, *pcviz_, vertical_stretch_mode_, save_pcd_);
+    if (scan.Ready()) {
+      UpdatePointCloudDisplay(
+          scan, *pcviz_, vertical_stretch_mode_, save_pcd_);
+    }
+  } else {
+    lock.unlock();
+    pcviz_->SpinOnce();
   }
 }
 
@@ -156,7 +163,7 @@ void PointCloudViewer::PacketReceiveThread() {
 
     static Packet packet;
     static Scan scan;
-    while (!scan.Ready()) {
+    while (!scan.Ready() && !kill_signal_) {
       if (GetPacket(packet, *socket_, true)) {
 //        ++cnt;
 //        auto elapsed = timer.elapsed();
