@@ -12,6 +12,7 @@ namespace pcl {
     class PCLVisualizer;
     class MouseEvent;
     class KeyboardEvent;
+    class PointPickingEvent;
   } // namespace visualization
 } // namespace pcl
 
@@ -35,12 +36,15 @@ public:
 protected:
   void HandleMouseEvent(const pcl::visualization::MouseEvent& event);
   void HandleKeyboardEvent(const pcl::visualization::KeyboardEvent& event);
+  void HandlePointPickingEvent(
+      const pcl::visualization::PointPickingEvent& event);
 private:
   std::shared_ptr<pcl::visualization::PCLVisualizer> viz_;
   std::unique_ptr<StaticView> aerial_view_;
   std::unique_ptr<StaticView> vertical_view_;
   std::vector<CtrlShortcut> ctrl_shortcuts_;
   bool double_tapped_;
+  bool point_pick_on_;
 };
 }
 

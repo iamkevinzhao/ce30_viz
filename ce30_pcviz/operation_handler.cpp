@@ -9,12 +9,16 @@ using namespace std::chrono;
 
 namespace ce30_pcviz {
 OperationHandler::OperationHandler(shared_ptr<PCLVisualizer> viz)
-  : viz_(viz), double_tapped_(false)
+  : viz_(viz),
+    double_tapped_(false),
+    point_pick_on_(false)
 {
   viz_->registerKeyboardCallback(
         boost::bind(&OperationHandler::HandleKeyboardEvent, this, _1));
   viz_->registerMouseCallback(
         boost::bind(&OperationHandler::HandleMouseEvent, this, _1));
+  viz_->registerPointPickingCallback(
+        boost::bind(&OperationHandler::HandlePointPickingEvent, this, _1));
   aerial_view_.reset(
       new StaticView(viz_, -10.0f, 0.0f, 5.0f, 10.0f, 0.0f, 0.0f));
   vertical_view_.reset(
@@ -23,10 +27,33 @@ OperationHandler::OperationHandler(shared_ptr<PCLVisualizer> viz)
       {"1", [this](){aerial_view_->Change();}, "Switch to Aerial View"});
   AddShortcut(
       {"2", [this](){vertical_view_->Change();}, "Switch to Vertical View"});
+  AddShortcut(
+      {"p",
+       [this](){
+         point_pick_on_ = !point_pick_on_;
+         if (point_pick_on_) {
+           std::cout << "Point Picking Mode On" << std::endl;
+         } else {
+           std::cout << "Point Picking Mode Off" << std::endl;
+         }
+       }, "Switch Point Picking Mode"});
 }
 
 void OperationHandler::HandleMouseEvent(const MouseEvent &event) {
 
+}
+
+void OperationHandler::HandlePointPickingEvent(
+    const PointPickingEvent &event) {
+  if (!point_pick_on_) {
+    return;
+  }
+  float x, y, z;
+  event.getPoint(x, y, z);
+  std::cout
+      << "Picked Point: "
+      << std::setprecision(2)
+      << x << ", " << y << ", " << z << std::endl;
 }
 
 void OperationHandler::HandleKeyboardEvent(const KeyboardEvent &event) {
