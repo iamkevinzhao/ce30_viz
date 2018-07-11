@@ -3,6 +3,7 @@
 
 #include "scene.h"
 #include "export.h"
+#include <pcl/point_types.h>
 
 namespace ce30_pcviz {
 class API StaticView : public Scene

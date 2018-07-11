@@ -6,6 +6,7 @@
 #include "operation_handler.h"
 #include <pcl/io/pcd_io.h>
 #include "cloud_cluster_scene.h"
+#include <pcl/visualization/pcl_visualizer.h>
 
 using namespace std;
 using namespace pcl::visualization;

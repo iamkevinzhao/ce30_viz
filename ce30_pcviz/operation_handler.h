@@ -2,10 +2,18 @@
 #define OPERATION_HANDLER_H
 
 #include <memory>
-#include <pcl/visualization/pcl_visualizer.h>
+// #include <pcl/visualization/pcl_visualizer.h>
 #include "static_view.h"
 #include <chrono>
 #include <unordered_map>
+
+namespace pcl {
+  namespace visualization {
+    class PCLVisualizer;
+    class MouseEvent;
+    class KeyboardEvent;
+  } // namespace visualization
+} // namespace pcl
 
 namespace ce30_pcviz {
 struct CtrlShortcut {

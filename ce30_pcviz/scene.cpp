@@ -1,4 +1,5 @@
 #include "scene.h"
+#include <pcl/visualization/pcl_visualizer.h>
 
 using namespace std;
 using namespace pcl::visualization;

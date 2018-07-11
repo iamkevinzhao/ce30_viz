@@ -1,5 +1,6 @@
 #include "grid_scene_x.h"
 #include "grid_geometry.h"
+#include <pcl/visualization/pcl_visualizer.h>
 
 using namespace std;
 

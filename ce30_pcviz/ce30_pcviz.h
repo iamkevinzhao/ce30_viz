@@ -8,10 +8,16 @@
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 #include "scene.h"
-#include <pcl/visualization/pcl_visualizer.h>
+// #include <pcl/visualization/pcl_visualizer.h>
 #include <pcl/visualization/point_cloud_color_handlers.h>
 #include "operation_handler.h"
 #include "cloud_scene.h"
+
+namespace pcl {
+  namespace visualization {
+    class PCLVisualizer;
+  } // namespace visualization
+} // namespace pcl
 
 namespace ce30_pcviz {
 using PCLPoint = pcl::PointXYZRGB;

@@ -3,7 +3,15 @@
 
 #include "export.h"
 #include <memory>
-#include <pcl/visualization/pcl_visualizer.h>
+// #include <pcl/visualization/pcl_visualizer.h>
+#include <string>
+#include <vector>
+
+namespace pcl {
+  namespace visualization {
+    class PCLVisualizer;
+  } // namespace visualization
+} // namespace pcl
 
 namespace ce30_pcviz {
 class API Scene

@@ -3,6 +3,8 @@
 
 #include "scene.h"
 #include "export.h"
+#include <pcl/point_types.h>
+#include <pcl/point_cloud.h>
 
 namespace ce30_pcviz {
 class API CloudScene : public Scene

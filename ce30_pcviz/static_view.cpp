@@ -1,5 +1,6 @@
 #include "static_view.h"
 #include <iostream>
+#include <pcl/visualization/pcl_visualizer.h>
 
 using namespace std;
 using namespace pcl::visualization;

@@ -1,4 +1,5 @@
 #include "world_scene_base.h"
+#include <pcl/visualization/pcl_visualizer.h>
 
 namespace ce30_pcviz {
 WorldSceneBase::WorldSceneBase(
