@@ -6,7 +6,7 @@
 #include <QDir>
 #include <QElapsedTimer>
 #include <ce30_pcviz/gray_image.h>
-
+#include <ce30_pcviz/world_scene_x.h>
 #include <ce30_drivers/ce30_d_driver.h>
 #include <chrono>
 
@@ -71,6 +71,11 @@ void PointCloudViewer::timerEvent(QTimerEvent *event) {
   }
   if (!pcviz_) {
     pcviz_.reset(new PointCloudViz);
+    auto pclviz = pcviz_->GetPCLViz();
+    if (pclviz) {
+      pcviz_->UpdateWorldScene(
+          std::shared_ptr<WorldSceneX>(new WorldSceneX(pclviz)));
+    }
     OnPCVizInitialized();
   }
   if (pcviz_->Closed()) {
