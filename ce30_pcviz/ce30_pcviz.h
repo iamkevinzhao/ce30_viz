@@ -48,6 +48,9 @@ public:
   inline const pcl::PointCloud<PCLPoint>& pcl_pointcloud() const {
     return cloud_;
   }
+  inline const void Reserve(int num) {
+    cloud_.points.reserve(num);
+  }
 private:
   pcl::PointCloud<PCLPoint> cloud_;
 };

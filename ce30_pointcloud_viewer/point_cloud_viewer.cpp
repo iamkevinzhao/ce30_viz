@@ -110,7 +110,27 @@ void PointCloudViewer::UpdatePointCloudDisplay(
 //    cnt = 0;
 //  }
 
+//  float x_min = 10000;
+//  float x_max = 0;
+//  float xx;
+//  for (int x = 0; x < scan.Width(); ++x) {
+//    for (int y = 0; y < scan.Height(); ++y) {
+//      xx = scan.at(x, y).point().x;
+//      if (xx < 0.1f) {
+//        continue;
+//      }
+//      if (xx > x_max) {
+//        x_max = xx;
+//      }
+//      if (xx < x_min) {
+//        x_min = xx;
+//      }
+//    }
+//  }
+//  ce30_pcviz::Point::SetXRange(x_min, x_max);
+
   ce30_pcviz::PointCloud cloud;
+  cloud.Reserve(scan.Width() * scan.Height());
   for (int x = 0; x < scan.Width(); ++x) {
     for (int y = 0; y < scan.Height(); ++y) {
       ce30_driver::Point p = scan.at(x, y).point();
