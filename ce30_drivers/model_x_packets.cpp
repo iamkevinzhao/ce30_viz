@@ -14,24 +14,27 @@ Packet::Packet() {
 
 Channel Packet::ParseChannel(
     const uint32_t &A, const uint32_t &B, uint16_t t) {
-  t += 76;
+  t = t - 106 + 4900;
   Channel channel;
   static int amp = 140;
-  static int b = 500;
-  static double k1 = -(2.0 * amp) / b;
-  static double k2 = (2.0 * amp) / (5000.0 - b);
+  static int b = 140;
+  static int ampy = 70;
+  static double k1 = -(2.0 * ampy) / b;
+  static double k2 = (2.0 * ampy) / (5000.0 - b);
 
   double dist_sortx = -(1.0 * amp * std::sin(2.0 * M_PI * 0.005 * t));
   double data_distxp = 26214.0 + (dist_sortx / 200.0) * 32767.0;
   double data_distxn = 26214.0 - (dist_sortx / 200.0) * 32767.0;
-  channel.x = ((data_distxp - data_distxn) / 22936.0) * 4.0;
+  channel.x = ((data_distxp - data_distxn) / 22936.0) * 10.0;
+  // channel.x = -channel.x;
 
-  double dist_sorty = (t < b) ? (k1 * t + amp) : (k2 * t - 170.0);
+  double dist_sorty = (t <= b) ? (k1 * t + ampy) : (k2 * t - 74.03);
   double data_distyn = 26214.0 + (dist_sorty / 200.0) * 32767.0;
   double data_distyp = 26214.0 - (dist_sorty / 200.0) * 32767.0;
-  channel.y = ((data_distyp - data_distyn) / 22936.0) * 4.0;
+  channel.y = ((data_distyp - data_distyn) / 22936.0) * 6.0 + 18.0;
+  // channel.y = -channel.y;
 
-  channel.distance = 1.0 * A / B * 1000.0 * 3.0 / 10.0 / 2.0;
+  channel.distance = 1.0 * A / B * 1000.0 * 3.0 / 10.0 / 2.0 - 18.0;
   return channel;
 }
 

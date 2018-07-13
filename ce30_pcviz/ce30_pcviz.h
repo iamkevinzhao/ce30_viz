@@ -73,6 +73,7 @@ public:
   bool IsClusterModeOn();
   std::shared_ptr<pcl::visualization::PCLVisualizer> GetPCLViz();
   void SpinOnce();
+  void SetPointSize(const int& size);
 private:
   void OnFirstPointCloud(
       pcl::PointCloud<pcl::PointXYZRGB>::Ptr point_cloud_ptr,
@@ -83,6 +84,7 @@ private:
   std::unique_ptr<OperationHandler> operation_;
   bool first_cloud_;
   int refresh_interval_; // in millisecs
+  int cloud_point_size_;
 };
 }
 

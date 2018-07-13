@@ -71,6 +71,7 @@ void PointCloudViewer::timerEvent(QTimerEvent *event) {
   }
   if (!pcviz_) {
     pcviz_.reset(new PointCloudViz);
+    pcviz_->SetPointSize(6);
     auto pclviz = pcviz_->GetPCLViz();
     if (pclviz) {
       pcviz_->UpdateWorldScene(

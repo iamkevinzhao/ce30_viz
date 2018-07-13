@@ -42,7 +42,7 @@ void Point::SetXRange(const float &min, const float &max) {
 PointCloud::PointCloud() {}
 
 PointCloudViz::PointCloudViz() :
-    first_cloud_(true), refresh_interval_(0) {
+    first_cloud_(true), refresh_interval_(0), cloud_point_size_(3) {
   viz_.reset(new PCLVisualizer("CE30 Point Cloud Viz"));
   world_scene_.reset(new WorldScene(viz_));
 //  cloud_cluster_scene_.reset(new CloudClusterScene(viz_));
@@ -88,6 +88,10 @@ void PointCloudViz::SpinOnce() {
   }
 }
 
+void PointCloudViz::SetPointSize(const int &size) {
+  cloud_point_size_ = size;
+}
+
 void PointCloudViz::AddCtrlShortcut(const CtrlShortcut &shortcut) {
   return operation_->AddShortcut(shortcut);
 }
@@ -124,7 +128,7 @@ void PointCloudViz::OnFirstPointCloud(
     PointCloudColorHandlerRGBField<PCLPoint>& rgb) {
   viz_->addPointCloud<pcl::PointXYZRGB>(point_cloud_ptr, rgb);
   viz_->setPointCloudRenderingProperties(
-      pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 3);
+      pcl::visualization::PCL_VISUALIZER_POINT_SIZE, cloud_point_size_);
   viz_->setShowFPS(false);
   operation_->UseAerialView();
 }
