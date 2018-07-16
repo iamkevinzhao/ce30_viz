@@ -9,8 +9,8 @@ namespace model_x {
 struct CE30_DRIVERS_API Channel : public ce30_drivers::Channel {
   static float DistanceMax();
   static float DistanceMin();
-  int x;
-  int y;
+  float x;
+  float y;
 };
 
 struct CE30_DRIVERS_API ParsedPacket : public ce30_drivers::ParsedPacket {
@@ -31,7 +31,7 @@ struct CE30_DRIVERS_API Packet : public ce30_drivers::Packet {
   inline static int TMax();
   inline static int NumT();
   static bool DetectHead(const unsigned char& alpha, const unsigned char& beta);
-  static Channel ParseChannel(const uint32_t& A, const uint32_t& B, uint16_t t);
+  static Channel ParseChannel(const uint32_t& A, const uint32_t& B, int t);
 };
 
 class CE30_DRIVERS_API Scan : public ce30_drivers::Scan {

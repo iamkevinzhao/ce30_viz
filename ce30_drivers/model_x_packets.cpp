@@ -13,8 +13,14 @@ Packet::Packet() {
 }
 
 Channel Packet::ParseChannel(
-    const uint32_t &A, const uint32_t &B, uint16_t t) {
-  t = t - 106 + 4900;
+    const uint32_t &A, const uint32_t &B, int t) {
+  //std::cout << t <<std::endl;
+  //t = t - 106 - 1000;
+  t = t - 106 + 4800;
+
+  if (t >= 5000) {
+    t = t % 4999;
+  }
   Channel channel;
   static int amp = 140;
   static int b = 140;
@@ -22,19 +28,25 @@ Channel Packet::ParseChannel(
   static double k1 = -(2.0 * ampy) / b;
   static double k2 = (2.0 * ampy) / (5000.0 - b);
 
+
   double dist_sortx = -(1.0 * amp * std::sin(2.0 * M_PI * 0.005 * t));
   double data_distxp = 26214.0 + (dist_sortx / 200.0) * 32767.0;
   double data_distxn = 26214.0 - (dist_sortx / 200.0) * 32767.0;
-  channel.x = ((data_distxp - data_distxn) / 22936.0) * 10.0;
+  channel.x = ((data_distxp - data_distxn) / 22936.0) * 5.0;
   // channel.x = -channel.x;
 
   double dist_sorty = (t <= b) ? (k1 * t + ampy) : (k2 * t - 74.03);
+  // std::cout << dist_sorty << " " << t << " " << b << " " << " " << k1 << " " << t << " " << ampy << " " << k2 << std::endl;
   double data_distyn = 26214.0 + (dist_sorty / 200.0) * 32767.0;
   double data_distyp = 26214.0 - (dist_sorty / 200.0) * 32767.0;
-  channel.y = ((data_distyp - data_distyn) / 22936.0) * 6.0 + 18.0;
+  // std::cout << dist_sorty << " " << data_distyp << " "  << data_distyn << " " << (data_distyp - data_distyn) << std::endl;
+  channel.y = ((data_distyp - data_distyn) / 22936.0) * 6.0 + 2.0;
   // channel.y = -channel.y;
 
   channel.distance = 1.0 * A / B * 1000.0 * 3.0 / 10.0 / 2.0 - 18.0;
+  // if (channel.distance > 25.0 && channel.distance < 30.0) {
+    // std::cout <<channel.x <<" " <<channel.y <<std::endl;
+  //}
   return channel;
 }
 
@@ -50,7 +62,6 @@ std::unique_ptr<ParsedPacket> Packet::Parse() {
   buf2[0] = data[3];
   buf2[1] = data[2];
   memcpy(&t, buf2, 2);
-  // std::cout << t << std::endl;
   int index = 4;
   const int kSizeOfDim = SizeOfDim();
   const int kSizeOfPacket = data.size();
