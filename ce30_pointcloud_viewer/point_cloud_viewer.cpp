@@ -8,6 +8,7 @@
 #include <QDir>
 #include <QElapsedTimer>
 #include "grey_image.h"
+#include <ce30_pcviz/world_scene_x.h>
 
 using namespace std;
 using namespace ce30_pcviz;
@@ -21,6 +22,11 @@ PointCloudViewer::PointCloudViewer()
 {
   startTimer(0);
   ce30_pcviz::Point::SetXRange(Channel::DistanceMin(), Channel::DistanceMax());
+  control_panel_.reset(new ControlPanelWidget);
+  connect(
+      this, SIGNAL(ShowControlPanel(std::vector<ce30_pcviz::CtrlShortcut>)),
+      control_panel_.get(),
+      SLOT(OnShow(std::vector<ce30_pcviz::CtrlShortcut>)));
 }
 
 PointCloudViewer::~PointCloudViewer() {
@@ -68,6 +74,10 @@ void PointCloudViewer::timerEvent(QTimerEvent *event) {
   }
   if (!pcviz_) {
     pcviz_.reset(new PointCloudViz);
+#if ON_DEVEL
+    pcviz_->UpdateWorldScene(
+        std::shared_ptr<WorldSceneX>(new WorldSceneX(pcviz_->GetPCLViz())));
+#endif
     OnPCVizInitialized();
   }
   if (pcviz_->Closed()) {
@@ -271,6 +281,11 @@ void PointCloudViewer::OnPCVizInitialized() {
        [this](){
          pcviz_->ClusterModeOn(!pcviz_->IsClusterModeOn());
        }, "Clustering Mode"});
+  pcviz_->AddCtrlShortcut(
+      {"c",
+       [this](){
+         emit ShowControlPanel(pcviz_->GetAllCtrlShortcuts());
+       }, "Show Control Panel"});
 
 #ifdef USE_FEATURE_FILTER
   pcviz_->AddCtrlShortcut(

@@ -10,6 +10,7 @@
 #include <thread>
 #include <mutex>
 #include <QImage>
+#include <ce30_pcviz/control_panel_widget.h>
 
 #ifdef CES_SPECIAL
 #include "ces_special/ces_static_scene.h"
@@ -23,6 +24,7 @@ public:
   ~PointCloudViewer();
 signals:
   void UpdateImage(std::shared_ptr<QImage> image);
+  void ShowControlPanel(std::vector<ce30_pcviz::CtrlShortcut> shortcuts);
 protected:
   void timerEvent(QTimerEvent* event);
 private:
@@ -51,6 +53,7 @@ private:
   std::mutex signal_mutex_;
   bool kill_signal_;
   std::condition_variable condition_;
+  std::shared_ptr<ce30_pcviz::ControlPanelWidget> control_panel_;
 };
 
 #endif // POINT_CLOUD_VIEWER_H

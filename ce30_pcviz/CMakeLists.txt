@@ -41,6 +41,13 @@ add_library(
       world_scene_base.cpp
       world_scene_x.h
       world_scene_x.cpp
+      control_panel_widget.h
+      control_panel_widget.cpp
+      control_panel_widget.ui
+      control_panel_base.h
+      control_panel_base.cpp
+      helper_utils.h
+      helper_utils.cpp
 )
 
 target_link_libraries(
