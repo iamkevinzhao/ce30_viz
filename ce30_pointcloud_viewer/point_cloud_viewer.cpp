@@ -71,6 +71,8 @@ void PointCloudViewer::timerEvent(QTimerEvent *event) {
     pcviz_.reset(new PointCloudViz);
     pcviz_->UpdateWorldScene(std::shared_ptr<WorldSceneX>(new WorldSceneX(pcviz_->GetPCLViz())));
     OnPCVizInitialized();
+    control_panel_ = new ControlPanelWindow;
+    connect(this, SIGNAL(ShowControlPanel(std::vector<ce30_pcviz::CtrlShortcut>)), control_panel_, SLOT(OnShow(std::vector<ce30_pcviz::CtrlShortcut>)));
     emit ShowControlPanel(pcviz_->GetAllCtrlShortcuts());
   }
   if (pcviz_->Closed()) {
