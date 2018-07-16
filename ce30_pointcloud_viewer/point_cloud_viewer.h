@@ -53,7 +53,7 @@ private:
   std::mutex signal_mutex_;
   bool kill_signal_;
   std::condition_variable condition_;
-  ce30_pcviz::ControlPanelWindow* control_panel_;
+  std::shared_ptr<ce30_pcviz::ControlPanelWindow> control_panel_;
 };
 
 #endif // POINT_CLOUD_VIEWER_H
