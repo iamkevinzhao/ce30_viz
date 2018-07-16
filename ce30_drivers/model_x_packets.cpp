@@ -16,7 +16,7 @@ Channel Packet::ParseChannel(
     const uint32_t &A, const uint32_t &B, int t) {
   //std::cout << t <<std::endl;
   //t = t - 106 - 1000;
-  t = t - 106 + 4800;
+  t = t - 6 + 4800;
 
   if (t >= 5000) {
     t = t % 4999;
@@ -33,7 +33,7 @@ Channel Packet::ParseChannel(
   double data_distxp = 26214.0 + (dist_sortx / 200.0) * 32767.0;
   double data_distxn = 26214.0 - (dist_sortx / 200.0) * 32767.0;
   channel.x = ((data_distxp - data_distxn) / 22936.0) * 5.0;
-  // channel.x = -channel.x;
+  channel.x = -channel.x;
 
   double dist_sorty = (t <= b) ? (k1 * t + ampy) : (k2 * t - 74.03);
   // std::cout << dist_sorty << " " << t << " " << b << " " << " " << k1 << " " << t << " " << ampy << " " << k2 << std::endl;
