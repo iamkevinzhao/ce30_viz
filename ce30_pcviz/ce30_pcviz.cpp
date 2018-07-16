@@ -96,6 +96,10 @@ void PointCloudViz::AddCtrlShortcut(const CtrlShortcut &shortcut) {
   return operation_->AddShortcut(shortcut);
 }
 
+std::vector<CtrlShortcut> PointCloudViz::GetAllCtrlShortcuts() {
+  return operation_->GetAllCtrlShortcuts();
+}
+
 vector<pair<string, string>> PointCloudViz::CtrlShortcutMap() {
   return operation_->CtrlShortcutMap();
 }

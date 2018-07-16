@@ -64,6 +64,7 @@ public:
   bool Closed();
   void UpdatePointCloud(const PointCloud& point_cloud);
   void AddCtrlShortcut(const CtrlShortcut& shortcut);
+  std::vector<CtrlShortcut> GetAllCtrlShortcuts();
   std::vector<std::pair<std::string, std::string>> CtrlShortcutMap();
   void PrintShortcuts();
   static bool SavePCD(const std::string& file, const PointCloud& pointcloud);

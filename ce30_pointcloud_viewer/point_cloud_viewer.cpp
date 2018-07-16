@@ -8,6 +8,7 @@
 #include <QDir>
 #include <QElapsedTimer>
 #include "grey_image.h"
+#include <ce30_pcviz/world_scene_x.h>
 
 using namespace std;
 using namespace ce30_pcviz;
@@ -68,7 +69,9 @@ void PointCloudViewer::timerEvent(QTimerEvent *event) {
   }
   if (!pcviz_) {
     pcviz_.reset(new PointCloudViz);
+    pcviz_->UpdateWorldScene(std::shared_ptr<WorldSceneX>(new WorldSceneX(pcviz_->GetPCLViz())));
     OnPCVizInitialized();
+    emit ShowControlPanel(pcviz_->GetAllCtrlShortcuts());
   }
   if (pcviz_->Closed()) {
      QCoreApplication::exit((int)ExitCode::normal_exit);

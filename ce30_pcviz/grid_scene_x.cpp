@@ -13,7 +13,7 @@ GridSceneX::GridSceneX(std::shared_ptr<pcl::visualization::PCLVisualizer> viz)
 
 void GridSceneX::ShowDefault() {
   int width = 20;
-  int height = 100;
+  int height = 200;
   float size = 1.0f;
   float x = height * size;
   float y = width * size / 2;

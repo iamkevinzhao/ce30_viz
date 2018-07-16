@@ -30,6 +30,7 @@ public:
   void UseAerialView();
   void UseVerticalView();
   void AddShortcut(const CtrlShortcut& shortcut);
+  std::vector<CtrlShortcut> GetAllCtrlShortcuts();
   std::vector<std::pair<std::string, std::string>> CtrlShortcutMap();
   void PrintShortcuts();
   static bool IsNumKey(const std::string& key);

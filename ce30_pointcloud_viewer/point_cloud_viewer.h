@@ -23,6 +23,7 @@ public:
   ~PointCloudViewer();
 signals:
   void UpdateImage(std::shared_ptr<QImage> image);
+  void ShowControlPanel(std::vector<ce30_pcviz::CtrlShortcut> shortcuts);
 protected:
   void timerEvent(QTimerEvent* event);
 private:

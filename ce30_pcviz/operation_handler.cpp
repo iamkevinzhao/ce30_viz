@@ -79,6 +79,10 @@ void OperationHandler::AddShortcut(const CtrlShortcut &shortcut) {
   ctrl_shortcuts_.push_back(shortcut);
 }
 
+std::vector<CtrlShortcut> OperationHandler::GetAllCtrlShortcuts() {
+  return ctrl_shortcuts_;
+}
+
 vector<pair<string, string>> OperationHandler::CtrlShortcutMap() {
   vector<pair<string, string>> map;
   for (auto& shortcut : ctrl_shortcuts_) {
