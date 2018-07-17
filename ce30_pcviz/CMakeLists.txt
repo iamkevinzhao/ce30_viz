@@ -44,6 +44,8 @@ add_library(
       control_panel_widget.h
       control_panel_widget.cpp
       control_panel_widget.ui
+      control_panel_base.h
+      control_panel_base.cpp
 )
 
 target_link_libraries(
