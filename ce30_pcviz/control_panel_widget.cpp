@@ -1,21 +1,20 @@
-#include "control_panel_window.h"
-#include "ui_control_panel_window.h"
+#include "control_panel_widget.h"
+#include "ui_control_panel_widget.h"
 #include <QPushButton>
 
 namespace ce30_pcviz {
-ControlPanelWindow::ControlPanelWindow(QWidget *parent) :
-  QMainWindow(parent),
-  ui(new Ui::ControlPanelWindow)
+ControlPanelWidget::ControlPanelWidget(QWidget *parent) :
+  QWidget(parent),
+  ui(new Ui::ControlPanelWidget)
 {
   ui->setupUi(this);
 }
 
-ControlPanelWindow::~ControlPanelWindow()
+ControlPanelWidget::~ControlPanelWidget()
 {
   delete ui;
 }
-
-void ControlPanelWindow::ClearGridLayout(QLayout *layout) {
+void ControlPanelWidget::ClearGridLayout(QLayout *layout) {
   if (!layout) {
     return;
   }
@@ -25,7 +24,7 @@ void ControlPanelWindow::ClearGridLayout(QLayout *layout) {
   }
 }
 
-void ControlPanelWindow::OnShow(
+void ControlPanelWidget::OnShow(
     std::vector<ce30_pcviz::CtrlShortcut> shortcuts) {
   auto panel_layout = ui->ControlButtonGridLayout;
   if (!panel_layout) {

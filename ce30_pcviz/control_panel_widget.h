@@ -1,7 +1,7 @@
-#ifndef CONTROL_PANEL_WINDOW_H
-#define CONTROL_PANEL_WINDOW_H
+#ifndef CONTROL_PANEL_WIDGET_H
+#define CONTROL_PANEL_WIDGET_H
 
-#include <QMainWindow>
+#include <QWidget>
 #include "operation_handler.h"
 #include "export.h"
 #include <unordered_map>
@@ -9,26 +9,26 @@
 #include <QLayout>
 
 namespace Ui {
-  class ControlPanelWindow;
+  class ControlPanelWidget;
 }
 
 namespace ce30_pcviz {
-class API ControlPanelWindow : public QMainWindow
+class API ControlPanelWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  explicit ControlPanelWindow(QWidget *parent = 0);
-  ~ControlPanelWindow();
+  explicit ControlPanelWidget(QWidget *parent = 0);
+  ~ControlPanelWidget();
   static void ClearGridLayout(QLayout* layout);
 
 public slots:
   void OnShow(std::vector<ce30_pcviz::CtrlShortcut> shortcuts);
 
 private:
-  Ui::ControlPanelWindow *ui;
+  Ui::ControlPanelWidget *ui;
   std::vector<CtrlShortcut> ctrl_shortcut_map_;
 };
 } // namespace ce30_pcviz
 
-#endif // CONTROL_PANEL_WINDOW_H
+#endif // CONTROL_PANEL_WIDGET_H

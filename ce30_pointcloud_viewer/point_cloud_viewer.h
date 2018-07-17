@@ -10,7 +10,7 @@
 #include <thread>
 #include <mutex>
 #include <QImage>
-#include <ce30_pcviz/control_panel_window.h>
+#include <ce30_pcviz/control_panel_widget.h>
 
 #ifdef CES_SPECIAL
 #include "ces_special/ces_static_scene.h"
@@ -53,7 +53,7 @@ private:
   std::mutex signal_mutex_;
   bool kill_signal_;
   std::condition_variable condition_;
-  std::shared_ptr<ce30_pcviz::ControlPanelWindow> control_panel_;
+  std::shared_ptr<ce30_pcviz::ControlPanelWidget> control_panel_;
 };
 
 #endif // POINT_CLOUD_VIEWER_H
