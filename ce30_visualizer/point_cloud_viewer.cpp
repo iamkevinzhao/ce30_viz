@@ -9,6 +9,8 @@
 #include <ce30_pcviz/world_scene_x.h>
 #include <ce30_drivers/ce30_d_driver.h>
 #include <chrono>
+#include <ce30_pcviz/control_panel_widget.h>
+#include <QProcess>
 
 using namespace std;
 using namespace ce30_pcviz;
@@ -24,6 +26,13 @@ PointCloudViewer::PointCloudViewer()
 {
   startTimer(0);
   ce30_pcviz::Point::SetXRange(Channel::DistanceMin(), Channel::DistanceMax());
+  control_panel_.reset(new ControlPanelWidget);
+  connect(
+      this, SIGNAL(ShowControlPanel(std::vector<ce30_pcviz::CtrlShortcut>)),
+      control_panel_.get(),
+      SLOT(OnShow(std::vector<ce30_pcviz::CtrlShortcut>)));
+  QProcess process;
+  process.execute("arp -s 192.168.0.2 00-0a-35-01-fe-c0");
 }
 
 PointCloudViewer::~PointCloudViewer() {
@@ -78,6 +87,9 @@ void PointCloudViewer::timerEvent(QTimerEvent *event) {
           std::shared_ptr<WorldSceneX>(new WorldSceneX(pclviz)));
     }
     OnPCVizInitialized();
+#ifndef ON_DEVEL
+    emit ShowControlPanel(pcviz_->GetAllCtrlShortcuts());
+#endif
   }
   if (pcviz_->Closed()) {
     QCoreApplication::exit((int)ExitCode::normal_exit);

@@ -11,6 +11,10 @@
 #include <mutex>
 #include <QImage>
 
+namespace ce30_pcviz {
+  class ControlPanelWidget;
+}
+
 namespace visualizer {
 class PointCloudViewer : public QObject
 {
@@ -20,6 +24,7 @@ class PointCloudViewer : public QObject
   ~PointCloudViewer();
  signals:
   void UpdateImage(std::shared_ptr<QImage> image);
+  void ShowControlPanel(std::vector<ce30_pcviz::CtrlShortcut> shortcuts);
  protected:
   void timerEvent(QTimerEvent* event);
  private:
@@ -46,6 +51,7 @@ class PointCloudViewer : public QObject
   std::mutex signal_mutex_;
   bool kill_signal_;
   std::condition_variable condition_;
+  std::shared_ptr<ce30_pcviz::ControlPanelWidget> control_panel_;
 };
 } // namespace visualizer
 #endif // POINT_CLOUD_VIEWER_H

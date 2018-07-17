@@ -14,6 +14,10 @@ if(USE_FAKE_POINTCLOUD)
   )
 endif()
 
+if(ON_DEVEL)
+  add_definitions(-DON_DEVEL)
+endif()
+
 if(CES_SPECIAL)
   add_definitions(-DCES_SPECIAL)
   set(

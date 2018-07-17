@@ -21,7 +21,14 @@ Channel Packet::ParseChannel(
   if (t >= 5000) {
     t = t % 4999;
   }
+
   Channel channel;
+  if (t <= 140) {
+    channel.x = 0;
+    channel.y = 0;
+    channel.distance = 0;
+    return channel;
+  }
   static int amp = 140;
   static int b = 140;
   static int ampy = 70;
@@ -69,7 +76,15 @@ std::unique_ptr<ParsedPacket> Packet::Parse() {
   parsed->channels.reserve(NumChannel());
   uint32_t A, B;
   uint8_t buf4[4];
+  int channel_num = 0;
   while (index < kSizeOfPacket) {
+    ++channel_num;
+//    if (channel_num > 149) {
+//      continue;
+//    }
+//    if (t >= 0 && t <= 140) {
+//      continue;
+//    }
     buf4[0] = data[index + 3];
     buf4[1] = data[index + 2];
     buf4[2] = data[index + 1];
@@ -83,7 +98,9 @@ std::unique_ptr<ParsedPacket> Packet::Parse() {
     buf4[3] = data[index];
     memcpy(&B, buf4, kSizeOfDim);
     index += kSizeOfDim;
-    parsed->channels.push_back(ParseChannel(A, B, t));
+    if (channel_num <= 149) {
+      parsed->channels.push_back(ParseChannel(A, B, t));
+    }
     ++t;
   }
   parsed->t = t;
