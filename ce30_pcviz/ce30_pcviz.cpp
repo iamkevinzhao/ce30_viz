@@ -7,6 +7,7 @@
 #include <pcl/io/pcd_io.h>
 #include "cloud_cluster_scene.h"
 #include <pcl/visualization/pcl_visualizer.h>
+#include "helper_utils.h"
 
 using namespace std;
 using namespace pcl::visualization;
@@ -42,11 +43,22 @@ void Point::SetXRange(const float &min, const float &max) {
 PointCloud::PointCloud() {}
 
 PointCloudViz::PointCloudViz() :
-    first_cloud_(true), refresh_interval_(0), cloud_point_size_(3) {
-  viz_.reset(new PCLVisualizer("CE30 Point Cloud Viz"));
+    first_cloud_(true),
+    refresh_interval_(0),
+    cloud_point_size_(3),
+    kVizWindowTitle("CE30 Point Cloud Viz") {
+  viz_.reset(new PCLVisualizer(kVizWindowTitle));
   world_scene_.reset(new WorldScene(viz_));
 //  cloud_cluster_scene_.reset(new CloudClusterScene(viz_));
   operation_.reset(new OperationHandler(viz_));
+  operation_->RegisterPointPickedCallback(
+      [this](float x, float y, float z){
+    viz_->setWindowName("Picked Point: " + ToCoordinateString(x, y, z));
+  });
+  operation_->RegisterPointPickingModeOffCallback(
+      [this](){
+    viz_->setWindowName(kVizWindowTitle);
+  });
 }
 
 string PointCloudViz::Version() {
@@ -90,6 +102,11 @@ void PointCloudViz::SpinOnce() {
 
 void PointCloudViz::SetPointSize(const int &size) {
   cloud_point_size_ = size;
+}
+
+void PointCloudViz::RegisterPointPickedCallback(
+    std::function<void (float, float, float)> callback) {
+  operation_->RegisterPointPickedCallback(callback);
 }
 
 void PointCloudViz::AddCtrlShortcut(const CtrlShortcut &shortcut) {

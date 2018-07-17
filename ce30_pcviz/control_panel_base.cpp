@@ -35,7 +35,9 @@ void ControlPanelBase::OnShow(
   ctrl_shortcut_map_ = shortcuts;
   for (int i = 0; i < shortcuts.size(); ++i) {
     auto button = new QPushButton(this);
-    button->setText(QString::fromStdString(shortcuts[i].description));
+    button->setText(
+        QString::fromStdString(
+            shortcuts[i].description + " (Ctrl+" + shortcuts[i].key + ")"));
     panel_layout->addWidget(button);
     connect(
         button, &QPushButton::pressed,

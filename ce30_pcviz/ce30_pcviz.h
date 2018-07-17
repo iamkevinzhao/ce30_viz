@@ -75,6 +75,8 @@ public:
   std::shared_ptr<pcl::visualization::PCLVisualizer> GetPCLViz();
   void SpinOnce();
   void SetPointSize(const int& size);
+  void RegisterPointPickedCallback(
+      std::function<void(float x, float y, float z)>);
 private:
   void OnFirstPointCloud(
       pcl::PointCloud<pcl::PointXYZRGB>::Ptr point_cloud_ptr,
@@ -86,6 +88,7 @@ private:
   bool first_cloud_;
   int refresh_interval_; // in millisecs
   int cloud_point_size_;
+  const std::string kVizWindowTitle;
 };
 }
 

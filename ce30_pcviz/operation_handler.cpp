@@ -35,6 +35,9 @@ OperationHandler::OperationHandler(shared_ptr<PCLVisualizer> viz)
            std::cout << "Point Picking Mode On" << std::endl;
          } else {
            std::cout << "Point Picking Mode Off" << std::endl;
+           if (point_picking_mode_off_callback_) {
+             point_picking_mode_off_callback_();
+           }
          }
        }, "Switch Point Picking Mode"});
 }
@@ -50,10 +53,13 @@ void OperationHandler::HandlePointPickingEvent(
   }
   float x, y, z;
   event.getPoint(x, y, z);
-  std::cout
-      << "Picked Point: "
-      << std::setprecision(2)
-      << x << ", " << y << ", " << z << std::endl;
+  if (point_picked_callback_) {
+    point_picked_callback_(x, y, z);
+  }
+//  std::cout
+//      << "Picked Point: "
+//      << std::setprecision(2)
+//      << x << ", " << y << ", " << z << std::endl;
 }
 
 void OperationHandler::HandleKeyboardEvent(const KeyboardEvent &event) {
@@ -105,6 +111,16 @@ bool OperationHandler::IsNumKey(const string &key) {
     return true;
   }
   return false;
+}
+
+void OperationHandler::RegisterPointPickedCallback(
+    std::function<void (float, float, float)> callback) {
+  point_picked_callback_ = callback;
+}
+
+void OperationHandler::RegisterPointPickingModeOffCallback(
+    std::function<void ()> callback) {
+  point_picking_mode_off_callback_ = callback;
 }
 
 void OperationHandler::UseAerialView() {
