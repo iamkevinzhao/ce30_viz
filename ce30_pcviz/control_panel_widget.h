@@ -2,6 +2,7 @@
 #define CONTROL_PANEL_WIDGET_H
 
 #include "control_panel_base.h"
+#include <QWidget>
 
 namespace Ui {
   class ControlPanelWidget;

@@ -22,6 +22,11 @@ PointCloudViewer::PointCloudViewer()
 {
   startTimer(0);
   ce30_pcviz::Point::SetXRange(Channel::DistanceMin(), Channel::DistanceMax());
+  control_panel_.reset(new ControlPanelWidget);
+  connect(
+      this, SIGNAL(ShowControlPanel(std::vector<ce30_pcviz::CtrlShortcut>)),
+      control_panel_.get(),
+      SLOT(OnShow(std::vector<ce30_pcviz::CtrlShortcut>)));
 }
 
 PointCloudViewer::~PointCloudViewer() {
@@ -74,12 +79,6 @@ void PointCloudViewer::timerEvent(QTimerEvent *event) {
         std::shared_ptr<WorldSceneX>(new WorldSceneX(pcviz_->GetPCLViz())));
 #endif
     OnPCVizInitialized();
-    control_panel_.reset(new ControlPanelWidget);
-    connect(
-        this, SIGNAL(ShowControlPanel(std::vector<ce30_pcviz::CtrlShortcut>)),
-        control_panel_.get(),
-        SLOT(OnShow(std::vector<ce30_pcviz::CtrlShortcut>)));
-    emit ShowControlPanel(pcviz_->GetAllCtrlShortcuts());
   }
   if (pcviz_->Closed()) {
      QCoreApplication::exit((int)ExitCode::normal_exit);
@@ -282,6 +281,11 @@ void PointCloudViewer::OnPCVizInitialized() {
        [this](){
          pcviz_->ClusterModeOn(!pcviz_->IsClusterModeOn());
        }, "Clustering Mode"});
+  pcviz_->AddCtrlShortcut(
+      {"c",
+       [this](){
+         emit ShowControlPanel(pcviz_->GetAllCtrlShortcuts());
+       }, "Show Control Panel"});
 
 #ifdef USE_FEATURE_FILTER
   pcviz_->AddCtrlShortcut(

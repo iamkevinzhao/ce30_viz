@@ -7,7 +7,9 @@ ControlPanelBase::ControlPanelBase(QWidget *parent) : QWidget(parent)
 
 }
 
-ControlPanelBase::~ControlPanelBase() {}
+ControlPanelBase::~ControlPanelBase() {
+  ClearGridLayout(button_grid_layout_);
+}
 
 void ControlPanelBase::ClearGridLayout(QLayout *layout) {
   if (!layout) {
@@ -28,6 +30,7 @@ void ControlPanelBase::OnShow(
   if (!panel_layout) {
     return;
   }
+  disconnect();
   ClearGridLayout(panel_layout);
   ctrl_shortcut_map_ = shortcuts;
   for (int i = 0; i < shortcuts.size(); ++i) {
