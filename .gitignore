@@ -1,6 +1,9 @@
-*~
+﻿*~
 \#*\#
 /build*
 CMakeLists.txt.user
 *.user
 *.autosave
+doc/X项目上位机使用手册.md
+
+media/project_x_visualizer.png
