@@ -38,6 +38,7 @@ public:
   void RegisterPointPickedCallback(
       std::function<void(float x, float y, float z)>);
   void RegisterPointPickingModeOffCallback(std::function<void()>);
+  void ChangeVerticalView(std::shared_ptr<StaticView> view);
 protected:
   void HandleMouseEvent(const pcl::visualization::MouseEvent& event);
   void HandleKeyboardEvent(const pcl::visualization::KeyboardEvent& event);
@@ -46,7 +47,7 @@ protected:
 private:
   std::shared_ptr<pcl::visualization::PCLVisualizer> viz_;
   std::unique_ptr<StaticView> aerial_view_;
-  std::unique_ptr<StaticView> vertical_view_;
+  std::shared_ptr<StaticView> vertical_view_;
   std::vector<CtrlShortcut> ctrl_shortcuts_;
   bool double_tapped_;
   bool point_pick_on_;

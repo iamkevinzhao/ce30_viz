@@ -109,6 +109,15 @@ void PointCloudViz::RegisterPointPickedCallback(
   operation_->RegisterPointPickedCallback(callback);
 }
 
+void PointCloudViz::ChangeVerticalView(
+    const float &at_x, const float &at_y, const float &at_z,
+    const float &toward_x, const float &toward_y, const float &toward_z) {
+  operation_->ChangeVerticalView(
+      std::shared_ptr<StaticView>(
+          new StaticView(
+              viz_, at_x, at_y, at_z, toward_x, toward_y, toward_z)));
+}
+
 void PointCloudViz::AddCtrlShortcut(const CtrlShortcut &shortcut) {
   return operation_->AddShortcut(shortcut);
 }

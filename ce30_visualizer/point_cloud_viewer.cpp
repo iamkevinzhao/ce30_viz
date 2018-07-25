@@ -86,6 +86,7 @@ void PointCloudViewer::timerEvent(QTimerEvent *event) {
       pcviz_->UpdateWorldScene(
           std::shared_ptr<WorldSceneX>(new WorldSceneX(pclviz)));
     }
+    pcviz_->ChangeVerticalView(100.0f, 0.0f, 50.0f, 101.0f, 0.0f, 1.0f);
     OnPCVizInitialized();
 #ifndef ON_DEVEL
     emit ShowControlPanel(pcviz_->GetAllCtrlShortcuts());
@@ -218,7 +219,7 @@ void PointCloudViewer::PacketReceiveThread() {
         if (parsed) {
           scan.AddFromPacket(*parsed);
         } else {
-          // cerr << "Error parsing package." << endl;
+          cerr << "Error parsing package." << endl;
         }
       } else {
         cerr << "Error getting package." << endl;

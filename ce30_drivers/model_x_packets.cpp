@@ -48,7 +48,7 @@ Channel Packet::ParseChannel(
   double data_distyp = 26214.0 - (dist_sorty / 200.0) * 32767.0;
   // std::cout << dist_sorty << " " << data_distyp << " "  << data_distyn << " " << (data_distyp - data_distyn) << std::endl;
   channel.y = ((data_distyp - data_distyn) / 22936.0) * 6.0 + 2.0;
-  // channel.y = -channel.y;
+  channel.y += 4.0f;
 
   channel.distance = 1.0 * A / B * 1000.0 * 3.0 / 10.0 / 2.0;
   // if (channel.distance > 25.0 && channel.distance < 30.0) {

@@ -23,6 +23,8 @@ OperationHandler::OperationHandler(shared_ptr<PCLVisualizer> viz)
       new StaticView(viz_, -10.0f, 0.0f, 5.0f, 10.0f, 0.0f, 0.0f));
   vertical_view_.reset(
       new StaticView(viz_, 15.0f, 0.0f, 50.0f, 16.0f, 0.0f, 0.0f));
+//  vertical_view_.reset(
+//      new StaticView(viz_, 50.0f, 0.0f, 50.0f, 51.0f, 0.0f, 1.0f));
   AddShortcut(
       {"1", [this](){aerial_view_->Change();}, "Switch to Aerial View"});
   AddShortcut(
@@ -129,5 +131,9 @@ void OperationHandler::UseAerialView() {
 
 void OperationHandler::UseVerticalView() {
   vertical_view_->Change();
+}
+
+void OperationHandler::ChangeVerticalView(std::shared_ptr<StaticView> view) {
+    vertical_view_ = view;
 }
 }

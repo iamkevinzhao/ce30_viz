@@ -77,6 +77,9 @@ public:
   void SetPointSize(const int& size);
   void RegisterPointPickedCallback(
       std::function<void(float x, float y, float z)>);
+  void ChangeVerticalView(
+      const float& at_x, const float& at_y, const float& at_z,
+      const float& toward_x, const float& toward_y, const float& toward_z);
 private:
   void OnFirstPointCloud(
       pcl::PointCloud<pcl::PointXYZRGB>::Ptr point_cloud_ptr,
