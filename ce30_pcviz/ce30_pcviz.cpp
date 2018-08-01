@@ -35,6 +35,12 @@ void Point::RainbowColorize(
   b = value < 128 ? 255 - (2 * value) : 0;
 }
 
+void Point::MultiRainbowColorize(
+    const float &x, const float &min, const float &max,
+    unsigned char &r, unsigned char &g, unsigned char &b) {
+  return RainbowColorize((int)x % 10, 0, 10, r, g, b);
+}
+
 void Point::SetXRange(const float &min, const float &max) {
   x_min_ = min;
   x_max_ = max;

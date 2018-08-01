@@ -146,7 +146,7 @@ void PointCloudViewer::UpdatePointCloudDisplay(
 //  }
   auto channels = scan.GetChannels();
   constexpr float kIgnoreDistanceMin = 10.0f;
-  constexpr float kIgnoreDistanceMax = 200.0f;
+  constexpr float kIgnoreDistanceMax = 350.0f;
   float dist_max = kIgnoreDistanceMin;
   float dist_min = kIgnoreDistanceMax;
 

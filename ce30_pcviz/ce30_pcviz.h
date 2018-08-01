@@ -33,6 +33,9 @@ private:
   static void RainbowColorize(
       const float& x, const float& min, const float& max,
       unsigned char& r, unsigned char& g, unsigned char& b);
+  static void MultiRainbowColorize(
+      const float& x, const float& min, const float& max,
+      unsigned char& r, unsigned char& g, unsigned char& b);
   static float x_max_;
   static float x_min_;
 
