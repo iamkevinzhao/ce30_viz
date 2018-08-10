@@ -46,20 +46,33 @@ add_definitions(${PCL_DEFINITIONS})
 add_subdirectory(ce30_drivers)
 add_subdirectory(ce30_pcviz)
 add_subdirectory(ce30_pointcloud_viewer)
-add_subdirectory(ce30_visualizer)
+if (${CE30_VISUALIZER})
+  add_subdirectory(ce30_visualizer)
+endif()
 # add_subdirectory(ce30_depthimage_viewer)
 
 # The interesting stuff goes here
 # ===============================
 
 # Add all targets to the build-tree export set
-export(
-  TARGETS
+SET(
+  EXPORT_TARGETS
     ce30_drivers
     ce30_pcviz
     ce30_pointcloud_viewer
-    # ce30_depthimage_viewer
-    ce30_visualizer
+)
+
+if (${CE30_VISUALIZER})
+  SET(
+    EXPORT_TARGETS
+      ${EXPORT_TARGETS}
+      ce30_visualizer
+  )
+endif()
+
+export(
+  TARGETS
+    ${EXPORT_TARGETS}
   FILE "${PROJECT_BINARY_DIR}/ce30_vizTargets.cmake")
 
 # Export the package for use from the build-tree
