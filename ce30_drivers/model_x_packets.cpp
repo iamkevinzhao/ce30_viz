@@ -4,6 +4,8 @@
 #endif
 
 #include <iostream>
+#include <cmath>
+#include <string.h>
 
 namespace ce30_drivers {
 namespace model_x {
