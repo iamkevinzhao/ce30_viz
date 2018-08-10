@@ -10,6 +10,7 @@
 #include <thread>
 #include <mutex>
 #include <QImage>
+#include <condition_variable>
 
 namespace ce30_pcviz {
   class ControlPanelWidget;
