@@ -41,7 +41,7 @@ Channel Packet::ParseChannel(
   double dist_sortx = -(1.0 * amp * std::sin(2.0 * M_PI * 0.0025 * t));
   double data_distxp = 31129.0 + (dist_sortx / 200.0) * 32767.0;
   double data_distxn = 31129.0 - (dist_sortx / 200.0) * 32767.0;
-  channel.x = ((data_distxp - data_distxn) / 22936.0) * 5.0;
+  channel.x = ((data_distxp - data_distxn) / 22936.0) * 7.0;
   channel.x = -channel.x;
 
   double dist_sorty = (t <= b) ? (k1 * t + ampy) : (k2 * t - 70.392);
@@ -49,7 +49,7 @@ Channel Packet::ParseChannel(
   double data_distyn = 31129.0 + (dist_sorty / 200.0) * 32767.0;
   double data_distyp = 31129.0 - (dist_sorty / 200.0) * 32767.0;
   // std::cout << dist_sorty << " " << data_distyp << " "  << data_distyn << " " << (data_distyp - data_distyn) << std::endl;
-  channel.y = ((data_distyp - data_distyn) / 22936.0) * 6.0 + 2.0;
+  channel.y = ((data_distyp - data_distyn) / 22936.0) * 4.0 + 2.0;
   channel.y += 4.0f;
 
   channel.distance = 1.0 * A / B * 1000.0 * 3.0 / 10.0 / 2.0;
