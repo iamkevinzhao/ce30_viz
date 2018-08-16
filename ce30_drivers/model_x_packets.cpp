@@ -18,7 +18,7 @@ Channel Packet::ParseChannel(
     const uint32_t &A, const uint32_t &B, int t) {
   //std::cout << t <<std::endl;
   //t = t - 106 - 1000;
-  t = t - 8 + 19800;
+  t = t - 407 + 19800;
 
   if (t >= 20000) {
     t = t % 19999;
@@ -49,13 +49,27 @@ Channel Packet::ParseChannel(
   double data_distyn = 31129.0 + (dist_sorty / 200.0) * 32767.0;
   double data_distyp = 31129.0 - (dist_sorty / 200.0) * 32767.0;
   // std::cout << dist_sorty << " " << data_distyp << " "  << data_distyn << " " << (data_distyp - data_distyn) << std::endl;
-  channel.y = ((data_distyp - data_distyn) / 22936.0) * 4.0 + 2.0;
-  channel.y += 4.0f;
+  channel.y = ((data_distyp - data_distyn) / 22936.0) * 4.0;
+  // channel.y += 4.0f;
 
   channel.distance = 1.0 * A / B * 1000.0 * 3.0 / 10.0 / 2.0;
   // if (channel.distance > 25.0 && channel.distance < 30.0) {
     // std::cout <<channel.x <<" " <<channel.y <<std::endl;
   //}
+
+
+  //////////////////////////////////////////////////
+  double alpha = channel.x;
+  double beta = channel.y;
+  double d = channel.distance;
+  double pi = 3.1415926;
+  double g = pi/180;
+
+  channel.x = d*cos(g*beta)*sin(g*alpha);
+  channel.y = d*sin(g*beta) + 15.0;
+  channel.distance = d*cos(g*beta)*cos(g*alpha);
+
+  ////////////////////////////////////////////////
   return channel;
 }
 
