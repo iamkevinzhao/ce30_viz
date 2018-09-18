@@ -51,6 +51,13 @@ ExitCode PointCloudViewer::ConnectOrExit(UDPSocket& socket) {
     return ExitCode::retrieve_ce30_version_failure;
   }
   cout << "CE30 Version: " << device_version << endl;
+#ifdef SUPPORT_GRAY_OUTPUT_MODE
+  emit HideGrayImage();
+  if (!DisableGrayOutput(socket)) {
+    cerr << "Unable to Switch off Gray Output" << endl;
+    return ExitCode::switch_gray_output_failure;
+  }
+#endif
   if (!StartRunning(socket)) {
     cerr << "Unable to Start CE30" << endl;
     return ExitCode::start_ce30_failure;
@@ -281,11 +288,22 @@ void PointCloudViewer::OnPCVizInitialized() {
        [this](){
          pcviz_->ClusterModeOn(!pcviz_->IsClusterModeOn());
        }, "Clustering Mode"});
+
+#ifdef SUPPORT_GRAY_OUTPUT_MODE
   pcviz_->AddCtrlShortcut(
-      {"c",
+      {"g",
        [this](){
-         emit ShowControlPanel(pcviz_->GetAllCtrlShortcuts());
-       }, "Show Control Panel"});
+         emit ShowGrayImage();
+         EnableGrayOutput(*socket_);
+       }, "Switch on Gray Image"});
+#endif
+
+  auto func = [this](){
+    emit ShowControlPanel(pcviz_->GetAllCtrlShortcuts());
+  };
+  pcviz_->AddCtrlShortcut(
+      {"c", func, "Show Control Panel"});
+  func();
 
 #ifdef USE_FEATURE_FILTER
   pcviz_->AddCtrlShortcut(

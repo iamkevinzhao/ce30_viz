@@ -115,26 +115,26 @@ bool EnableFilter(UDPSocket& socket) {
 /// @endcond
 
 /// @cond DO_NOT_DOCUMENT_THIS
-bool DisableFilter(UDPSocket& socket) {
-  DisableFilterRequestPacket request_packet;
-  auto diagnose = socket.SendPacket(request_packet);
-  if (diagnose == Diagnose::send_successful) {
-    DisableFilterResponsePacket response_packet;
-    diagnose = socket.GetPacket(response_packet);
-    if (diagnose == Diagnose::receive_successful) {
-      if (response_packet.Successful()) {
-        return true;
-      } else {
-        cerr << "'Disable Filter' Failed" << endl;
-      }
-    } else {
-      cerr << "'Disable Filter' not Responding" << endl;
-    }
-  } else {
-    cerr << "Request 'Disable Filter' Failed" << endl;
-  }
-  return false;
-}
+//bool DisableFilter(UDPSocket& socket) {
+//  DisableFilterRequestPacket request_packet;
+//  auto diagnose = socket.SendPacket(request_packet);
+//  if (diagnose == Diagnose::send_successful) {
+//    DisableFilterResponsePacket response_packet;
+//    diagnose = socket.GetPacket(response_packet);
+//    if (diagnose == Diagnose::receive_successful) {
+//      if (response_packet.Successful()) {
+//        return true;
+//      } else {
+//        cerr << "'Disable Filter' Failed" << endl;
+//      }
+//    } else {
+//      cerr << "'Disable Filter' not Responding" << endl;
+//    }
+//  } else {
+//    cerr << "Request 'Disable Filter' Failed" << endl;
+//  }
+//  return false;
+//}
 /// @endcond
 } // namespace model_d
 } // namespace ce30_drivers

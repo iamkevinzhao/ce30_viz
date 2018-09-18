@@ -18,6 +18,10 @@ if(ON_DEVEL)
   add_definitions(-DON_DEVEL)
 endif()
 
+if(SUPPORT_GRAY_OUTPUT_MODE)
+  add_definitions(-DSUPPORT_GRAY_OUTPUT_MODE)
+endif()
+
 if(CES_SPECIAL)
   add_definitions(-DCES_SPECIAL)
   set(

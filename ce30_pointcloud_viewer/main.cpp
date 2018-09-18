@@ -22,5 +22,11 @@ int main(int argc, char *argv[])
   QObject::connect(
       &viewer, SIGNAL(UpdateImage(std::shared_ptr<QImage>)),
       &win, SLOT(OnUpdateImage(std::shared_ptr<QImage>)));
+  QObject::connect(
+      &viewer, SIGNAL(ShowGrayImage()),
+      &win, SLOT(show()));
+  QObject::connect(
+      &viewer, SIGNAL(HideGrayImage()),
+      &win, SLOT(hide()));
   return app.exec();
 }

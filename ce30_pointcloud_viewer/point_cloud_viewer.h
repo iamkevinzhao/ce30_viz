@@ -25,12 +25,14 @@ public:
 signals:
   void UpdateImage(std::shared_ptr<QImage> image);
   void ShowControlPanel(std::vector<ce30_pcviz::CtrlShortcut> shortcuts);
+  void ShowGrayImage();
+  void HideGrayImage();
 protected:
   void timerEvent(QTimerEvent* event);
 private:
   void PacketReceiveThread();
   void OnPCVizInitialized();
-  static ExitCode ConnectOrExit(ce30_driver::UDPSocket& socket);
+  ExitCode ConnectOrExit(ce30_driver::UDPSocket& socket);
   static void UpdatePointCloudDisplay(
       const ce30_driver::Scan& scan,
       ce30_pcviz::PointCloudViz& viz,
