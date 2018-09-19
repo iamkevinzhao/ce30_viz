@@ -15,6 +15,9 @@ class API ControlPanelBase : public QWidget {
   ControlPanelBase(QWidget *parent = 0);
   virtual ~ControlPanelBase();
   static void ClearGridLayout(QLayout* layout);
+  void AppendWidget(QWidget* widget);
+  void AppendWidgets(const std::vector<QWidget*>& widgets);
+  QWidget* Widget();
 public slots:
   void OnShow(std::vector<ce30_pcviz::CtrlShortcut> shortcuts);
 protected:
@@ -22,6 +25,7 @@ protected:
 private:
   std::vector<CtrlShortcut> ctrl_shortcut_map_;
   QGridLayout* button_grid_layout_;
+  std::vector<QWidget*> appended_widgets_;
 };
 } // namespace ce30_pcviz
 

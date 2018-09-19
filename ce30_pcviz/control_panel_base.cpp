@@ -21,6 +21,25 @@ void ControlPanelBase::ClearGridLayout(QLayout *layout) {
   }
 }
 
+void ControlPanelBase::AppendWidget(QWidget *widget) {
+//  auto row = button_grid_layout_->rowCount();
+//  button_grid_layout_->addWidget(widget, row++, 0);
+  if (!widget) {
+    return;
+  }
+  appended_widgets_.push_back(widget);
+}
+
+void ControlPanelBase::AppendWidgets(const std::vector<QWidget *> &widgets) {
+  for (auto& w : widgets)   {
+    AppendWidget(w);
+  }
+}
+
+QWidget* ControlPanelBase::Widget() {
+  return this;
+}
+
 void ControlPanelBase::OnShow(
     std::vector<ce30_pcviz::CtrlShortcut> shortcuts) {
   if (!button_grid_layout_) {
@@ -42,6 +61,9 @@ void ControlPanelBase::OnShow(
     connect(
         button, &QPushButton::pressed,
         [this, i](){ctrl_shortcut_map_[i].callback();});
+  }
+  for (auto& widget : appended_widgets_) {
+    panel_layout->addWidget(widget);
   }
   this->show();
 }

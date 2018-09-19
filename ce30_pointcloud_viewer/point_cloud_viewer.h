@@ -11,6 +11,7 @@
 #include <mutex>
 #include <QImage>
 #include <ce30_pcviz/control_panel_widget.h>
+#include <ce30_driver/channel_type_widgets.h>
 
 #ifdef CES_SPECIAL
 #include "ces_special/ces_static_scene.h"
@@ -33,7 +34,7 @@ private:
   void PacketReceiveThread();
   void OnPCVizInitialized();
   ExitCode ConnectOrExit(ce30_driver::UDPSocket& socket);
-  static void UpdatePointCloudDisplay(
+  void UpdatePointCloudDisplay(
       const ce30_driver::Scan& scan,
       ce30_pcviz::PointCloudViz& viz,
       const bool& vsmode,
@@ -56,6 +57,7 @@ private:
   bool kill_signal_;
   std::condition_variable condition_;
   std::shared_ptr<ce30_pcviz::ControlPanelWidget> control_panel_;
+  std::shared_ptr<ce30_driver::ChannelTypeWidgets> channel_type_widgets_;
 };
 
 #endif // POINT_CLOUD_VIEWER_H

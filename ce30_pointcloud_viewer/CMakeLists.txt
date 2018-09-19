@@ -22,6 +22,10 @@ if(SUPPORT_GRAY_OUTPUT_MODE)
   add_definitions(-DSUPPORT_GRAY_OUTPUT_MODE)
 endif()
 
+if (SUPPORT_CHANNEL_TYPE_FEATURE)
+  add_definitions(-DSUPPORT_CHANNEL_TYPE_FEATURE)
+endif()
+
 if(CES_SPECIAL)
   add_definitions(-DCES_SPECIAL)
   set(

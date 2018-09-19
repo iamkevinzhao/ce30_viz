@@ -23,6 +23,10 @@ PointCloudViewer::PointCloudViewer()
   startTimer(0);
   ce30_pcviz::Point::SetXRange(Channel::DistanceMin(), Channel::DistanceMax());
   control_panel_.reset(new ControlPanelWidget);
+#ifdef SUPPORT_CHANNEL_TYPE_FEATURE
+  channel_type_widgets_.reset(new ChannelTypeWidgets(control_panel_->Widget()));
+  control_panel_->AppendWidgets(channel_type_widgets_->GetAllWidgets());
+#endif
   connect(
       this, SIGNAL(ShowControlPanel(std::vector<ce30_pcviz::CtrlShortcut>)),
       control_panel_.get(),
@@ -104,6 +108,10 @@ void PointCloudViewer::timerEvent(QTimerEvent *event) {
   }
   lock.unlock();
 
+#ifdef SUPPORT_CHANNEL_TYPE_FEATURE
+  channel_type_widgets_->Update();
+#endif
+
   if (scan.Ready()) {
     UpdatePointCloudDisplay(
         scan, *pcviz_, vertical_stretch_mode_, save_pcd_);
@@ -118,39 +126,17 @@ void PointCloudViewer::UpdatePointCloudDisplay(
     PointCloudViz &viz,
     const bool& vsmode,
     const bool& save_pcd) {
-//  static int cnt = 0;
-//  cnt++;
-//  static QElapsedTimer timer;
-//  if (cnt > 30) {
-//    cout << timer.elapsed() << endl;
-//    timer.start();
-//    cnt = 0;
-//  }
-
-//  float x_min = 10000;
-//  float x_max = 0;
-//  float xx;
-//  for (int x = 0; x < scan.Width(); ++x) {
-//    for (int y = 0; y < scan.Height(); ++y) {
-//      xx = scan.at(x, y).point().x;
-//      if (xx < 0.1f) {
-//        continue;
-//      }
-//      if (xx > x_max) {
-//        x_max = xx;
-//      }
-//      if (xx < x_min) {
-//        x_min = xx;
-//      }
-//    }
-//  }
-//  ce30_pcviz::Point::SetXRange(x_min, x_max);
-
   ce30_pcviz::PointCloud cloud;
   cloud.Reserve(scan.Width() * scan.Height());
   for (int x = 0; x < scan.Width(); ++x) {
     for (int y = 0; y < scan.Height(); ++y) {
-      ce30_driver::Point p = scan.at(x, y).point();
+      auto channel = scan.at(x, y);
+#ifdef SUPPORT_CHANNEL_TYPE_FEATURE
+      if (!(channel_type_widgets_->IsChannelTypeChecked(channel))) {
+        continue;
+      }
+#endif
+      ce30_driver::Point p = channel.point();
       if (vsmode) {
         p.z = (scan.Height() - y) * 0.1f;
       }
