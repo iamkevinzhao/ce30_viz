@@ -55,8 +55,8 @@ ExitCode PointCloudViewer::ConnectOrExit(UDPSocket& socket) {
     return ExitCode::retrieve_ce30_version_failure;
   }
   cout << "CE30 Version: " << device_version << endl;
-#ifdef SUPPORT_GRAY_OUTPUT_MODE
   emit HideGrayImage();
+#ifdef SUPPORT_GRAY_OUTPUT_MODE
   if (!DisableGrayOutput(socket)) {
     cerr << "Unable to Switch off Gray Output" << endl;
     return ExitCode::switch_gray_output_failure;
