@@ -36,14 +36,17 @@ include_directories(
   "${PROJECT_BINARY_DIR}")  # to find ce30_pcviz/config.h
 
 find_package(PCL 1.7 REQUIRED)
-find_package(ce30_driver 1.2.1 REQUIRED)
+# find_package(ce30_driver 1.2.1 REQUIRED)
+find_package(ce30_driver 1.0.0 REQUIRED)
 
 include_directories(${PCL_INCLUDE_DIRS})
 link_directories(${PCL_LIBRARY_DIRS})
 add_definitions(${PCL_DEFINITIONS})
 
 # Add sub-directories
-add_subdirectory(ce30_drivers)
+if (${CE30_VISUALIZER})
+  add_subdirectory(ce30_drivers)
+endif()
 add_subdirectory(ce30_pcviz)
 add_subdirectory(ce30_pointcloud_viewer)
 if (${CE30_VISUALIZER})
@@ -57,10 +60,14 @@ endif()
 # Add all targets to the build-tree export set
 SET(
   EXPORT_TARGETS
-    ce30_drivers
+    # ce30_drivers
     ce30_pcviz
     ce30_pointcloud_viewer
 )
+
+if (${CE30_VISUALIZER})
+  SET(EXPORT_TARGETS "${EXPORT_TARGETS};ce30_drivers")
+endif()
 
 if (${CE30_VISUALIZER})
   SET(
