@@ -147,15 +147,25 @@ void PointCloudViewer::UpdatePointCloudDisplay(
     }
   }
   viz.UpdatePointCloud(cloud);
+  static const QString data_dir_name = "data";
   if (save_pcd) {
-    static const QString data_dir_name = "data";
     if (!QDir(data_dir_name).exists()) {
       QDir::current().mkdir(data_dir_name);
     }
     viz.SavePCD(
         data_dir_name.toStdString() + "/" +
-        QTime::currentTime().toString().replace(":", "_").toStdString() +
+        QTime::currentTime().toString("hh_mm_ss_zzz").toStdString() +
         ".pcd", cloud);
+  }
+  bool save_images = save_pcd;
+  if (save_images) {
+    if (!QDir(data_dir_name).exists()) {
+      QDir::current().mkdir(data_dir_name);
+    }
+    ce30_driver::SaveImages(
+        data_dir_name.toStdString() + "/" +
+        QTime::currentTime().toString("hh_mm_ss_zzz").toStdString() +
+        ".txt", scan);
   }
 }
 
