@@ -62,6 +62,10 @@ ExitCode PointCloudViewer::ConnectOrExit(UDPSocket& socket) {
     return ExitCode::switch_gray_output_failure;
   }
 #endif
+  if (!DeviceConfig::Configure(socket)) {
+    cerr << "Failed to Configure CE30" << endl;
+    return ExitCode::configure_ce30_failure;
+  }
   if (!StartRunning(socket)) {
     cerr << "Unable to Start CE30" << endl;
     return ExitCode::start_ce30_failure;
@@ -157,7 +161,8 @@ void PointCloudViewer::UpdatePointCloudDisplay(
         QTime::currentTime().toString("hh_mm_ss_zzz").toStdString() +
         ".pcd", cloud);
   }
-  bool save_images = save_pcd;
+//  bool save_images = save_pcd;
+  bool save_images = false;
   if (save_images) {
     if (!QDir(data_dir_name).exists()) {
       QDir::current().mkdir(data_dir_name);

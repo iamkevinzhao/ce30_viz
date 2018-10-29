@@ -8,6 +8,7 @@ enum class ExitCode {
   start_ce30_failure = 2,
   retrieve_ce30_version_failure = 3,
   switch_gray_output_failure = 4,
+  configure_ce30_failure = 5,
 };
 
 #endif // EXIT_CODE_H
