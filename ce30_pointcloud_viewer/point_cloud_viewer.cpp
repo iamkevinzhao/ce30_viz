@@ -94,7 +94,8 @@ void PointCloudViewer::timerEvent(QTimerEvent *event) {
     pcl::PointCloud<pcl::PointXYZ> cloud;
     if (pcl::io::loadPCDFile<pcl::PointXYZ>("pcd/" + pcds.at(index).toStdString(), cloud) != -1) {
       for (auto& p : cloud) {
-        pointcloud.push_back(ce30_pcviz::Point(p.z, p.x,p.y));
+//        pointcloud.push_back(ce30_pcviz::Point(p.z, p.x, p.y));
+        pointcloud.push_back(ce30_pcviz::Point(p.x, p.y, p.z));
       }
       pcviz_->UpdatePointCloud(pointcloud);
     }
