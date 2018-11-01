@@ -37,7 +37,7 @@ include_directories(
 
 find_package(PCL 1.7 REQUIRED)
 # find_package(ce30_driver 1.2.1 REQUIRED)
-find_package(ce30_driver 1.2.1 REQUIRED)
+find_package(ce30_driver 1.3.0 REQUIRED)
 
 include_directories(${PCL_INCLUDE_DIRS})
 link_directories(${PCL_LIBRARY_DIRS})
