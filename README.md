@@ -10,14 +10,14 @@ The `ce30_viz` provides a set of tools to visualize CE30-D measurement data. All
 
 #### Version
 
-- 1.9.2
+- 1.10.0
 
 #### Dependencies
 
 - [PCL](http://www.pointclouds.org) 1.7
 - [CMake](https://cmake.org/) 2.8.1
 - C++11
-- [ce30_driver](https://codincodee.github.io/ce30_driver) 1.2.1
+- [ce30_driver](https://codincodee.github.io/ce30_driver) 1.3.0
 - [Qt](https://www.qt.io/) 5.6
 
 #### Recommend Configurations
@@ -27,7 +27,7 @@ The `ce30_viz` provides a set of tools to visualize CE30-D measurement data. All
 
 #### Download
 
-- [Point Cloud Viewer for Windows](https://github.com/codincodee/ce30_viz/releases/download/v1.9.1/ce30_pointcloud_viewer_v1_9_1_win10_x86_64.zip)
+- [Point Cloud Viewer for Windows](https://github.com/codincodee/ce30_viz/releases/download/v1.10.0/ce30_pointcloud_viewer_v1_10_0_win10_x86_64.zip)
 
 #### Quick Access
 
